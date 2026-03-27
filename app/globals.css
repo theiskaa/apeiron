@@ -91,6 +91,10 @@ body {
   border-color: #35353f;
 }
 
+/* Hide scrollbar for tab bar */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* Scrollbar styling */
 .panel-scroll::-webkit-scrollbar {
   width: 6px;
