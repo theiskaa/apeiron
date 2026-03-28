@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Apeiron — Graph tree of the bigges questions humanity asks",
+  title: "Apeirron — Graph tree of the biggest questions humanity asks",
   description:
     "An interactive map of the biggest questions humanity asks. Explore consciousness, reality, hidden power, and the cosmos.",
 };

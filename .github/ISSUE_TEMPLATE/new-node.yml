@@ -30,7 +30,7 @@ body:
     id: description
     attributes:
       label: What is this topic?
-      description: A brief description of the idea and why it belongs on Apeiron.
+      description: A brief description of the idea and why it belongs on Apeirron.
       placeholder: |
         What is the core idea? Why is it interesting?
         Why does it deserve a deep-dive rather than a passing mention in another node?

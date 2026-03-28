@@ -6,10 +6,10 @@ export default function Navbar() {
   return (
     <nav className="relative z-10 flex items-center justify-between px-8 pt-6 pb-4 shrink-0">
       <div className="flex items-center gap-3">
-        <Image src="/apeiron.svg" alt="Apeiron" width={42} height={42} />
+        <Image src="/apeiron.svg" alt="Apeirron" width={42} height={42} />
         <div className="flex flex-col">
           <span className="text-lg font-semibold tracking-wide text-text-primary leading-tight">
-            Apeiron
+            Apeirron
           </span>
           <span className="text-[10px] text-text-muted tracking-wide">
             Biggest questions humanity asks
@@ -17,7 +17,7 @@ export default function Navbar() {
         </div>
       </div>
       <a
-        href="https://github.com/theiskaa/apeiron"
+        href="https://github.com/theiskaa/apeirron"
         target="_blank"
         rel="noopener noreferrer"
         className="text-text-muted hover:text-text-primary transition-colors"

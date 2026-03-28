@@ -1,6 +1,6 @@
-# Contributing to Apeiron
+# Contributing to Apeirron
 
-Apeiron grows through community contributions. Every node is a Markdown file. Every connection is a link. If you have something worth exploring, we want it on the graph.
+Apeirron grows through community contributions. Every node is a Markdown file. Every connection is a link. If you have something worth exploring, we want it on the graph.
 
 ## Adding a new node
 
@@ -44,7 +44,7 @@ There is no required structure. No forced sections. No template to follow. Some 
 
 - **Narrative, not encyclopedic.** Don't summarize — tell the story. Why does this idea exist? What makes it compelling? What makes it unsettling?
 - **Present both sides.** The strongest case for, and the strongest case against. Don't mock believers or uncritically endorse claims. Map the intellectual landscape fairly.
-- **Make connections.** The real value of Apeiron is the web. Use `[[wiki links]]` throughout your text to connect to other nodes. Every link is a rabbit hole the reader can follow.
+- **Make connections.** The real value of Apeirron is the web. Use `[[wiki links]]` throughout your text to connect to other nodes. Every link is a rabbit hole the reader can follow.
 - **Be specific.** Names, dates, papers, events. Vague hand-waving is not interesting. Specific claims with specific evidence are.
 - **Treat every topic seriously.** Whether it's the hard problem of consciousness or ancient astronaut theory, the tone is the same: genuine inquiry.
 
@@ -61,7 +61,7 @@ There is no required structure. No forced sections. No template to follow. Some 
 
 Every node **must** end with a `## Sources` section. This is not optional. A node without verifiable sources will not be merged.
 
-The purpose is simple: Apeiron maps ideas that are contested, speculative, and often dismissed. The only way to maintain credibility is to show your work. Every claim should be traceable to something a reader can verify independently.
+The purpose is simple: Apeirron maps ideas that are contested, speculative, and often dismissed. The only way to maintain credibility is to show your work. Every claim should be traceable to something a reader can verify independently.
 
 ### Format
 

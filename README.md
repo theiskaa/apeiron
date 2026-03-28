@@ -1,6 +1,6 @@
-# Apeiron
+# Apeirron
 
-> *apeiron (ἄπειρον)* — ancient Greek for "the infinite, the boundless, the undefined origin of all things."
+> *apeirron (ἄπειρον)* — ancient Greek for "the infinite, the boundless, the undefined origin of all things."
 
 An interactive knowledge graph mapping the biggest questions humanity asks — consciousness, ancient civilizations, the nature of reality, hidden power structures, the cosmos and many more — as interconnected nodes in a visual web.
 
@@ -14,7 +14,7 @@ All content lives as Markdown files in the [`content/nodes/`](./content/nodes) d
 
 ## Contributing
 
-Apeiron is open to contributions. You can:
+Apeirron is open to contributions. You can:
 
 - **Add a new node** — write a deep-dive on a topic and submit a PR
 - **Improve an existing node** — better writing, more connections, factual corrections
