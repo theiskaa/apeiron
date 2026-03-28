@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import type { GraphData } from "@/lib/types";
 import Navbar from "./Navbar";
@@ -13,11 +13,19 @@ const GRAPH_TAB: Tab = { id: "graph", type: "graph" };
 
 interface Props {
   graphData: GraphData;
+  initialNodeId?: string;
 }
 
-export default function PageClient({ graphData }: Props) {
-  const [tabs, setTabs] = useState<Tab[]>([GRAPH_TAB]);
-  const [activeTabId, setActiveTabId] = useState("graph");
+export default function PageClient({ graphData, initialNodeId }: Props) {
+  const [tabs, setTabs] = useState<Tab[]>(() => {
+    if (initialNodeId) {
+      return [GRAPH_TAB, { id: `node:${initialNodeId}`, type: "node", nodeId: initialNodeId }];
+    }
+    return [GRAPH_TAB];
+  });
+  const [activeTabId, setActiveTabId] = useState(
+    initialNodeId ? `node:${initialNodeId}` : "graph"
+  );
 
   const activeTab = useMemo(
     () => tabs.find((t) => t.id === activeTabId) ?? GRAPH_TAB,
@@ -30,6 +38,14 @@ export default function PageClient({ graphData }: Props) {
   }, [activeTab, graphData.nodes]);
 
   const hasNodeTabs = tabs.some((t) => t.type === "node");
+
+  useEffect(() => {
+    if (activeTab.type === "node" && activeTab.nodeId) {
+      window.history.replaceState(null, "", `/node/${activeTab.nodeId}`);
+    } else {
+      window.history.replaceState(null, "", "/");
+    }
+  }, [activeTab]);
 
   const handleNodeClick = useCallback((nodeId: string) => {
     const tabId = `node:${nodeId}`;
@@ -66,7 +82,7 @@ export default function PageClient({ graphData }: Props) {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">
-      <div className={showGraph ? "absolute inset-0" : "hidden"}>
+      <div className={`absolute inset-0 ${showGraph ? "z-0" : "z-[-1] pointer-events-none"}`}>
         <Graph
           graphData={graphData}
           onNodeClick={handleNodeClick}

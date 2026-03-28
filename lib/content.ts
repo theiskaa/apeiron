@@ -49,6 +49,21 @@ export function getAllNodes(): NodeData[] {
   });
 }
 
+/** Extract a plain-text excerpt from markdown for meta descriptions. */
+export function getExcerpt(markdown: string, maxLength = 160): string {
+  return markdown
+    .replace(/\[\[([^\]]+)\]\]/g, "$1") // strip wiki links
+    .replace(/^---[\s\S]*?---\s*/m, "") // strip frontmatter
+    .replace(/^#{1,6}\s+.*$/gm, "") // strip headings
+    .replace(/\*\*([^*]+)\*\*/g, "$1") // strip bold
+    .replace(/\*([^*]+)\*/g, "$1") // strip italic
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // strip markdown links
+    .replace(/\n+/g, " ")
+    .trim()
+    .slice(0, maxLength)
+    .replace(/\s+\S*$/, "…"); // cut at word boundary
+}
+
 /**
  * Resolve [[wiki links]] in HTML content.
  * Supports [[node-id]] and [[Node Title]] formats.
@@ -100,7 +115,6 @@ export async function buildGraphData(): Promise<GraphData> {
     }
   }
 
-  // Count connections per node (both directions)
   const connectionCount = new Map<string, number>();
   for (const link of links) {
     connectionCount.set(
