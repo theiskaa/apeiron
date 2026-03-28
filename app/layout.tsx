@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "An interactive knowledge graph mapping the biggest questions humanity asks — consciousness, ancient civilizations, the nature of reality, hidden power structures, and the cosmos.",
+    "An interactive knowledge graph mapping the biggest questions humanity asks — consciousness, ancient civilizations, the nature of reality, and many more",
   keywords: [
     "knowledge graph",
     "consciousness",
