@@ -100,11 +100,12 @@ export default function Graph({
     fg.d3Force("link").distance(linkDist).strength(linkStr);
     fg.d3Force("center", null);
 
-    const p = isMobile ? 80 : 200;
+    const p = isMobile ? 20 : 200;
     const t1 = setTimeout(() => fg.zoomToFit(600, p), 500);
-    const t2 = setTimeout(() => fg.zoomToFit(800, p), 2000);
+    const t2 = setTimeout(() => fg.zoomToFit(800, p), 1500);
+    const t3 = setTimeout(() => fg.zoomToFit(800, p), 3000);
 
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dimensions.width]);
 
@@ -420,8 +421,8 @@ export default function Graph({
         backgroundColor={graphBg}
         onRenderFramePre={paintBefore}
         warmupTicks={0}
-        d3AlphaDecay={0.01}
-        d3VelocityDecay={0.3}
+        d3AlphaDecay={0.04}
+        d3VelocityDecay={0.4}
         nodeId="id"
         nodeVal="val"
         enableZoomInteraction={true}
