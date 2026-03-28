@@ -115,6 +115,11 @@ export default function Graph({
     }
   }, [hoveredNode]);
 
+  // Keep the engine alive — when it stops, restart it so hover always works
+  const handleEngineStop = useCallback(() => {
+    fgRef.current?.d3ReheatSimulation?.();
+  }, []);
+
   useEffect(() => {
     if (hoveredNode === null) return;
     let running = true;
@@ -409,6 +414,7 @@ export default function Graph({
         onNodeClick={handleNodeClick}
         onNodeHover={handleNodeHover}
         onBackgroundClick={handleBackgroundClick}
+        onEngineStop={handleEngineStop}
         onNodeDrag={handleNodeDrag}
         onNodeDragEnd={handleNodeDragEnd}
         backgroundColor={graphBg}
