@@ -3,12 +3,19 @@
 import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
 
-export default function Navbar() {
+interface Props {
+  onLogoClick?: () => void;
+}
+
+export default function Navbar({ onLogoClick }: Props) {
   return (
-    <nav className="relative z-10 flex items-center justify-between px-8 pt-6 pb-4 shrink-0">
-      <div className="flex items-center gap-3">
+    <nav className="relative z-10 flex items-center justify-between px-4 md:px-8 pt-7 pb-4 shrink-0">
+      <button
+        onClick={onLogoClick}
+        className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+      >
         <Image src="/apeiron.svg" alt="Apeirron" width={42} height={42} className="dark:invert-0 invert" />
-        <div className="flex flex-col">
+        <div className="flex flex-col text-left">
           <span className="text-lg font-semibold tracking-wide text-text-primary leading-tight">
             Apeirron
           </span>
@@ -16,7 +23,7 @@ export default function Navbar() {
             Biggest questions humanity asks
           </span>
         </div>
-      </div>
+      </button>
       <div className="flex items-center gap-5">
         <ThemeToggle />
         <a

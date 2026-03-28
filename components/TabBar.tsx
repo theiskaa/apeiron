@@ -79,7 +79,7 @@ export default function TabBar({
                   e.stopPropagation();
                   onCloseTab(tab.id);
                 }}
-                className={`shrink-0 rounded-full p-0.5
+                className={`shrink-0 rounded-full flex items-center justify-center
                   hover:bg-border hover:text-text-primary
                   transition-all duration-200 origin-center
                   ${isActive
