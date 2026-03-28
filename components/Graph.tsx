@@ -25,6 +25,8 @@ export default function Graph({
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  // On mobile, first tap "selects" (highlights connections), second tap opens
+  const [tappedNode, setTappedNode] = useState<string | null>(null);
   const hoverStartTime = useRef<number>(0);
   const animFrameRef = useRef<number>(0);
 
@@ -48,26 +50,29 @@ export default function Graph({
     return () => observer.disconnect();
   }, []);
 
-  // Configure forces on mount
+  // Configure forces on mount — scale physics based on screen size
   useEffect(() => {
     const fg = fgRef.current;
     if (!fg) return;
 
-    fg.d3Force("charge").strength(-400).distanceMax(500);
-    fg.d3Force("link").distance(100).strength(0.3);
-    // Remove center force — it pulls dragged nodes back to origin
+    const isMobile = dimensions.width < 768;
+    const chargeStrength = isMobile ? -150 : -400;
+    const chargeMax = isMobile ? 250 : 500;
+    const linkDist = isMobile ? 50 : 100;
+    const linkStr = isMobile ? 0.5 : 0.3;
+    const padding = isMobile ? 30 : 60;
+
+    fg.d3Force("charge").strength(chargeStrength).distanceMax(chargeMax);
+    fg.d3Force("link").distance(linkDist).strength(linkStr);
     fg.d3Force("center", null);
 
-    // Zoom to fit — zoomed out
-    // Fit all nodes in view after simulation has spread them out.
-    // Fire multiple times: early for a rough fit, then again once settled.
-    const t1 = setTimeout(() => fg.zoomToFit(600, 60), 500);
-    const t2 = setTimeout(() => fg.zoomToFit(800, 60), 2000);
-    const t3 = setTimeout(() => fg.zoomToFit(800, 60), 4000);
+    const t1 = setTimeout(() => fg.zoomToFit(600, padding), 500);
+    const t2 = setTimeout(() => fg.zoomToFit(800, padding), 2000);
+    const t3 = setTimeout(() => fg.zoomToFit(800, padding), 4000);
 
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dimensions.width]);
 
   // Hover animation loop
   useEffect(() => {
@@ -136,14 +141,41 @@ export default function Graph({
   const handleNodeClick = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (node: any) => {
-      onNodeClick(node.id);
+      const isMobile = dimensions.width < 768;
+      if (isMobile) {
+        // Mobile: first tap highlights, second tap opens
+        if (tappedNode === node.id) {
+          // Second tap — open the node
+          onNodeClick(node.id);
+          setTappedNode(null);
+          setHoveredNode(null);
+        } else {
+          // First tap — highlight connections
+          setTappedNode(node.id);
+          setHoveredNode(node.id);
+          hoverStartTime.current = performance.now();
+        }
+      } else {
+        onNodeClick(node.id);
+      }
     },
-    [onNodeClick]
+    [onNodeClick, tappedNode, dimensions.width]
   );
 
+  // Tap empty space on mobile to deselect
+  const handleBackgroundClick = useCallback(() => {
+    if (dimensions.width < 768 && tappedNode) {
+      setTappedNode(null);
+      setHoveredNode(null);
+    }
+  }, [tappedNode, dimensions.width]);
+
   const handleNodeHover = useCallback((node: GraphNode | null) => {
-    setHoveredNode(node?.id ?? null);
-  }, []);
+    // Only use hover on desktop
+    if (dimensions.width >= 768) {
+      setHoveredNode(node?.id ?? null);
+    }
+  }, [dimensions.width]);
 
   const paintNode = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -155,8 +187,11 @@ export default function Graph({
       const somethingHovered = hoveredNode !== null;
       const isDimmed = somethingHovered && !isHovered && !isNeighbor;
 
+      const isMobile = dimensions.width < 768;
       const connections = node.val || 1;
-      const radius = Math.sqrt(connections) * 4.5 + 3.5;
+      const radius = isMobile
+        ? Math.sqrt(connections) * 3 + 2.5
+        : Math.sqrt(connections) * 4.5 + 3.5;
 
       let nodeAlpha = 1;
       if (somethingHovered && isNeighbor) {
@@ -184,7 +219,9 @@ export default function Graph({
         ctx.stroke();
       }
 
-      const fontSize = Math.min(11 / globalScale, 13);
+      const fontSize = isMobile
+        ? Math.min(9 / globalScale, 11)
+        : Math.min(11 / globalScale, 13);
       if (fontSize >= 1.5) {
         ctx.font = `400 ${fontSize}px Inter, -apple-system, system-ui, sans-serif`;
         ctx.textAlign = "center";
@@ -199,21 +236,25 @@ export default function Graph({
         ctx.fillText(node.title, node.x, node.y + radius + 4);
       }
     },
-    [selectedNodeId, hoveredNode, neighbors]
+    [selectedNodeId, hoveredNode, neighbors, dimensions.width]
   );
 
   const paintNodeArea = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (node: any, color: string, ctx: CanvasRenderingContext2D) => {
+      const isMobile = dimensions.width < 768;
       const connections = node.val || 1;
-      const radius = Math.sqrt(connections) * 4.5 + 3.5;
-      const hitRadius = Math.max(radius * 3, 14);
+      const radius = isMobile
+        ? Math.sqrt(connections) * 3 + 2.5
+        : Math.sqrt(connections) * 4.5 + 3.5;
+      // Bigger hit area on mobile for fat fingers
+      const hitRadius = isMobile ? Math.max(radius * 4, 20) : Math.max(radius * 3, 14);
       ctx.beginPath();
       ctx.arc(node.x, node.y, hitRadius, 0, 2 * Math.PI);
       ctx.fillStyle = color;
       ctx.fill();
     },
-    []
+    [dimensions.width]
   );
 
   const paintLink = useCallback(
@@ -340,6 +381,7 @@ export default function Graph({
         linkCanvasObjectMode={() => "replace"}
         onNodeClick={handleNodeClick}
         onNodeHover={handleNodeHover}
+        onBackgroundClick={handleBackgroundClick}
         onNodeDrag={handleNodeDrag}
         onNodeDragEnd={handleNodeDragEnd}
         backgroundColor="#202024"
