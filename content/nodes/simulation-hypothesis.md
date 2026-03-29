@@ -9,6 +9,8 @@ connections:
     reason: "The absence of aliens could be a design choice in a simulated universe"
   - target: "hard-problem"
     reason: "The hard problem deepens in a simulation — is simulated consciousness real consciousness?"
+  - target: "hermetic-tradition"
+    reason: "The Gnostics and Hermeticists claimed millennia ago that reality is a construct and the uninitiated cannot see it — the simulation hypothesis is their thesis in modern clothing"
 ---
 
 In 2003, Oxford philosopher Nick Bostrom published a paper that reframed an ancient question in the language of probability theory. The argument was simple, the conclusion was not.

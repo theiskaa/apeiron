@@ -13,6 +13,8 @@ connections:
     reason: "Panpsychism and idealism both treat consciousness as fundamental, though they differ on how"
   - target: "plato"
     reason: "Plato's Theory of Forms is the founding document of Western idealism"
+  - target: "hermetic-tradition"
+    reason: "'As above, so below' — the Hermetic doctrine that mind mirrors cosmos is the oldest formulation of philosophical idealism, predating Berkeley by two millennia"
   - target: "kant"
     reason: "Kant's transcendental idealism reshaped the question: we never experience reality directly, only the mind's structuring of it"
 ---

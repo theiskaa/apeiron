@@ -9,6 +9,8 @@ connections:
     reason: "If an advanced civilization existed before recorded history, the question becomes whether they were human at all"
   - target: "consciousness"
     reason: "Ancient cultures universally placed consciousness at the center of reality, suggesting knowledge we have lost"
+  - target: "secret-societies"
+    reason: "The mystery traditions and secret orders claim unbroken lineages to pre-flood civilizations — if those civilizations existed, someone may have preserved what they knew"
 ---
 
 Around 11,600 years ago, the Earth changed. The Younger Dryas — a sudden, catastrophic return to ice-age conditions — ended as abruptly as it began. Sea levels rose dramatically. Coastlines that had been inhabited for millennia vanished under water. And somewhere in this cataclysm, something may have been lost.

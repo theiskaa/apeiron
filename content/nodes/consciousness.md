@@ -15,6 +15,8 @@ connections:
     reason: "Idealism places consciousness at the foundation of reality — mind is primary, matter is derivative"
   - target: "dualism"
     reason: "Dualism proposes consciousness is non-physical — a separate substance from the brain"
+  - target: "secret-societies"
+    reason: "From the Eleusinian Mysteries to the Hermetic orders, secret societies have been organized around the claim that ordinary consciousness is a veil hiding a deeper reality"
 ---
 
 There is something it is like to be you. Right now, reading these words, there is an experience happening — light hitting your eyes, meaning forming in your mind, a sense of being *here*. This is consciousness. And after centuries of philosophy and decades of neuroscience, nobody can explain why it exists.
