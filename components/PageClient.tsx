@@ -93,7 +93,7 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
       {activeNode && !showGraph && (
         <div className="absolute inset-0 bg-background overflow-hidden">
           <div className="flex flex-col h-full">
-            <Navbar />
+            <Navbar onLogoClick={() => setActiveTabId("graph")} />
             {hasNodeTabs && (
               <TabBar
                 tabs={tabs}
@@ -117,7 +117,7 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
 
       {showGraph && (
         <div className="absolute top-0 left-0 right-0 z-10">
-          <Navbar />
+          <Navbar onLogoClick={() => setActiveTabId("graph")} />
           {hasNodeTabs && (
             <TabBar
               tabs={tabs}
