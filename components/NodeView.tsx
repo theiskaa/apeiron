@@ -86,29 +86,28 @@ export default function NodeView({
     const content = contentRef.current;
     if (!scroll || !content || tocItems.length === 0) return;
 
-    const headings = tocItems
-      .map((item) => content.querySelector(`#${CSS.escape(item.id)}`))
-      .filter(Boolean) as HTMLElement[];
+    const onScroll = () => {
+      const headings = tocItems
+        .map((item) => content.querySelector(`#${CSS.escape(item.id)}`))
+        .filter(Boolean) as HTMLElement[];
+      if (headings.length === 0) return;
 
-    if (headings.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
+      const scrollTop = scroll.scrollTop;
+      const offset = 120;
+      let current = headings[0]?.id ?? null;
+      for (const h of headings) {
+        if (h.offsetTop - scroll.offsetTop <= scrollTop + offset) {
+          current = h.id;
+        } else {
+          break;
         }
-      },
-      {
-        root: scroll,
-        rootMargin: "0px 0px -70% 0px",
-        threshold: 0,
       }
-    );
+      setActiveId(current);
+    };
 
-    for (const h of headings) observer.observe(h);
-    return () => observer.disconnect();
+    scroll.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => scroll.removeEventListener("scroll", onScroll);
   }, [tocItems, node.id]);
 
   const handleTocClick = useCallback(
