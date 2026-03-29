@@ -59,13 +59,45 @@ body {
 
 /* Prose styles for rendered markdown articles */
 .prose-apeiron h2 {
-  @apply text-xl font-semibold mt-8 mb-3;
+  @apply text-xl font-semibold mt-8 mb-3 relative cursor-default;
   color: var(--text-primary);
 }
 
+.prose-apeiron h2::before {
+  content: "##";
+  position: absolute;
+  left: -1.75rem;
+  top: 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  color: var(--text-muted);
+}
+
+.prose-apeiron h2:hover::before {
+  opacity: 0.5;
+}
+
 .prose-apeiron h3 {
-  @apply text-lg font-medium mt-6 mb-2;
+  @apply text-lg font-medium mt-6 mb-2 relative cursor-default;
   color: var(--text-primary);
+}
+
+.prose-apeiron h3::before {
+  content: "###";
+  position: absolute;
+  left: -2.25rem;
+  top: 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  color: var(--text-muted);
+}
+
+.prose-apeiron h3:hover::before {
+  opacity: 0.5;
 }
 
 .prose-apeiron p {
