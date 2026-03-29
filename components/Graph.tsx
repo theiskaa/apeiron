@@ -13,12 +13,14 @@ interface Props {
   graphData: GraphData;
   onNodeClick: (nodeId: string) => void;
   selectedNodeId: string | null;
+  focusNodeId: string | null;
 }
 
 export default function Graph({
   graphData,
   onNodeClick,
   selectedNodeId,
+  focusNodeId,
 }: Props) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const fgRef = useRef<any>(null);
@@ -107,6 +109,20 @@ export default function Graph({
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dimensions.width]);
+
+  useEffect(() => {
+    if (!focusNodeId || !fgRef.current) return;
+    const fg = fgRef.current;
+    if (!fg) return;
+    // d3-force mutates node objects in place, adding x/y directly on them
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const gNode = graphData.nodes.find((n) => n.id === focusNodeId) as any;
+    if (gNode?.x != null && gNode?.y != null) {
+      fg.centerAt(gNode.x, gNode.y, 800);
+      fg.zoom(3, 800);
+      setHoveredNode(focusNodeId);
+    }
+  }, [focusNodeId, graphData.nodes]);
 
   useEffect(() => {
     hoveredNodeRef.current = hoveredNode;

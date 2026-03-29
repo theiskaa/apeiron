@@ -6,6 +6,7 @@ import type { GraphData } from "@/lib/types";
 import Navbar from "./Navbar";
 import TabBar, { type Tab } from "./TabBar";
 import NodeView from "./NodeView";
+import CommandPalette from "./CommandPalette";
 
 const Graph = dynamic(() => import("./Graph"), { ssr: false });
 
@@ -26,6 +27,8 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
   const [activeTabId, setActiveTabId] = useState(
     initialNodeId ? `node:${initialNodeId}` : "graph"
   );
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [focusNodeId, setFocusNodeId] = useState<string | null>(null);
 
   const activeTab = useMemo(
     () => tabs.find((t) => t.id === activeTabId) ?? GRAPH_TAB,
@@ -46,6 +49,18 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
       window.history.replaceState(null, "", "/");
     }
   }, [activeTab]);
+
+  // ⌘K / Ctrl+K keyboard shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const handleNodeClick = useCallback((nodeId: string) => {
     const tabId = `node:${nodeId}`;
@@ -73,12 +88,26 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
     });
   }, []);
 
+  const handlePaletteSelect = useCallback(
+    (nodeId: string) => {
+      const showGraph = activeTabId === "graph";
+      if (showGraph) {
+        setFocusNodeId(nodeId);
+        setTimeout(() => setFocusNodeId(null), 1000);
+      } else {
+        handleNodeClick(nodeId);
+      }
+    },
+    [activeTabId, handleNodeClick]
+  );
+
   const selectedNodeOnGraph = useMemo(() => {
     if (activeTab.type === "node") return activeTab.nodeId ?? null;
     return null;
   }, [activeTab]);
 
   const showGraph = activeTab.type === "graph";
+  const openSearch = useCallback(() => setPaletteOpen(true), []);
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">
@@ -87,13 +116,14 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
           graphData={graphData}
           onNodeClick={handleNodeClick}
           selectedNodeId={selectedNodeOnGraph}
+          focusNodeId={focusNodeId}
         />
       </div>
 
       {activeNode && !showGraph && (
         <div className="absolute inset-0 bg-background overflow-hidden">
           <div className="flex flex-col h-full">
-            <Navbar onLogoClick={() => setActiveTabId("graph")} />
+            <Navbar onLogoClick={() => setActiveTabId("graph")} onSearchClick={openSearch} />
             {hasNodeTabs && (
               <TabBar
                 tabs={tabs}
@@ -117,7 +147,7 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
 
       {showGraph && (
         <div className="absolute top-0 left-0 right-0 z-10">
-          <Navbar onLogoClick={() => setActiveTabId("graph")} />
+          <Navbar onLogoClick={() => setActiveTabId("graph")} onSearchClick={openSearch} />
           {hasNodeTabs && (
             <TabBar
               tabs={tabs}
@@ -129,6 +159,13 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
           )}
         </div>
       )}
+
+      <CommandPalette
+        nodes={graphData.nodes}
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        onSelect={handlePaletteSelect}
+      />
     </div>
   );
 }

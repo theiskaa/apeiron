@@ -5,9 +5,10 @@ import ThemeToggle from "./ThemeToggle";
 
 interface Props {
   onLogoClick?: () => void;
+  onSearchClick?: () => void;
 }
 
-export default function Navbar({ onLogoClick }: Props) {
+export default function Navbar({ onLogoClick, onSearchClick }: Props) {
   return (
     <nav className="relative z-10 flex items-center justify-between px-4 md:px-8 pt-7 pb-4 shrink-0">
       <button
@@ -25,6 +26,27 @@ export default function Navbar({ onLogoClick }: Props) {
         </div>
       </button>
       <div className="flex items-center gap-5">
+        {onSearchClick && (
+          <button
+            onClick={onSearchClick}
+            className="text-text-muted hover:text-text-primary transition-colors"
+            aria-label="Search nodes"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
+        )}
         <ThemeToggle />
         <a
           href="https://github.com/theiskaa/apeirron"
