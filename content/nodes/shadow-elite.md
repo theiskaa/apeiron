@@ -11,6 +11,10 @@ connections:
     reason: "The Illuminati's model of institutional infiltration is the playbook the modern elite follows — Weishaupt would recognize Davos immediately"
   - target: "freemasonry"
     reason: "Many members of modern elite networks are or were Freemasons — the organizational DNA of the lodge persists in the structure of invitation-only power"
+  - target: "ufos"
+    reason: "The UFO cover-up is the shadow elite's longest-running secret — crash retrieval programs hidden from congressional oversight for decades"
+  - target: "jfk"
+    reason: "The JFK assassination exposed the machinery of shadow power — the CIA, the Mafia, and the military-industrial complex converging on a single act"
 ---
 
 In 1966, Carroll Quigley — a professor of history at Georgetown University's School of Foreign Service and mentor to a young Bill Clinton — published a 1,348-page book called *Tragedy and Hope: A History of the World in Our Time*. Buried in this massive academic history was a passage that would make Quigley the most cited author in conspiracy literature for the next half century:

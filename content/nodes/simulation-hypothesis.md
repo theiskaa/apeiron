@@ -11,6 +11,10 @@ connections:
     reason: "The hard problem deepens in a simulation — is simulated consciousness real consciousness?"
   - target: "hermetic-tradition"
     reason: "The Gnostics and Hermeticists claimed millennia ago that reality is a construct and the uninitiated cannot see it — the simulation hypothesis is their thesis in modern clothing"
+  - target: "mandela-effect"
+    reason: "If reality can be patched like software, the Mandela Effect is what the edit looks like from inside — residual memories from a previous version"
+  - target: "sacred-geometry"
+    reason: "If reality is computed, sacred geometry may be the source code showing through — mathematical constants that recur too perfectly to be coincidental"
 ---
 
 In 2003, Oxford philosopher Nick Bostrom published a paper that reframed an ancient question in the language of probability theory. The argument was simple, the conclusion was not.

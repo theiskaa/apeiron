@@ -7,6 +7,8 @@ connections:
     reason: "Our experience of time flowing may be a feature of consciousness, not of physics"
   - target: "simulation-hypothesis"
     reason: "In a simulation, time might be an illusion — a rendering sequence rather than a dimension"
+  - target: "mandela-effect"
+    reason: "If the block universe can be modified retroactively, the Mandela Effect is its fingerprint — memories from a timeline that no longer exists"
 ---
 
 You have never experienced the past. You have never experienced the future. You have only ever experienced *now*. The past exists as memory — a pattern in your brain, accessed in the present. The future exists as anticipation — another pattern, also accessed in the present. The flow of time, the sense that moments are arriving and departing, is the most fundamental feature of your experience. And physics says it may not be real.

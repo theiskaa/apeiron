@@ -11,6 +11,10 @@ connections:
     reason: "The oldest form of invisible control is not media or money but secret networks — organizations that shaped power long before Bernays or broadcast television"
   - target: "shadow-elite"
     reason: "The CFR, Bilderberg, and Trilateral Commission operate the control systems Bernays theorized — but from the top of the pyramid, selecting which ideas reach the public"
+  - target: "mkultra"
+    reason: "MKUltra was the control system turned inward — not shaping public opinion but directly reprogramming individual consciousness"
+  - target: "jfk"
+    reason: "The Warren Commission demonstrated that official investigations can manufacture consensus — the template for managed narrative applied to the crime of the century"
 ---
 
 In 1928, Edward Bernays — nephew of Sigmund Freud and the father of modern public relations — published a book called *Propaganda*. Its opening paragraph is remarkably candid: "The conscious and intelligent manipulation of the organized habits and opinions of the masses is an important element in democratic society. Those who manipulate this unseen mechanism of society constitute an invisible government which is the true ruling power of our country."

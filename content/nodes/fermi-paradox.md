@@ -9,6 +9,8 @@ connections:
     reason: "The absence of aliens could mean our universe is simulated with limited scope"
   - target: "consciousness"
     reason: "If consciousness is rare or special, it may explain why we appear to be alone"
+  - target: "ufos"
+    reason: "The modern UAP evidence — Pentagon videos, congressional testimony, whistleblower claims — suggests the paradox may already be resolved: they are here"
 ---
 
 In the summer of 1950, physicist Enrico Fermi sat down to lunch with colleagues at Los Alamos National Laboratory. The conversation turned to flying saucers, then to the probability of extraterrestrial life, and then to a question that silenced the table. Fermi looked up and asked: "Where is everybody?"

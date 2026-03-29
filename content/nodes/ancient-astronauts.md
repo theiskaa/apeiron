@@ -9,6 +9,8 @@ connections:
     reason: "Megalithic construction that defies known ancient capabilities has fueled theories of external help"
   - target: "fermi-paradox"
     reason: "If aliens visited Earth in the past, the Fermi Paradox may already have its answer"
+  - target: "ufos"
+    reason: "The ancient astronaut phenomenon and modern UAPs may be the same phenomenon across millennia — the descriptions change with the technology of the observer"
 ---
 
 Every ancient culture on Earth describes beings who came from the sky.

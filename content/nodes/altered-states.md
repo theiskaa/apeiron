@@ -13,6 +13,8 @@ connections:
     reason: "The Eleusinian Mysteries, the Hermetic orders, the Rosicrucians — secret societies have always been built around the induction and preservation of altered states"
   - target: "hermetic-tradition"
     reason: "Alchemical transformation, ritual magic, and the Hermetic pursuit of gnosis are all technologies for inducing altered states — the tradition treats consciousness modification as laboratory work"
+  - target: "mkultra"
+    reason: "The CIA used LSD, mescaline, and sensory deprivation — the same tools as shamans — not to expand consciousness but to break and reprogram it"
 ---
 
 In 1954, Aldous Huxley swallowed four-tenths of a gram of mescaline, sat down in his garden in Los Angeles, and wrote what would become one of the most influential documents in the history of consciousness research. *The Doors of Perception* described not hallucination but *revelation* — the sense that ordinary perception is a filter, and the drug had opened it. "The man who comes back through the Door in the Wall," Huxley wrote, "will never be quite the same as the man who went out."

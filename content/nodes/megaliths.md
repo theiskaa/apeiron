@@ -9,6 +9,10 @@ connections:
     reason: "The engineering precision of ancient megaliths has fueled theories of non-human assistance"
   - target: "freemasonry"
     reason: "Freemasonry claims descent from the master builders of antiquity — the knowledge of how these stones were cut and placed may be the original secret"
+  - target: "sacred-geometry"
+    reason: "The Great Pyramid encodes pi and phi to extraordinary precision — the megaliths are sacred geometry rendered in stone"
+  - target: "atlantis"
+    reason: "If Atlantis was real, the megalithic structures scattered across the globe may be what its builders left behind"
 ---
 
 The Great Pyramid of Giza contains approximately 2.3 million stone blocks, averaging 2.5 tons each, with some granite blocks in the King's Chamber weighing over 80 tons. These were quarried, transported hundreds of miles, and placed with a precision of 1/50th of an inch. The base is level to within 2.1 centimeters across 13 acres. The sides are aligned to true north with an error of 3/60th of a degree — more accurate than the Royal Greenwich Observatory.

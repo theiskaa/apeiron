@@ -15,6 +15,10 @@ connections:
     reason: "Idealism places consciousness at the foundation of reality — mind is primary, matter is derivative"
   - target: "dualism"
     reason: "Dualism proposes consciousness is non-physical — a separate substance from the brain"
+  - target: "mkultra"
+    reason: "MKUltra was the government's attempt to weaponize consciousness — and the experiments revealed how fragile and malleable the mind truly is"
+  - target: "sacred-geometry"
+    reason: "The golden ratio appears in brain structure and neural oscillations — geometry may be the language in which consciousness is written"
   - target: "secret-societies"
     reason: "From the Eleusinian Mysteries to the Hermetic orders, secret societies have been organized around the claim that ordinary consciousness is a veil hiding a deeper reality"
 ---

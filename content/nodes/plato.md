@@ -11,6 +11,10 @@ connections:
     reason: "Plato's distinction between the world of Forms and the world of appearances prefigures mind-body dualism"
   - target: "hermetic-tradition"
     reason: "Cosimo de' Medici ordered the Hermetica translated before Plato — and the Neoplatonic tradition that preserved Plato's legacy became inseparable from Hermetic thought"
+  - target: "atlantis"
+    reason: "Plato is the only primary source on Atlantis — his Timaeus and Critias describe a civilization destroyed 9,000 years before Solon, a date that coincides with the Younger Dryas"
+  - target: "sacred-geometry"
+    reason: "The Platonic solids — the only five regular polyhedra possible in three dimensions — are the mathematical foundation Plato placed at the heart of reality"
 ---
 
 Imagine prisoners chained in a cave since birth. Their legs and necks are fixed so that they can see only the wall directly in front of them. Behind them and above, a fire burns. Between the fire and the prisoners, a low wall runs along a walkway, and along this walkway people carry objects — statues of animals, vessels, figures of men — that cast shadows on the wall. The prisoners have never seen the objects. They have never seen the fire. They have never seen each other's faces. All they know are shadows, and the echoes of voices they take to be the voices of the shadows themselves. They name the shadows. They develop expertise in predicting which shadow will follow which. They award prizes to the best shadow-predictors. This is their entire reality, and they are perfectly satisfied with it.
