@@ -1,7 +1,7 @@
 [
-  { "id": "mind", "label": "Mind", "color": "#9cb8d4" },
-  { "id": "origins", "label": "Origins", "color": "#d4a24c" },
-  { "id": "cosmos", "label": "Cosmos", "color": "#6fa8dc" },
-  { "id": "power", "label": "Power", "color": "#d46b72" },
-  { "id": "reality", "label": "Reality", "color": "#5cc0b3" }
+  { "id": "mind", "label": "Mind", "color": "#9683b7" },
+  { "id": "origins", "label": "Origins", "color": "#b89458" },
+  { "id": "cosmos", "label": "Cosmos", "color": "#6790b5" },
+  { "id": "power", "label": "Power", "color": "#b5616a" },
+  { "id": "reality", "label": "Reality", "color": "#549e93" }
 ]

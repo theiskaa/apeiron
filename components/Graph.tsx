@@ -90,11 +90,10 @@ export default function Graph({
     if (!fg) return;
 
     const isMobile = dimensions.width < 768;
-    const chargeStrength = isMobile ? -150 : -400;
-    const chargeMax = isMobile ? 250 : 500;
-    const linkDist = isMobile ? 50 : 100;
-    const linkStr = isMobile ? 0.5 : 0.3;
-    const padding = isMobile ? 30 : 60;
+    const chargeStrength = isMobile ? -250 : -600;
+    const chargeMax = isMobile ? 400 : 800;
+    const linkDist = isMobile ? 80 : 160;
+    const linkStr = isMobile ? 0.3 : 0.15;
 
     fg.d3Force("charge").strength(chargeStrength).distanceMax(chargeMax);
     fg.d3Force("link").distance(linkDist).strength(linkStr);
