@@ -92,13 +92,13 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[18vh]">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-md" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-md" onClick={onClose} />
 
       <div
         className="relative w-full max-w-xl mx-4"
         onKeyDown={handleKeyDown}
       >
-        <div className="flex items-center gap-3 px-5 h-12 bg-[var(--bg-secondary)] rounded-full shadow-2xl shadow-black/30 ring-1 ring-white/[0.08]">
+        <div className="flex items-center gap-3 px-5 h-12 bg-[var(--surface)] rounded-full shadow-2xl shadow-black/10 dark:shadow-black/30 ring-1 ring-black/[0.06] dark:ring-white/[0.08]">
           <svg
             width="16"
             height="16"
@@ -124,7 +124,7 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
         </div>
 
         {(hasResults || hasNoResults) && (
-          <div className="mt-2 bg-[var(--bg-secondary)] rounded-2xl shadow-2xl shadow-black/30 ring-1 ring-white/[0.08] overflow-hidden">
+          <div className="mt-2 bg-[var(--surface)] rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/30 ring-1 ring-black/[0.06] dark:ring-white/[0.08] overflow-hidden">
             {hasNoResults ? (
               <div className="px-5 py-6 text-center text-sm text-text-muted">
                 No matching nodes
@@ -137,7 +137,7 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
                     onClick={() => handleSelect(node.id)}
                     onMouseEnter={() => setSelectedIndex(i)}
                     className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors rounded-xl ${
-                      i === selectedIndex ? "bg-white/[0.06]" : ""
+                      i === selectedIndex ? "bg-black/[0.04] dark:bg-white/[0.06]" : ""
                     }`}
                   >
                     <span
