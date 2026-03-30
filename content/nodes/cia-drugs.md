@@ -1,7 +1,7 @@
 ---
 id: "cia-drugs"
 title: "CIA Drug Trafficking"
-category: "power"
+category: "operations"
 connections:
   - target: "mkultra"
     reason: "The same agency that dosed unwitting citizens with LSD facilitated the flow of cocaine and heroin into American cities — MKUltra and drug trafficking are two faces of the CIA's contempt for the people it claims to protect"

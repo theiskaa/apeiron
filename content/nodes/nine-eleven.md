@@ -1,7 +1,7 @@
 ---
 id: "nine-eleven"
 title: "9/11"
-category: "power"
+category: "operations"
 connections:
   - target: "control-systems"
     reason: "The 9/11 Commission was the Warren Commission's successor — a managed investigation designed to produce consensus, not truth"

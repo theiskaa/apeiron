@@ -1,7 +1,7 @@
 ---
 id: "mkultra"
 title: "MKUltra"
-category: "power"
+category: "operations"
 connections:
   - target: "consciousness"
     reason: "MKUltra was the US government's attempt to crack the code of consciousness — and weaponize it"

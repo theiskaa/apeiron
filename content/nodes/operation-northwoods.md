@@ -1,7 +1,7 @@
 ---
 id: "operation-northwoods"
 title: "Operation Northwoods"
-category: "power"
+category: "operations"
 connections:
   - target: "jfk"
     reason: "Kennedy rejected Northwoods and removed its architect — within eighteen months he was dead, and the question of whether the same institutional mindset was turned against him has never been resolved"

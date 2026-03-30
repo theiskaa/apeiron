@@ -1,7 +1,7 @@
 ---
 id: "qanon"
 title: "QAnon"
-category: "power"
+category: "modern"
 connections:
   - target: "control-systems"
     reason: "QAnon is simultaneously a rebellion against narrative control and an example of it — a decentralized movement that nonetheless steered millions toward a single, managed interpretation of reality"

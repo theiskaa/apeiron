@@ -1,7 +1,7 @@
 ---
 id: "mass-surveillance"
 title: "Mass Surveillance"
-category: "power"
+category: "modern"
 connections:
   - target: "control-systems"
     reason: "Mass surveillance is the ultimate control system — not because it changes what people think, but because the knowledge of being watched changes how people behave"

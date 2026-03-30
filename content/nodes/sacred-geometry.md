@@ -1,7 +1,7 @@
 ---
 id: "sacred-geometry"
 title: "Sacred Geometry"
-category: "reality"
+category: "origins"
 connections:
   - target: "megaliths"
     reason: "The Great Pyramid, Stonehenge, and Göbekli Tepe all encode geometric ratios that their builders supposedly could not have known"

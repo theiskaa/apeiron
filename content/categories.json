@@ -3,5 +3,7 @@
   { "id": "origins", "label": "Origins", "color": "#b89458" },
   { "id": "cosmos", "label": "Cosmos", "color": "#6790b5" },
   { "id": "power", "label": "Power", "color": "#b5616a" },
+  { "id": "operations", "label": "Operations", "color": "#c4855c" },
+  { "id": "modern", "label": "Modern", "color": "#a87f98" },
   { "id": "reality", "label": "Reality", "color": "#549e93" }
 ]

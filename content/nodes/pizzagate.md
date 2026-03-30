@@ -1,7 +1,7 @@
 ---
 id: "pizzagate"
 title: "Pizzagate and the Epstein Network"
-category: "power"
+category: "modern"
 connections:
   - target: "shadow-elite"
     reason: "Epstein's network — spanning finance, politics, academia, and royalty — is the shadow elite made visible, a power structure that operated through blackmail, access, and mutual complicity"

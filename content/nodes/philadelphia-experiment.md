@@ -1,7 +1,7 @@
 ---
 id: "philadelphia-experiment"
 title: "The Philadelphia Experiment"
-category: "power"
+category: "operations"
 connections:
   - target: "ufos"
     reason: "The Philadelphia Experiment occupies the same territory as UFO crash retrievals — claims of exotic physics under military control, officially denied, never fully debunked"

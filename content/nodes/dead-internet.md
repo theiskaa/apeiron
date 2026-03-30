@@ -1,7 +1,7 @@
 ---
 id: "dead-internet"
 title: "The Dead Internet Theory"
-category: "reality"
+category: "modern"
 connections:
   - target: "control-systems"
     reason: "If most of the internet is artificial, then the greatest communication tool in human history has been transformed into the most sophisticated control system ever built — a hall of mirrors where manufactured consensus replaces organic thought"

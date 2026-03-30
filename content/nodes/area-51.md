@@ -1,7 +1,7 @@
 ---
 id: "area-51"
 title: "Area 51"
-category: "power"
+category: "cosmos"
 connections:
   - target: "ufos"
     reason: "Area 51 is the epicenter of UFO conspiracy culture — the alleged repository of crashed craft, recovered bodies, and reverse-engineered alien technology"

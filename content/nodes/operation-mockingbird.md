@@ -1,7 +1,7 @@
 ---
 id: "operation-mockingbird"
 title: "Operation Mockingbird"
-category: "power"
+category: "operations"
 connections:
   - target: "control-systems"
     reason: "Mockingbird is the literal mechanism by which invisible control systems operated through the visible institution of the free press"

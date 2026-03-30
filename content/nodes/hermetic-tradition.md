@@ -1,7 +1,7 @@
 ---
 id: "hermetic-tradition"
 title: "The Hermetic Tradition"
-category: "power"
+category: "origins"
 connections:
   - target: "secret-societies"
     reason: "Hermeticism is the philosophical core that runs beneath all Western secret societies — the esoteric current that gives the rituals their meaning"

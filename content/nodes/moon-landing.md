@@ -1,7 +1,7 @@
 ---
 id: "moon-landing"
 title: "The Moon Landing Hoax"
-category: "power"
+category: "cosmos"
 connections:
   - target: "control-systems"
     reason: "If the landings were faked, NASA and the U.S. government pulled off the greatest narrative management operation in history — and if they were real, the hoax theory itself reveals how control systems generate distrust"

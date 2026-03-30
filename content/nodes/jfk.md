@@ -1,7 +1,7 @@
 ---
 id: "jfk"
 title: "The JFK Assassination"
-category: "power"
+category: "operations"
 connections:
   - target: "shadow-elite"
     reason: "The assassination exposed the fault lines of invisible power — the CIA, the Mafia, the military-industrial complex, and the question of who actually governs America"
