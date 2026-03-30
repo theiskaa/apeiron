@@ -15,7 +15,7 @@ export default function Navbar({ onLogoClick, onSearchClick }: Props) {
         className="flex items-center gap-3 hover:opacity-80 transition-opacity"
       >
         <div className="flex flex-col text-left">
-          <span className="text-[15px] font-semibold tracking-[0.14em] text-text-primary leading-tight uppercase">
+          <span className="text-[15px] font-semibold tracking-[0.14em] text-text-primary leading-tight capitalize">
             Apeirron
           </span>
           <span className="text-[10px] text-text-muted tracking-[0.06em]">
