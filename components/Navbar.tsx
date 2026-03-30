@@ -15,34 +15,40 @@ export default function Navbar({ onLogoClick, onSearchClick }: Props) {
         className="flex items-center gap-3 hover:opacity-80 transition-opacity"
       >
         <div className="flex flex-col text-left">
-          <span className="text-lg font-semibold tracking-wide text-text-primary leading-tight">
+          <span className="text-[15px] font-semibold tracking-[0.14em] text-text-primary leading-tight uppercase">
             Apeirron
           </span>
-          <span className="text-[10px] text-text-muted tracking-wide">
+          <span className="text-[10px] text-text-muted tracking-[0.06em]">
             Biggest questions humanity asks
           </span>
         </div>
       </button>
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-4">
         {onSearchClick && (
           <button
             onClick={onSearchClick}
-            className="text-text-muted hover:text-text-primary transition-colors"
+            className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-full text-text-muted hover:text-text-secondary transition-all text-[11px] tracking-wide leading-none"
+            style={{
+              backgroundColor: "color-mix(in srgb, var(--text-primary) 5%, transparent)",
+              boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent)",
+            }}
             aria-label="Search nodes"
           >
             <svg
-              width="18"
-              height="18"
+              width="13"
+              height="13"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
+            <span className="hidden sm:inline">Search</span>
+            <kbd className="hidden md:inline text-[10px] text-text-muted/70 ml-1">⌘K</kbd>
           </button>
         )}
         <ThemeToggle />
@@ -54,8 +60,8 @@ export default function Navbar({ onLogoClick, onSearchClick }: Props) {
           aria-label="GitHub repository"
         >
           <svg
-            width="20"
-            height="20"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
             fill="currentColor"
           >

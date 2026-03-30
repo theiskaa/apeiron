@@ -98,7 +98,7 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
         className="relative w-full max-w-xl mx-4"
         onKeyDown={handleKeyDown}
       >
-        <div className="flex items-center gap-3 px-5 h-12 bg-[var(--surface)] rounded-full shadow-2xl shadow-black/10 dark:shadow-black/30 ring-1 ring-black/[0.06] dark:ring-white/[0.08]">
+        <div className="flex items-center gap-3 px-5 h-12 bg-[var(--surface)] rounded-full shadow-2xl shadow-black/10 dark:shadow-black/30 ring-1 ring-black/[0.06] dark:ring-white/[0.08] focus-within:ring-2 focus-within:ring-black/[0.12] dark:focus-within:ring-white/[0.15] transition-shadow">
           <svg
             width="16"
             height="16"
@@ -119,7 +119,7 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search nodes..."
-            className="flex-1 bg-transparent text-[15px] text-text-primary placeholder:text-text-muted outline-none"
+            className="flex-1 bg-transparent text-[15px] text-text-primary placeholder:text-text-muted outline-none focus:outline-none focus:ring-0"
           />
         </div>
 

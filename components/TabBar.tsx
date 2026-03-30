@@ -26,7 +26,7 @@ export default function TabBar({
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
 
   return (
-    <div className="relative z-10 flex items-center gap-1.5 px-8 py-1.5 overflow-x-auto no-scrollbar">
+    <div className="relative z-10 flex items-center gap-2 px-3 md:px-8 py-1.5 overflow-x-auto no-scrollbar">
       {tabs.map((tab) => {
         const isActive = tab.id === activeTabId;
         const isGraph = tab.type === "graph";
@@ -36,14 +36,20 @@ export default function TabBar({
           <button
             key={tab.id}
             onClick={() => onSelectTab(tab.id)}
-            className={`group flex items-center gap-2 py-1.5 text-[12px] rounded-full
-              transition-all duration-150 shrink-0
+            className={`group flex items-center gap-1.5 py-1 px-2.5 text-[11.5px] rounded-full shrink-0 transition-all duration-150
               ${isActive
-                ? "bg-surface ring-1 ring-border px-3.5 text-text-primary"
-                : "bg-surface/40 px-3 text-text-muted hover:text-text-secondary hover:bg-surface/60"
+                ? "text-text-primary ring-1"
+                : "text-text-muted hover:text-text-secondary hover:bg-text-primary/[0.04]"
               }
               ${isActive ? "" : "max-w-[140px]"}
             `}
+            style={isActive ? (isGraph ? {
+              backgroundColor: "color-mix(in srgb, var(--text-primary) 7%, transparent)",
+              boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 13%, transparent)",
+            } : {
+              backgroundColor: `${node?.color ?? "#666"}11`,
+              boxShadow: `inset 0 0 0 1px ${node?.color ?? "#666"}22`,
+            }) : undefined}
           >
             {isGraph ? (
               <svg
@@ -63,7 +69,7 @@ export default function TabBar({
               </svg>
             ) : (
               <span
-                className="w-[7px] h-[7px] rounded-full shrink-0"
+                className="w-[6px] h-[6px] rounded-full shrink-0"
                 style={{ backgroundColor: node?.color ?? "#666" }}
               />
             )}
@@ -80,17 +86,17 @@ export default function TabBar({
                   onCloseTab(tab.id);
                 }}
                 className={`shrink-0 rounded-full flex items-center justify-center
-                  hover:bg-border hover:text-text-primary
+                  hover:bg-text-primary/10 hover:text-text-primary
                   transition-all duration-200 origin-center
                   ${isActive
-                    ? "w-4 h-4 opacity-60 hover:opacity-100 scale-100 ml-0.5"
-                    : "w-0 h-0 opacity-0 scale-0 group-hover:w-4 group-hover:h-4 group-hover:opacity-60 group-hover:scale-100 group-hover:ml-0.5 hover:!opacity-100"
+                    ? "w-4 h-4 opacity-40 hover:opacity-100 scale-100 ml-0.5"
+                    : "w-0 h-0 opacity-0 scale-0 group-hover:w-4 group-hover:h-4 group-hover:opacity-40 group-hover:scale-100 group-hover:ml-0.5 hover:!opacity-100"
                   }
                 `}
               >
                 <svg
-                  width="9"
-                  height="9"
+                  width="8"
+                  height="8"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
