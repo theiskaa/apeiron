@@ -289,10 +289,13 @@ function ConnectionReasons({
   );
 
   const reasons = useMemo(() => {
+    const getId = (v: any): string => (typeof v === "object" && v !== null ? v.id : v);
     return links
-      .filter((l) => l.source === nodeId || l.target === nodeId)
+      .filter((l) => getId(l.source) === nodeId || getId(l.target) === nodeId)
       .map((l) => {
-        const otherId = l.source === nodeId ? l.target : l.source;
+        const srcId = getId(l.source);
+        const tgtId = getId(l.target);
+        const otherId = srcId === nodeId ? tgtId : srcId;
         const other = nodeMap.get(otherId);
         if (!other) return null;
         return { id: otherId, title: other.title, color: other.color, reason: l.reason };
