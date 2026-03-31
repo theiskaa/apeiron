@@ -4,8 +4,10 @@
 
 An interactive knowledge graph mapping the biggest questions humanity asks — consciousness, ancient civilizations, the nature of reality, hidden power structures, the cosmos and many more — as interconnected nodes in a visual web.
 
-Every idea is a node. Every node links to others. Every connection has a reason. The result is a web of thought where nothing exists in isolation.
+![Apeiron Graph](public/apeirron-graph.svg)
 
+
+Every idea is a node. Every node links to others. Every connection has a reason. The result is a web of thought where nothing exists in isolation.
 ## How it works
 
 The site is a force-directed graph. Each node is a topic — written as a narrative deep-dive, not a Wikipedia summary. Click a node to read it. Follow `[[links]]` in the text to fall deeper into the rabbit hole. The graph grows as contributors add new nodes through Pull Requests.
