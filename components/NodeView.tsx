@@ -110,10 +110,8 @@ export default function NodeView({
 
       // If we haven't scrolled past the first real heading, we're at top
       if (headings.length === 0 || headings[0].offsetTop - scroll.offsetTop > scrollTop + offset) {
-        setActiveId((prev) => {
-          if (prev !== "_top") window.history.replaceState(null, "", window.location.pathname);
-          return "_top";
-        });
+        setActiveId("_top");
+        window.history.replaceState(null, "", window.location.pathname);
         return;
       }
 
@@ -125,12 +123,8 @@ export default function NodeView({
           break;
         }
       }
-      setActiveId((prev) => {
-        if (prev !== current) {
-          window.history.replaceState(null, "", current === "_top" ? window.location.pathname : `#${current}`);
-        }
-        return current;
-      });
+      setActiveId(current);
+      window.history.replaceState(null, "", current === "_top" ? window.location.pathname : `#${current}`);
     };
 
     scroll.addEventListener("scroll", onScroll, { passive: true });
@@ -210,17 +204,26 @@ export default function NodeView({
                   allLinks={links}
                   onNodeClick={onNodeClick}
                 />
+                <ConnectionReasons
+                  nodeId={node.id}
+                  links={links}
+                  allNodes={allNodes}
+                  onNodeClick={onNodeClick}
+                />
               </div>
               {sourcesHtml && (
-                <div>
-                  <h3 className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3">
-                    Sources
-                  </h3>
-                  <div
-                    className="prose-apeiron prose-apeiron-sources"
-                    dangerouslySetInnerHTML={{ __html: sourcesHtml.replace(/<h2[^>]*>.*?<\/h2>/i, "") }}
-                  />
-                </div>
+                <>
+                  <hr style={{ borderColor: "rgba(144,144,160,0.15)" }} />
+                  <div>
+                    <h3 className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3">
+                      Sources
+                    </h3>
+                    <div
+                      className="prose-apeiron prose-apeiron-sources"
+                      dangerouslySetInnerHTML={{ __html: sourcesHtml.replace(/<h2[^>]*>.*?<\/h2>/i, "") }}
+                    />
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -244,6 +247,12 @@ export default function NodeView({
                 allLinks={links}
                 onNodeClick={onNodeClick}
               />
+              <ConnectionReasons
+                nodeId={node.id}
+                links={links}
+                allNodes={allNodes}
+                onNodeClick={onNodeClick}
+              />
             </div>
             {sourcesHtml && (
               <div>
@@ -258,6 +267,75 @@ export default function NodeView({
             )}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ConnectionReasons({
+  nodeId,
+  links,
+  allNodes,
+  onNodeClick,
+}: {
+  nodeId: string;
+  links: GraphLink[];
+  allNodes: GraphNode[];
+  onNodeClick: (id: string) => void;
+}) {
+  const nodeMap = useMemo(
+    () => new Map(allNodes.map((n) => [n.id, n])),
+    [allNodes]
+  );
+
+  const reasons = useMemo(() => {
+    return links
+      .filter((l) => l.source === nodeId || l.target === nodeId)
+      .map((l) => {
+        const otherId = l.source === nodeId ? l.target : l.source;
+        const other = nodeMap.get(otherId);
+        if (!other) return null;
+        return { id: otherId, title: other.title, color: other.color, reason: l.reason };
+      })
+      .filter(Boolean) as { id: string; title: string; color: string; reason: string }[];
+  }, [links, nodeId, nodeMap]);
+
+  if (reasons.length === 0) return null;
+
+  return (
+    <div className="mt-6">
+      <h3 className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3">
+        Why these connect
+      </h3>
+      <div className="space-y-2.5">
+        {reasons.map((r) => (
+          <button
+            key={r.id}
+            onClick={() => onNodeClick(r.id)}
+            className="block w-full text-left group cursor-pointer"
+          >
+            <div className="flex gap-2">
+              <div className="flex flex-col items-center shrink-0 pt-[5px]">
+                <span
+                  className="w-[5px] h-[5px] rounded-full shrink-0"
+                  style={{ backgroundColor: r.color }}
+                />
+                <span
+                  className="w-px flex-1 mt-1"
+                  style={{ backgroundColor: r.color, opacity: 0.25 }}
+                />
+              </div>
+              <div className="pb-1">
+                <span className="text-[12px] font-medium text-text-primary group-hover:underline block">
+                  {r.title}
+                </span>
+                <span className="block text-[11px] leading-relaxed mt-0.5" style={{ color: "rgba(144,144,160,0.65)" }}>
+                  {r.reason}
+                </span>
+              </div>
+            </div>
+          </button>
+        ))}
       </div>
     </div>
   );
