@@ -83,7 +83,6 @@ function ty(y) { return y * scale + offsetY; }
 
 const svgLines = [];
 svgLines.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">`);
-svgLines.push(`  <rect width="${WIDTH}" height="${HEIGHT}" fill="#f8f8fa" />`);
 
 for (const link of simLinks) {
   const s = typeof link.source === "object" ? link.source : nodeMap.get(link.source);
