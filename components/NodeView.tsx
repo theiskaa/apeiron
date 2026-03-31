@@ -98,38 +98,54 @@ export default function NodeView({
     const content = contentRef.current;
     if (!scroll || !content || tocItems.length === 0) return;
 
+    let ticking = false;
+    let urlTimer: ReturnType<typeof setTimeout> | null = null;
+
     const onScroll = () => {
-      // Skip _top when querying DOM — it doesn't exist as an element
-      const realItems = tocItems.filter((item) => item.id !== "_top");
-      const headings = realItems
-        .map((item) => content.querySelector(`#${CSS.escape(item.id)}`))
-        .filter(Boolean) as HTMLElement[];
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
 
-      const scrollTop = scroll.scrollTop;
-      const offset = 120;
+        const realItems = tocItems.filter((item) => item.id !== "_top");
+        const headings = realItems
+          .map((item) => content.querySelector(`#${CSS.escape(item.id)}`))
+          .filter(Boolean) as HTMLElement[];
 
-      // If we haven't scrolled past the first real heading, we're at top
-      if (headings.length === 0 || headings[0].offsetTop - scroll.offsetTop > scrollTop + offset) {
-        setActiveId("_top");
-        window.history.replaceState(null, "", window.location.pathname);
-        return;
-      }
+        const scrollTop = scroll.scrollTop;
+        const offset = 120;
 
-      let current = headings[0]?.id ?? "_top";
-      for (const h of headings) {
-        if (h.offsetTop - scroll.offsetTop <= scrollTop + offset) {
-          current = h.id;
-        } else {
-          break;
+        if (headings.length === 0 || headings[0].offsetTop - scroll.offsetTop > scrollTop + offset) {
+          setActiveId("_top");
+          if (urlTimer) clearTimeout(urlTimer);
+          urlTimer = setTimeout(() => {
+            window.history.replaceState(null, "", window.location.pathname);
+          }, 150);
+          return;
         }
-      }
-      setActiveId(current);
-      window.history.replaceState(null, "", current === "_top" ? window.location.pathname : `#${current}`);
+
+        let current = headings[0]?.id ?? "_top";
+        for (const h of headings) {
+          if (h.offsetTop - scroll.offsetTop <= scrollTop + offset) {
+            current = h.id;
+          } else {
+            break;
+          }
+        }
+        setActiveId(current);
+        if (urlTimer) clearTimeout(urlTimer);
+        urlTimer = setTimeout(() => {
+          window.history.replaceState(null, "", current === "_top" ? window.location.pathname : `#${current}`);
+        }, 150);
+      });
     };
 
     scroll.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    return () => scroll.removeEventListener("scroll", onScroll);
+    return () => {
+      scroll.removeEventListener("scroll", onScroll);
+      if (urlTimer) clearTimeout(urlTimer);
+    };
   }, [tocItems, node.id]);
 
   const handleTocClick = useCallback(

@@ -146,3 +146,19 @@ export async function buildGraphData(): Promise<GraphData> {
 
   return { nodes: graphNodes, links };
 }
+
+/**
+ * Build a lightweight version of graph data where only the specified node
+ * has its full HTML content. All other nodes get contentHtml stripped to
+ * save memory on mobile (Safari iOS kills pages that use too much RAM).
+ */
+export async function buildGraphDataForNode(activeNodeId: string): Promise<GraphData> {
+  const full = await buildGraphData();
+  return {
+    links: full.links,
+    nodes: full.nodes.map((n) => ({
+      ...n,
+      contentHtml: n.id === activeNodeId ? n.contentHtml : "",
+    })),
+  };
+}
