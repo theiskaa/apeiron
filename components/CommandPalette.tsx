@@ -92,7 +92,7 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[18vh]">
-      <div className="absolute inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-md" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/15 dark:bg-black/30 backdrop-blur-sm" onClick={onClose} />
 
       <div
         className="relative w-full max-w-xl mx-4"
