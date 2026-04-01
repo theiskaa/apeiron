@@ -51,6 +51,28 @@ export default function Navbar({ onLogoClick, onSearchClick }: Props) {
             <kbd className="hidden md:inline text-[10px] text-text-muted/70 ml-1">⌘K</kbd>
           </button>
         )}
+        <a
+          href="/contribute"
+          className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-text-muted hover:text-text-secondary transition-all text-[11px] tracking-wide leading-none"
+          style={{
+            backgroundColor: "color-mix(in srgb, var(--text-primary) 5%, transparent)",
+            boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent)",
+          }}
+        >
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          <span className="hidden sm:inline">New Node</span>
+        </a>
         <ThemeToggle />
         <a
           href="https://github.com/theiskaa/apeirron"
