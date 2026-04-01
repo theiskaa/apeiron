@@ -1,4 +1,4 @@
-import { getCategories, getAllNodes } from "@/lib/content";
+import { getCategories, getAllNodeFrontmatters } from "@/lib/content";
 import ContributeForm from "@/components/ContributeForm";
 import type { Metadata } from "next";
 
@@ -14,21 +14,21 @@ interface Props {
 export default async function ContributePage({ searchParams }: Props) {
   const { node: nodeId } = await searchParams;
   const categories = getCategories();
-  const allNodes = getAllNodes();
+  const frontmatters = getAllNodeFrontmatters();
   const categoryMap = new Map(categories.map((c) => [c.id, c]));
 
-  const nodeList = allNodes.map((n) => ({
-    id: n.frontmatter.id,
-    title: n.frontmatter.title,
-    color: categoryMap.get(n.frontmatter.category)?.color ?? "#666666",
+  const nodeList = frontmatters.map((n) => ({
+    id: n.id,
+    title: n.title,
+    color: categoryMap.get(n.category)?.color ?? "#666666",
   }));
 
   // Pre-fill title if coming from a phantom node
   let prefillTitle = "";
   if (nodeId) {
-    const existing = allNodes.find((n) => n.frontmatter.id === nodeId);
+    const existing = frontmatters.find((n) => n.id === nodeId);
     if (existing) {
-      prefillTitle = existing.frontmatter.title;
+      prefillTitle = existing.title;
     } else {
       prefillTitle = nodeId
         .split("-")

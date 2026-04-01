@@ -426,7 +426,7 @@ export default function Graph({
   );
 
   return (
-    <div ref={containerRef} className="w-full h-full absolute inset-0">
+    <div ref={containerRef} role="img" aria-label="Interactive knowledge graph" className="w-full h-full absolute inset-0">
       <ForceGraph2D
         ref={fgRef}
         graphData={graphData}

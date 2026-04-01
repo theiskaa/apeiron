@@ -36,6 +36,16 @@ export function getCategories(): Category[] {
   return JSON.parse(raw);
 }
 
+/** Lightweight: only parses frontmatter, skips content. */
+export function getAllNodeFrontmatters(): NodeFrontmatter[] {
+  const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".md"));
+  return files.map((filename) => {
+    const raw = fs.readFileSync(path.join(CONTENT_DIR, filename), "utf-8");
+    const { data } = matter(raw);
+    return data as NodeFrontmatter;
+  });
+}
+
 export function getAllNodes(): NodeData[] {
   const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".md"));
   return files.map((filename) => {

@@ -26,7 +26,7 @@ export default function TabBar({
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
 
   return (
-    <div className="relative z-10 flex items-center gap-2 px-3 md:px-8 py-1.5 overflow-x-auto no-scrollbar">
+    <div role="tablist" aria-label="Open tabs" className="relative z-10 flex items-center gap-2 px-3 md:px-8 py-1.5 overflow-x-auto no-scrollbar">
       {tabs.map((tab) => {
         const isActive = tab.id === activeTabId;
         const isGraph = tab.type === "graph";
@@ -35,6 +35,9 @@ export default function TabBar({
         return (
           <button
             key={tab.id}
+            role="tab"
+            aria-selected={isActive}
+            aria-label={isGraph ? "Graph view" : node?.title ?? "Unknown node"}
             onClick={() => onSelectTab(tab.id)}
             className={`group flex items-center gap-1.5 py-1 px-2.5 text-[11px] rounded-full shrink-0 transition-all duration-150
               ${isActive
@@ -81,6 +84,7 @@ export default function TabBar({
             {!isGraph && (
               <span
                 role="button"
+                aria-label={`Close ${node?.title ?? "tab"}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onCloseTab(tab.id);
@@ -89,8 +93,8 @@ export default function TabBar({
                   hover:bg-text-primary/10 hover:text-text-primary
                   transition-all duration-200 origin-center
                   ${isActive
-                    ? "w-4 h-4 opacity-40 hover:opacity-100 scale-100 ml-0.5"
-                    : "w-0 h-0 opacity-0 scale-0 group-hover:w-4 group-hover:h-4 group-hover:opacity-40 group-hover:scale-100 group-hover:ml-0.5 hover:!opacity-100"
+                    ? "w-5 h-5 opacity-40 hover:opacity-100 scale-100 ml-0.5"
+                    : "w-0 h-0 opacity-0 scale-0 group-hover:w-5 group-hover:h-5 group-hover:opacity-40 group-hover:scale-100 group-hover:ml-0.5 hover:!opacity-100"
                   }
                 `}
               >

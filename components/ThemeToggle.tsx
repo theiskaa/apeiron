@@ -34,7 +34,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="text-text-muted hover:text-text-primary transition-colors p-1"
+      className="text-text-muted hover:text-text-primary transition-colors p-2"
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
     >
       {dark ? (
