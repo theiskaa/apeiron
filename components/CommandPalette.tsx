@@ -64,9 +64,12 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
     setSelectedIndex(0);
   }, [filtered.length]);
 
+  const keyboardNav = useRef(false);
   useEffect(() => {
-    if (!listRef.current) return;
-    const item = listRef.current.children[selectedIndex] as HTMLElement;
+    if (!keyboardNav.current || !listRef.current) return;
+    keyboardNav.current = false;
+    const items = listRef.current.querySelectorAll("[role=option]");
+    const item = items[selectedIndex] as HTMLElement;
     if (item) item.scrollIntoView({ block: "nearest" });
   }, [selectedIndex]);
 
@@ -122,10 +125,12 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
           switch (e.key) {
             case "ArrowDown":
               e.preventDefault();
+              keyboardNav.current = true;
               setSelectedIndex((i) => Math.min(i + 1, list.length - 1));
               break;
             case "ArrowUp":
               e.preventDefault();
+              keyboardNav.current = true;
               setSelectedIndex((i) => Math.max(i - 1, 0));
               break;
             case "Enter":
