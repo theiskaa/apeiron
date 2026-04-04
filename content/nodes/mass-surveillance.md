@@ -15,6 +15,10 @@ connections:
     reason: "Operation Mockingbird controlled what information the public received. Mass surveillance controls what the government knows about the public. Both are tools of state information control."
   - target: "mkultra"
     reason: "MKUltra experimented on citizens without their consent. Mass surveillance collects citizens' data without their knowledge. Both are cases of the government invading people's private lives in secret."
+  - target: "covid-lab-leak"
+    reason: "COVID-19 justified the most rapid expansion of surveillance infrastructure since 9/11 — contact tracing apps, vaccine passports, QR code check-ins, and movement tracking became normalized virtually overnight."
+  - target: "great-reset"
+    reason: "The Great Reset's proposed infrastructure — digital IDs, health passports, carbon tracking, programmable money — requires a surveillance apparatus that dwarfs anything built under the Patriot Act."
 ---
 
 In 1975, Senator Frank Church — the Idaho Democrat who chaired the Senate Select Committee to Study Governmental Operations with Respect to Intelligence Activities — appeared on NBC's *Meet the Press* and issued a warning so precise that it reads today less like prophecy than like a technical description of the present. Speaking of the National Security Agency, Church said: "That capability at any time could be turned around on the American people, and no American would have any privacy left, such is the capability to monitor everything: telephone conversations, telegrams, it doesn't matter. There would be no place to hide." He paused, and then added the line that would become his most quoted: "I don't want to see this country ever go across the bridge. I know the capacity that is there to make tyranny total in America, and we must see to it that this agency and all agencies that possess this technology operate within the law and under proper supervision, so that we never cross over that abyss. That is the abyss from which there is no return."

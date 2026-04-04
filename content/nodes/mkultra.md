@@ -15,6 +15,8 @@ connections:
     reason: "MKUltra used trauma, dissociation, and identity reconstruction -- the same methods secret societies have used in initiation rituals for centuries."
   - target: "ufos"
     reason: "The same CIA offices that ran MKUltra also managed the UFO cover-up. Some researchers think the two programs were connected."
+  - target: "marilyn-monroe"
+    reason: "Monroe's psychiatrist Ralph Greenson controlled every aspect of her life in her final months — her medication, her housekeeper, her social contacts — in a handler arrangement that mirrors MKUltra's methods of managing vulnerable subjects through psychiatric authority."
 ---
 
 On August 3, 1977, Senator Ted Kennedy opened a joint hearing of the Senate Select Committee on Intelligence and the Subcommittee on Health and Scientific Research. His opening statement was measured in tone and devastating in content. The CIA, Kennedy told the chamber, had conducted a twenty-year program of experiments on unwitting American citizens — experiments involving drugs, electroshock, radiation, sensory deprivation, hypnosis, and psychological torture — in an effort to develop techniques of mind control. The program was called MKUltra. It had been authorized at the highest levels of the intelligence community. Most of its records had been deliberately destroyed. And the American public had known nothing about it.

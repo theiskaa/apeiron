@@ -7,12 +7,8 @@ connections:
     reason: "Monroe's affairs with both John and Robert Kennedy placed her at the intersection of the presidency and its secrets. Her death came weeks after she allegedly threatened to go public about what the Kennedys had told her."
   - target: "mkultra"
     reason: "Monroe's psychiatric treatment, her relationship with her psychiatrist Ralph Greenson, and the heavy sedation that defined her final years raise questions about whether she was subjected to — or a casualty of — mind control techniques being developed under MKUltra."
-  - target: "operation-mockingbird"
-    reason: "The media's handling of Monroe's death — the swift acceptance of the suicide narrative, the absence of investigative follow-up — is consistent with the kind of narrative management that Operation Mockingbird was designed to achieve."
   - target: "cia-drugs"
     reason: "Monroe's death by barbiturate overdose occurred in a period when the CIA was actively studying the use of pharmaceuticals for incapacitation and assassination. The specific drug cocktail found in her system has raised questions among forensic experts."
-  - target: "control-systems"
-    reason: "Monroe's story illustrates how celebrity functions as a control system — a person elevated to icon status becomes both an asset and a liability to the powerful, and when the liability outweighs the asset, the person is disposable."
   - target: "deep-state"
     reason: "The FBI and CIA files on Monroe — partially declassified, heavily redacted — confirm that she was surveilled by both agencies. The question is whether surveillance tipped into something more active."
 ---

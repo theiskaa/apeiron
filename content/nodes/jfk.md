@@ -11,6 +11,8 @@ connections:
     reason: "Dealey Plaza is on the 33rd parallel and was named after a 33rd-degree Freemason. Multiple researchers have connected the assassination to Masonic symbolism."
   - target: "mkultra"
     reason: "Oswald had intelligence connections and a bizarre defection history, and Jack Ruby's behavior fits patterns seen in MKUltra-style programming."
+  - target: "marilyn-monroe"
+    reason: "Monroe's death came sixteen months before JFK's assassination. Both were entangled with the Kennedys, both knew secrets about CIA operations, and both died under circumstances the official record has never convincingly explained."
 ---
 
 At 12:30 p.m. on November 22, 1963, the presidential motorcade turned left from Houston Street onto Elm Street in Dealey Plaza, Dallas, Texas. President John Fitzgerald Kennedy sat in the rear seat of the open Lincoln Continental limousine, SS-100-X, next to his wife Jacqueline. In front of them sat Texas Governor John Connally and his wife Nellie. The sun was out. The crowds were large and enthusiastic. Nellie Connally turned to the President and said, "Mr. President, you can't say Dallas doesn't love you." Kennedy replied, "No, you certainly can't." Seconds later, he was shot. Within thirty minutes, he was dead at Parkland Memorial Hospital. He was forty-six years old.

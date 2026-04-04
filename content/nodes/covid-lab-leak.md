@@ -6,17 +6,13 @@ connections:
   - target: "big-pharma"
     reason: "The pharmaceutical industry's unprecedented profits from COVID-19 vaccines — and its role in shaping the public health response — made it both the solution to and a primary beneficiary of the pandemic."
   - target: "aids-bioweapon"
-    reason: "The AIDS bioweapon theory and the COVID lab leak hypothesis share the same foundational question: whether governments and institutions have engineered or manipulated deadly pathogens, and whether the official origin stories are covers."
+    reason: "Both involve the same institutional actors: the NIH funding pipeline, Fort Detrick and USAMRIID's biodefense programs, and a pattern of government-funded pathogen research conducted with minimal transparency. The scientists and institutions at the center of the COVID gain-of-function debate operate within a biodefense establishment whose roots trace directly to the Cold War biological weapons programs central to the AIDS bioweapon narrative."
   - target: "mass-surveillance"
     reason: "COVID-19 justified the most rapid expansion of surveillance infrastructure since 9/11 — contact tracing apps, vaccine passports, QR code check-ins, and movement tracking became normalized virtually overnight."
   - target: "control-systems"
     reason: "Lockdowns, mandates, censorship of dissent, emergency powers — COVID-19 demonstrated that governments could impose control systems of unprecedented scope when provided with a sufficiently compelling justification."
   - target: "deep-state"
     reason: "The lab leak debate exposed the entanglement between public health agencies (NIH, NIAID), intelligence agencies, and the research institutions they fund — a biodefense deep state operating with minimal oversight."
-  - target: "nine-eleven"
-    reason: "Like 9/11, COVID-19 was a catastrophic event that triggered massive expansions of state power, surveillance, and spending — with questions about its origins suppressed as conspiracy theory before slowly becoming mainstream."
-  - target: "operation-mockingbird"
-    reason: "The coordinated suppression of the lab leak hypothesis across major media, social media platforms, and scientific journals — later revealed to have been influenced by interested parties — echoed the media management patterns of Operation Mockingbird."
 ---
 
 On December 30, 2019, Dr. Li Wenliang, a thirty-three-year-old ophthalmologist at Wuhan Central Hospital, sent a message to a private WeChat group of fellow medical school alumni. He attached a clinical report showing that seven patients had been diagnosed with a SARS-like illness linked to the Huanan Seafood Wholesale Market, and he warned his colleagues to take protective precautions. Within hours, screenshots of his message had spread beyond the private group. Within days, the Wuhan Municipal Health Commission had issued an internal notice acknowledging the cluster but insisting there was "no clear evidence of human-to-human transmission." Within a week, Li Wenliang had been summoned to the Zhongnan Road Police Station and forced to sign a statement admitting that he had made "false comments" that had "severely disturbed the social order." The document, a photograph of which Li later posted online, warned him that if he continued to engage in "illegal activities," he would be "brought to justice." He signed it. He went back to work. On January 10, 2020, he began coughing. On January 12, he was hospitalized. On February 7, 2020 — thirty-nine days after his warning — Li Wenliang was dead of the disease he had tried to alert the world about.

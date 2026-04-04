@@ -15,6 +15,10 @@ connections:
     reason: "MKUltra proves the deep state is real: a 20-year program of human experimentation hidden by the classification system, invisible to Congress, courts, and the public."
   - target: "operation-mockingbird"
     reason: "Operation Mockingbird showed the deep state controlled major media outlets, meaning the press was not checking government power but helping to hide it."
+  - target: "covid-lab-leak"
+    reason: "The COVID lab leak debate exposed a biodefense deep state — the entanglement between NIH, NIAID, the intelligence community, and the research institutions they fund, operating with minimal oversight and suppressing inconvenient questions."
+  - target: "great-reset"
+    reason: "The WEF's Young Global Leaders program has placed alumni in positions of power across dozens of governments — a pipeline of technocrats loyal to an agenda set in Davos, not by their national electorates."
 ---
 
 In January 2014, a retired congressional staffer named Mike Lofgren published an essay on Bill Moyers's website titled "Anatomy of the Deep State." Lofgren had spent twenty-eight years working on the Senate and House Budget Committees, watching the federal government from the inside with the particular clarity that comes from handling the money. His thesis was simple and devastating: there exists within the United States government a permanent, largely unaccountable infrastructure of national security agencies, military contractors, Wall Street firms, and Silicon Valley surveillance companies that operates regardless of which party holds the White House or Congress. Elections change the figureheads. They do not change the policy. "It is the red thread," Lofgren wrote, "that runs through the war on terrorism, the ## financialization and deindustrialization of the American economy, the rise of a plutocratic social structure and political dysfunction."

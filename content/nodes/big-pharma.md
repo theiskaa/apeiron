@@ -15,6 +15,10 @@ connections:
     reason: "Epstein donated to major scientific institutions and gained access and credibility through his wealth. Big Pharma critics say the same thing happens in medical research: money buys influence over science."
   - target: "qanon"
     reason: "QAnon adopted anti-vaccine beliefs and folded them into its conspiracy framework. In the Q narrative, Big Pharma is part of the cabal that harms children for profit."
+  - target: "covid-lab-leak"
+    reason: "COVID-19 generated unprecedented pharmaceutical profits — Pfizer alone earned over $100 billion in vaccine revenue — while the question of whether the virus originated from research funded by the same public health establishment went suppressed for years."
+  - target: "great-reset"
+    reason: "The pandemic was the proof of concept for the Great Reset's governance model — global coordination between governments, pharmaceutical corporations, and international organizations, with vaccine passports as digital ID infrastructure."
 ---
 
 In September 2009, Pfizer Inc. — the world's largest pharmaceutical company — pleaded guilty to a federal criminal charge of misbranding Bextra, a painkiller the company had promoted for uses the FDA had explicitly declined to approve, and agreed to pay $2.3 billion in fines and settlements. It was the largest healthcare fraud settlement in the history of the United States Department of Justice. The company paid the fine. Its stock barely moved. No executive went to prison. Within a decade, Pfizer would become the most recognized pharmaceutical brand on Earth, its name synonymous not with criminal fraud but with the vaccine that was supposed to end a pandemic. The settlement, the largest of its kind in human history, had been absorbed into the cost of doing business — a rounding error in the moral accounting of an industry whose annual global revenues exceed $1.4 trillion.

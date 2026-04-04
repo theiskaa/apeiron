@@ -15,6 +15,12 @@ connections:
     reason: "UFO crash retrieval programs have been hidden from Congress for decades. This is one of the shadow elite's longest-running secrets."
   - target: "jfk"
     reason: "The JFK assassination showed the CIA, the Mafia, and the military-industrial complex all converging around a single event -- exposing how shadow power actually works."
+  - target: "bohemian-grove"
+    reason: "The Bohemian Grove is the shadow elite's summer retreat — every Republican president from Hoover to Bush, plus Kissinger, Rockefeller, and the heads of the CIA and major defense contractors, socializing in the California redwoods behind armed guards."
+  - target: "bilderberg"
+    reason: "Bilderberg is the shadow elite's annual transatlantic summit — 150 heads of state, central bankers, defense ministers, and corporate CEOs meeting in secret to align on policy before it enters the democratic process."
+  - target: "great-reset"
+    reason: "The World Economic Forum and its Great Reset initiative represent the shadow elite operating in plain sight — unelected technocrats and billionaires publicly declaring their intention to reshape the global economic and social order."
 ---
 
 In 1966, Carroll Quigley — a professor of history at Georgetown University's School of Foreign Service and mentor to a young Bill Clinton — published a 1,348-page book called *Tragedy and Hope: A History of the World in Our Time*. Buried in this massive academic history was a passage that would make Quigley the most cited author in conspiracy literature for the next half century:

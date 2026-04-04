@@ -7,18 +7,12 @@ connections:
     reason: "Bohemian Grove is a modern secret society in all but name — an invitation-only gathering of the world's most powerful men, bound by ritual, secrecy, and an explicit prohibition on outside reporting."
   - target: "shadow-elite"
     reason: "The Grove's membership list reads like a directory of the shadow elite: presidents, defense secretaries, central bankers, CEOs, and intelligence chiefs, all socializing off the record in the California redwoods."
-  - target: "illuminati"
-    reason: "The Grove's rituals — particularly the Cremation of Care — feed directly into Illuminati conspiracy narratives, providing visible evidence that the world's elite engage in occult-themed ceremonies."
-  - target: "freemasonry"
-    reason: "Like Freemasonry, Bohemian Grove uses ritual and symbolism to bind its members. The organizational structure — camps, degrees of access, initiation customs — mirrors Masonic lodge culture adapted for the 20th-century ruling class."
   - target: "control-systems"
     reason: "The Grove functions as an invisible control system: policy is discussed, alliances are formed, and decisions are made in a setting with no minutes, no press, and no accountability."
-  - target: "new-world-order"
-    reason: "For New World Order theorists, the Grove is exhibit A — a place where the men who run the world literally gather in one location, behind armed guards, to plan the future in secret."
   - target: "mkultra"
     reason: "The CIA's presence at the Grove is well-documented. Agency directors from Allen Dulles onward have been members, and the Manhattan Project itself was allegedly discussed at the Grove in 1942 — raising questions about what other classified programs have been shaped under those redwoods."
-  - target: "counterculture-psyop"
-    reason: "The Grove's existence creates a paradox for counterculture movements: the very elites they oppose gather annually to perform pagan-themed rituals, suggesting the power structure has its own counter-rational, counter-Enlightenment dimension."
+  - target: "bilderberg"
+    reason: "Bohemian Grove and Bilderberg share documented overlapping membership — David Rockefeller, Henry Kissinger, George Shultz, and other confirmed attendees of both. The Grove is the American domestic counterpart to Bilderberg's transatlantic meetings."
 ---
 
 In the summer of 2000, a man with a hidden camera walked through the gates of one of the most exclusive private retreats on Earth. He moved through groves of ancient redwood trees, past clusters of rustic cabins housing former presidents, past tables where defense secretaries poured whiskey for weapons contractors, past stages where grown men in drag performed musical comedies for audiences of billionaires, until he reached the edge of a small artificial lake. There, in the darkness, he filmed what would become one of the most widely circulated conspiracy videos of the early internet: hundreds of men, many of them among the most powerful on the planet, gathered in robes before a forty-foot concrete owl, watching as a priestly figure conducted a fire ritual in which a human effigy was burned on an altar. The man with the camera was Alex Jones. The place was the Bohemian Grove. And the ritual — the Cremation of Care — had been performed there, largely unchanged, since the 1880s.

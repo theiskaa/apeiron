@@ -3,22 +3,12 @@ id: "tesla-suppressed-tech"
 title: "Tesla & Suppressed Technology"
 category: "operations"
 connections:
-  - target: "control-systems"
-    reason: "The suppression of Tesla's technology — and of free energy research more broadly — is cited as evidence that the energy industry functions as a control system, maintaining artificial scarcity to preserve the economic and political power of those who control fossil fuels."
-  - target: "federal-reserve"
-    reason: "Free energy would collapse the petroleum economy and the financial system built on it. The suppression of Tesla's work is, in this reading, inseparable from the interests of the banking system that depends on energy scarcity."
   - target: "deep-state"
     reason: "The FBI's seizure of Tesla's papers after his death, the classification of his research by the Office of Alien Property, and the military's ongoing interest in directed-energy weapons all point to a deep state that absorbed Tesla's most dangerous ideas."
   - target: "shadow-elite"
     reason: "J.P. Morgan's withdrawal of funding from Tesla's Wardenclyffe Tower — allegedly because wireless free energy couldn't be metered and sold — is the founding myth of technological suppression by financial elites."
   - target: "haarp"
     reason: "Tesla's theoretical work on directed energy, resonance weapons, and ionospheric manipulation is the intellectual foundation for conspiracy theories about HAARP and weather warfare."
-  - target: "philadelphia-experiment"
-    reason: "The Philadelphia Experiment's alleged use of electromagnetic fields for invisibility and teleportation draws directly on Tesla's theoretical work on high-energy electromagnetic phenomena."
-  - target: "sacred-geometry"
-    reason: "Tesla's famous obsession with the numbers 3, 6, and 9, his statements about the universe as 'energy, frequency, and vibration,' and his interest in resonance connect his work to the broader tradition of sacred geometry and numerology."
-  - target: "secret-societies"
-    reason: "Tesla's connections to elite circles — his friendships with Mark Twain, Robert Underwood Johnson, and the Johnsons' salon — and the mystery surrounding his later years have led to speculation about secret society involvement in both promoting and suppressing his work."
 ---
 
 On the morning of January 8, 1943, a maid at the Hotel New Yorker in Manhattan entered Room 3327 on the thirty-third floor and found the body of an elderly man lying on the bed. He was thin to the point of emaciation, dressed in his usual dark suit, his silver hair combed back from a gaunt face. He had been dead for some hours — the medical examiner would later establish the time of death as approximately 10:45 p.m. the previous evening, January 7. The cause of death was coronary thrombosis. He was eighty-six years old. He had no wife, no children, no close surviving family in the United States. He had lived in the hotel for the last decade of his life, moving from one room to another as his debts accumulated, feeding pigeons in Bryant Park and Central Park with a devotion that concerned his few remaining acquaintances, writing letters to world leaders that went unanswered, and speaking occasionally to reporters about inventions that sounded, to the uninitiated, like the fantasies of a man losing his mind — a "death ray" that could destroy ten thousand airplanes at a distance of two hundred fifty miles, a device that could photograph human thoughts, a machine that could cause earthquakes, and a method for transmitting unlimited electrical power to any point on Earth without wires.
