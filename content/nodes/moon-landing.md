@@ -13,6 +13,8 @@ connections:
     reason: "Both the moon hoax theory and 9/11 truth movement claim that a major public event was staged or manipulated by the government. People who believe one often believe the other."
   - target: "simulation-hypothesis"
     reason: "The simulation hypothesis asks whether all of reality could be fake. The moon hoax asks whether one specific event was fake. Both are about the same basic question: how do we know what is real?"
+  - target: "flat-earth"
+    reason: "Flat Earth and moon landing denial share the same institutional target — NASA — and the same core claim that the agency fabricates space imagery. The modern Flat Earth movement explicitly incorporates Apollo denial, and the community overlap is extensively documented."
 ---
 
 On July 20, 1969, an estimated 600 million people watched a grainy, ghostly television image of Neil Armstrong descending a ladder onto the surface of the Moon. It was, by almost any measure, the most extraordinary technological achievement in human history — a species that had invented powered flight only sixty-six years earlier had sent two of its members to walk on another world and brought them home alive. The moment was broadcast live. The world watched. And almost immediately, some people began to doubt that it had happened at all.
