@@ -17,6 +17,8 @@ connections:
     reason: "Both cases involve powerful people who may have been protected by institutions. JFK's assassination and Epstein's death both raised questions about cover-ups at the highest levels."
   - target: "mass-surveillance"
     reason: "Epstein ran a private surveillance operation with hidden cameras in his properties. He used the same tools as government mass surveillance programs, but to collect blackmail material on elites."
+  - target: "epstein"
+    reason: "Epstein's documented trafficking and blackmail operation is the real case that validated the core Pizzagate intuition — that powerful people abuse children with institutional protection. The Epstein case is covered in its own dedicated node focusing on the intelligence operation and Mossad connections."
 ---
 
 On the evening of December 4, 2016, a twenty-eight-year-old man named Edgar Maddison Welch drove from Salisbury, North Carolina, to Washington, D.C., carrying an AR-15 semiautomatic rifle, a Colt .38 handgun, and a shotgun. He walked into Comet Ping Pong, a family pizzeria on Connecticut Avenue in the Northwest quadrant of the city, and fired his rifle inside the restaurant. No one was hurt. Welch surrendered peacefully to police. When asked why he had done it, he said he had come to investigate reports — spread virally across the internet over the preceding weeks — that the restaurant was the front for a child sex trafficking ring operated by high-ranking members of the Democratic Party.

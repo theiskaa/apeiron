@@ -21,6 +21,8 @@ connections:
     reason: "Bilderberg is the shadow elite's annual transatlantic summit — 150 heads of state, central bankers, defense ministers, and corporate CEOs meeting in secret to align on policy before it enters the democratic process."
   - target: "great-reset"
     reason: "The World Economic Forum and its Great Reset initiative represent the shadow elite operating in plain sight — unelected technocrats and billionaires publicly declaring their intention to reshape the global economic and social order."
+  - target: "epstein"
+    reason: "Epstein's documented social network — Clinton, Gates, Prince Andrew, Ehud Barak, Les Wexner, Leon Black — is a map of the shadow elite. His operation sat at the interface between extreme wealth, political power, and intelligence services, with the Mega Group providing the financial and social infrastructure."
 ---
 
 In 1966, Carroll Quigley — a professor of history at Georgetown University's School of Foreign Service and mentor to a young Bill Clinton — published a 1,348-page book called *Tragedy and Hope: A History of the World in Our Time*. Buried in this massive academic history was a passage that would make Quigley the most cited author in conspiracy literature for the next half century:
