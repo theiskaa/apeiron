@@ -15,6 +15,8 @@ connections:
     reason: "The simulation hypothesis asks whether all of reality could be fake. The moon hoax asks whether one specific event was fake. Both are about the same basic question: how do we know what is real?"
   - target: "flat-earth"
     reason: "Flat Earth and moon landing denial share the same institutional target — NASA — and the same core claim that the agency fabricates space imagery. The modern Flat Earth movement explicitly incorporates Apollo denial, and the community overlap is extensively documented."
+  - target: "operation-paperclip"
+    reason: "The Saturn V rocket that carried Apollo 11 to the Moon was designed by Wernher von Braun — an SS officer imported through Operation Paperclip who had built V-2 rockets with slave labor from Buchenwald. Whether the landing was real or faked, the man behind the rocket arrived in America through a program that falsified his Nazi records to make him admissible."
 ---
 
 On July 20, 1969, an estimated 600 million people watched a grainy, ghostly television image of Neil Armstrong descending a ladder onto the surface of the Moon. It was, by almost any measure, the most extraordinary technological achievement in human history — a species that had invented powered flight only sixty-six years earlier had sent two of its members to walk on another world and brought them home alive. The moment was broadcast live. The world watched. And almost immediately, some people began to doubt that it had happened at all.
