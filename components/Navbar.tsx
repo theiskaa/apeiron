@@ -23,7 +23,7 @@ export default function Navbar({ onLogoClick, onSearchClick, onExplorerToggle, e
   );
 
   return (
-    <nav className="relative z-10 flex items-center justify-between px-3 md:px-8 pt-10 md:pt-7 pb-4 shrink-0">
+    <nav className="relative z-10 flex items-center justify-between px-3 md:px-5 pt-10 md:pt-7 pb-4 shrink-0">
       {onLogoClick ? (
         <button
           onClick={onLogoClick}

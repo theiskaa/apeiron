@@ -6,85 +6,52 @@ import { READING_PATHS } from "@/lib/paths";
 
 type Mode = "browse" | "paths";
 
-const MIN_WIDTH = 272;
-const MAX_WIDTH = 600;
-const DEFAULT_WIDTH = 480;
-const STORAGE_KEY = "apeiron-explorer-width";
+export const EXPLORER_MIN_WIDTH = 272;
+export const EXPLORER_MAX_WIDTH = 600;
+export const EXPLORER_DEFAULT_WIDTH = 480;
+export const EXPLORER_WIDTH_KEY = "apeiron-explorer-width";
+export const EXPLORER_OPEN_KEY = "apeiron-explorer-open";
 
-function loadWidth(): number {
-  if (typeof window === "undefined") return DEFAULT_WIDTH;
+export function loadExplorerWidth(): number {
+  if (typeof window === "undefined") return EXPLORER_DEFAULT_WIDTH;
   try {
-    const v = localStorage.getItem(STORAGE_KEY);
+    const v = localStorage.getItem(EXPLORER_WIDTH_KEY);
     if (v) {
       const n = Number(v);
-      if (n >= MIN_WIDTH && n <= MAX_WIDTH) return n;
+      if (n >= EXPLORER_MIN_WIDTH && n <= EXPLORER_MAX_WIDTH) return n;
     }
   } catch {}
-  return DEFAULT_WIDTH;
+  return EXPLORER_DEFAULT_WIDTH;
+}
+
+export function loadExplorerOpen(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return localStorage.getItem(EXPLORER_OPEN_KEY) === "true";
+  } catch {}
+  return false;
 }
 
 interface Props {
   nodes: GraphNode[];
-  open: boolean;
   onClose: () => void;
   onNodeSelect: (nodeId: string) => void;
 }
 
 export default function ExplorerPanel({
   nodes,
-  open,
   onClose,
   onNodeSelect,
 }: Props) {
   const [mode, setMode] = useState<Mode>("paths");
   const [query, setQuery] = useState("");
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
-  const [width, setWidth] = useState(loadWidth);
-  const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const dragRef = useRef({ startX: 0, startWidth: 0 });
 
   useEffect(() => {
-    if (open && mode === "browse")
-      setTimeout(() => inputRef.current?.focus(), 200);
-  }, [open, mode]);
-
-  const handleDragStart = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      dragRef.current = { startX: e.clientX, startWidth: width };
-      setIsDragging(true);
-    },
-    [width]
-  );
-
-  useEffect(() => {
-    if (!isDragging) return;
-
-    const handleMove = (e: MouseEvent) => {
-      const delta = e.clientX - dragRef.current.startX;
-      const next = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, dragRef.current.startWidth + delta));
-      setWidth(next);
-    };
-    const handleUp = () => {
-      setIsDragging(false);
-      setWidth((w) => {
-        try { localStorage.setItem(STORAGE_KEY, String(w)); } catch {}
-        return w;
-      });
-    };
-
-    document.addEventListener("mousemove", handleMove);
-    document.addEventListener("mouseup", handleUp);
-    document.body.style.userSelect = "none";
-    document.body.style.cursor = "col-resize";
-    return () => {
-      document.removeEventListener("mousemove", handleMove);
-      document.removeEventListener("mouseup", handleUp);
-      document.body.style.userSelect = "";
-      document.body.style.cursor = "";
-    };
-  }, [isDragging]);
+    if (mode === "browse")
+      setTimeout(() => inputRef.current?.focus(), 100);
+  }, [mode]);
 
   const realNodes = useMemo(() => nodes.filter((n) => !n.phantom), [nodes]);
   const nodeMap = useMemo(
@@ -144,41 +111,69 @@ export default function ExplorerPanel({
   );
 
   return (
-    <>
-      {open && (
-        <div
-          className="absolute inset-0 z-[39]"
-          onClick={onClose}
-          aria-hidden="true"
-        />
-      )}
+    <div
+      className="h-full flex flex-col"
+      style={{
+        backgroundColor: "var(--surface)",
+      }}
+    >
+        <div className="flex items-center justify-between px-3 md:px-5 pt-10 md:pt-7 pb-4 shrink-0">
+          <div
+            className="flex items-center gap-0.5 p-0.5 rounded-full"
+            style={{
+              backgroundColor:
+                "color-mix(in srgb, var(--text-primary) 5%, transparent)",
+              boxShadow:
+                "inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent)",
+            }}
+          >
+            <button
+              onClick={() => setMode("paths")}
+              className={`px-4 py-1.5 rounded-full text-[12px] font-medium tracking-wide transition-all duration-150 leading-none ${
+                mode === "paths"
+                  ? "text-text-primary"
+                  : "text-text-muted hover:text-text-secondary"
+              }`}
+              style={
+                mode === "paths"
+                  ? {
+                      backgroundColor: "var(--surface)",
+                      boxShadow:
+                        "0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px color-mix(in srgb, var(--text-primary) 8%, transparent)",
+                    }
+                  : undefined
+              }
+            >
+              Paths
+            </button>
+            <button
+              onClick={() => setMode("browse")}
+              className={`px-4 py-1.5 rounded-full text-[12px] font-medium tracking-wide transition-all duration-150 leading-none ${
+                mode === "browse"
+                  ? "text-text-primary"
+                  : "text-text-muted hover:text-text-secondary"
+              }`}
+              style={
+                mode === "browse"
+                  ? {
+                      backgroundColor: "var(--surface)",
+                      boxShadow:
+                        "0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px color-mix(in srgb, var(--text-primary) 8%, transparent)",
+                    }
+                  : undefined
+              }
+            >
+              Browse
+            </button>
+          </div>
 
-      <div
-        className="absolute left-0 top-0 bottom-0 z-40 flex"
-        style={{
-          width: `${width}px`,
-          transform: open ? "translateX(0)" : "translateX(-100%)",
-          transition: isDragging ? "none" : "transform 220ms cubic-bezier(0.4, 0, 0.2, 1)",
-          pointerEvents: open ? "auto" : "none",
-        }}
-      >
-      <div
-        className="flex-1 min-w-0 h-full flex flex-col"
-        style={{
-          backgroundColor: "var(--surface)",
-          borderRight: "1px solid var(--border)",
-          boxShadow: open
-            ? "4px 0 24px rgba(0,0,0,0.05), 1px 0 2px rgba(0,0,0,0.04)"
-            : "none",
-        }}
-      >
-        <div className="px-4 pt-11 md:pt-8 pb-2 flex items-center justify-between shrink-0">
-          <span className="text-[13px] font-medium tracking-wide text-text-secondary">
-            Explorer
-          </span>
           <button
             onClick={onClose}
-            className="w-6 h-6 flex items-center justify-center rounded-full text-text-muted hover:text-text-secondary hover:bg-[color-mix(in_srgb,var(--text-primary)_6%,transparent)] transition-colors"
+            className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-full text-text-muted hover:text-text-secondary transition-all text-[11px] tracking-wide leading-none"
+            style={{
+              backgroundColor: "color-mix(in srgb, var(--text-primary) 5%, transparent)",
+              boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent)",
+            }}
             aria-label="Close explorer"
           >
             <svg
@@ -193,60 +188,12 @@ export default function ExplorerPanel({
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
+            <span className="hidden sm:inline">Close</span>
           </button>
         </div>
 
-        <div className="px-3 pb-2 shrink-0">
-          <div
-            className="flex items-center gap-0.5 p-0.5 rounded-lg"
-            style={{
-              backgroundColor:
-                "color-mix(in srgb, var(--text-primary) 4%, transparent)",
-            }}
-          >
-            <button
-              onClick={() => setMode("paths")}
-              className={`flex-1 py-1 rounded-md text-[11px] font-medium tracking-wide transition-all duration-150 ${
-                mode === "paths"
-                  ? "text-text-primary shadow-sm"
-                  : "text-text-muted hover:text-text-secondary"
-              }`}
-              style={
-                mode === "paths"
-                  ? {
-                      backgroundColor: "var(--surface)",
-                      boxShadow:
-                        "0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent)",
-                    }
-                  : undefined
-              }
-            >
-              Paths
-            </button>
-            <button
-              onClick={() => setMode("browse")}
-              className={`flex-1 py-1 rounded-md text-[11px] font-medium tracking-wide transition-all duration-150 ${
-                mode === "browse"
-                  ? "text-text-primary shadow-sm"
-                  : "text-text-muted hover:text-text-secondary"
-              }`}
-              style={
-                mode === "browse"
-                  ? {
-                      backgroundColor: "var(--surface)",
-                      boxShadow:
-                        "0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent)",
-                    }
-                  : undefined
-              }
-            >
-              Browse
-            </button>
-          </div>
-        </div>
-
         {mode === "browse" && (
-          <div className="px-3 pb-2 shrink-0">
+          <div className="pl-3 pr-2 pb-2 shrink-0">
             <div
               className="flex items-center gap-2 px-3 h-8 rounded-lg transition-shadow"
               style={{
@@ -302,7 +249,7 @@ export default function ExplorerPanel({
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto panel-scroll px-1.5 pb-3">
+        <div className="flex-1 overflow-y-auto panel-scroll pl-1.5 pr-1 pb-3">
           {mode === "paths" ? (
             <div>
               {READING_PATHS.map((path) => {
@@ -487,7 +434,7 @@ export default function ExplorerPanel({
         </div>
 
         <div
-          className="px-4 py-2.5 shrink-0 flex items-center justify-between"
+          className="pl-4 pr-3 py-2.5 shrink-0 flex items-center justify-between"
           style={{ borderTop: "1px solid var(--border)" }}
         >
           <span className="text-[10px] text-text-muted/60">
@@ -497,30 +444,6 @@ export default function ExplorerPanel({
           </span>
           <kbd className="text-[9px] text-text-muted/40 tracking-wide">⌘B</kbd>
         </div>
-      </div>
-
-      <div
-        onMouseDown={handleDragStart}
-        className="w-[6px] shrink-0 cursor-col-resize group relative"
-        role="separator"
-        aria-orientation="vertical"
-        aria-valuemin={MIN_WIDTH}
-        aria-valuemax={MAX_WIDTH}
-        aria-valuenow={width}
-      >
-        <div
-          className={`absolute inset-y-0 left-[2px] w-[2px] rounded-full transition-opacity duration-150 ${
-            isDragging
-              ? "opacity-100"
-              : "opacity-0 group-hover:opacity-100"
-          }`}
-          style={{
-            backgroundColor:
-              "color-mix(in srgb, var(--text-primary) 15%, transparent)",
-          }}
-        />
-      </div>
     </div>
-    </>
   );
 }
