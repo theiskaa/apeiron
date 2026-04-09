@@ -25,6 +25,8 @@ connections:
     reason: "Bohemian Grove is a modern secret society in all but name — 2,700 acres of private redwood forest where presidents, CIA directors, and corporate titans gather for rituals, drinking, and off-the-record policy talks every July."
   - target: "bilderberg"
     reason: "The Bilderberg Group is the transatlantic counterpart to the lodge tradition — 150 of the world's most powerful people meeting annually under Chatham House Rules, with no press and no public minutes."
+  - target: "skull-and-bones"
+    reason: "Skull and Bones is the most powerful American secret society — fifteen Yale seniors per year, bound by coffin rituals and lifelong secrecy, producing three presidents, multiple CIA directors, and the leadership of Wall Street."
 ---
 
 In 1798, John Robison — professor of natural philosophy at the University of Edinburgh and fellow of the Royal Society — published *Proofs of a Conspiracy Against All the Religions and Governments of Europe*. His claim was specific: a network of secret societies, centered on the [[illuminati]] and infiltrating [[freemasonry]] lodges across Europe, had engineered the French Revolution. The book was not the work of a crank. Robison was one of the most respected scientists in Britain. George Washington read it and wrote in a letter dated October 24, 1798, that he did not doubt "the Doctrines of the Illuminati, and principles of Jacobinism had not spread in the United States."

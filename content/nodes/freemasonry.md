@@ -17,6 +17,8 @@ connections:
     reason: "Masonic initiation puts candidates through symbolic death, darkness, and rebirth. The goal is to transform how the person sees reality, not just to admit them to a club."
   - target: "illuminati"
     reason: "Weishaupt deliberately infiltrated Masonic lodges to recruit for the Illuminati. This real connection between the two groups fueled conspiracy theories for centuries."
+  - target: "skull-and-bones"
+    reason: "Skull and Bones borrowed its core rituals directly from Masonic tradition — the coffin ceremony, the death-and-rebirth initiation, the division between initiated and profane, and the oath of lifelong secrecy."
 ---
 
 On June 24, 1717 — the Feast of St. John the Baptist — four London lodges met at the Goose and Gridiron Ale House near St Paul's Cathedral and formed the Grand Lodge of England. This is the conventional origin date of modern Freemasonry. But the conventional date is almost certainly wrong — not in the sense that the meeting didn't happen, but in the sense that what happened that evening was not a beginning. It was a formalization. The thing itself was already ancient.
