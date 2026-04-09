@@ -21,6 +21,8 @@ connections:
     reason: "DIA is a case study in symbolic control — when the airport leaned into conspiracy theories with ironic signage and lizard-people jokes during its 2018 renovation, it deployed the most sophisticated control response: co-optation through humor, neutralizing inquiry by making it entertainment."
   - target: "saturn-black-cube"
     reason: "The Gnostic Saturn is the oldest invisible control system: the Demiurge who built reality itself as a prison, maintaining it through Archons who govern each layer of the cosmic cage. Every modern control system is a smaller version of this original architecture."
+  - target: "predictive-programming"
+    reason: "Predictive programming is a specific control mechanism that uses entertainment media to normalize future events before they occur — reducing public resistance by making the unthinkable feel familiar, the unprecedented somehow expected."
 ---
 
 In 1928, Edward Bernays — nephew of Sigmund Freud and the father of modern public relations — published a book called *Propaganda*. Its opening paragraph is remarkably candid: "The conscious and intelligent manipulation of the organized habits and opinions of the masses is an important element in democratic society. Those who manipulate this unseen mechanism of society constitute an invisible government which is the true ruling power of our country."

@@ -15,6 +15,8 @@ connections:
     reason: "CIA-connected media promoted the drugged, apolitical hippie image while marginalizing the organized antiwar voices that actually threatened the war machine."
   - target: "cia-drugs"
     reason: "The CIA's pattern of flooding target populations with drugs -- heroin in Southeast Asia, cocaine in Black neighborhoods -- has a domestic precedent in the LSD that the Agency developed and then watched pour into the antiwar movement."
+  - target: "predictive-programming"
+    reason: "If the counterculture was steered by intelligence agencies through media and entertainment, predictive programming is the same mechanism applied forward — using fiction not to redirect a movement but to pre-script public acceptance of future events."
 ---
 
 On April 17, 1965, between fifteen and twenty-five thousand people marched on Washington, D.C. to protest the escalation of the Vietnam War. The march was organized by Students for a Democratic Society — SDS — and it was serious. Paul Potter, the president of SDS, stood before the crowd and delivered a speech that named the problem with a precision that made powerful men uncomfortable. "What kind of system is it," Potter asked, "that justifies the United States or any country seizing the destinies of the Vietnamese people and using them callously for its own purpose? What kind of system is it that disenfranchises people in the South, leaves millions upon millions of people throughout the country impoverished and excluded from the mainstream and promise of American society, and creates combatants for Vietnam that come from the very communities it is responsible for destroying?"
