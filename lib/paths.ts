@@ -70,6 +70,7 @@ export const READING_PATHS: ReadingPath[] = [
       { id: "rockefeller", hook: "Cross the Atlantic. The 1911 Supreme Court breakup of Standard Oil was supposed to be antitrust's great victory — it made Rockefeller substantially richer than he had been before. The lesson reshaped American institutional power for the next century" },
       { id: "vatican-jesuits", hook: "The oldest continuously operating institutional power in the Western world — two thousand years of unbroken existence, a diplomatic corps older than any nation-state, and a religious order so disciplined that no Jesuit was elected pope for 473 years until Francis broke the taboo in 2013" },
       { id: "cfr-trilateral", hook: "The Anglo-American foreign-policy establishment David Rockefeller built. Founded 1921, expanded by Trilateral in 1973, supplied the senior cabinet of every administration since Truman — and finally confessed by its principal architect in his 2002 memoirs: he stood guilty, and he was proud of it" },
+      { id: "schwab-wef", hook: "And the contemporary continuation. Klaus Schwab founded the European Management Forum at Davos in 1971, two years before David Rockefeller founded Trilateral — and built it across fifty-three years into the World Economic Forum, whose Young Global Leaders program, in Schwab's own 2017 Harvard words, has penetrated the cabinets of national governments" },
     ],
   },
   {
