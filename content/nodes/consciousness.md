@@ -21,6 +21,8 @@ connections:
     reason: "The golden ratio shows up in brain structure and neural oscillation patterns, suggesting a link between geometric ratios and how consciousness is organized"
   - target: "secret-societies"
     reason: "Secret societies from the Eleusinian Mysteries to the Hermetic orders have centered their teachings on the idea that normal waking consciousness hides a deeper reality"
+  - target: "jung"
+    reason: "Carl Jung is the indispensable depth-psychological investigator of consciousness — the trained psychiatrist who arrived through clinical observation at the conclusion that ordinary waking consciousness is a small, recent illuminated zone within a vastly larger unconscious that is itself structured, autonomous, and trans-personal. His doctrine of the collective unconscious and the archetypes is the most sustained empirical case ever made for the existence of a layer of mind that is not personal, not learned, and not culturally transmitted, but is structurally inherited and shared across the species. Any serious modern inquiry into the nature of consciousness that ignores Jung is incomplete by construction."
 ---
 
 There is something it is like to be you. Right now, reading these words, there is an experience happening — light hitting your eyes, meaning forming in your mind, a sense of being *here*. This is consciousness. And after centuries of philosophy and decades of neuroscience, nobody can explain why it exists.
