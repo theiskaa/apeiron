@@ -15,6 +15,8 @@ connections:
     reason: "If reality is a simulation that gets updated, the Mandela Effect could be people remembering things from before a patch was applied"
   - target: "sacred-geometry"
     reason: "If reality is computed, the recurring mathematical constants in sacred geometry could be the underlying code showing through, like seeing the math behind a video game's graphics"
+  - target: "cern"
+    reason: "If reality is a computational simulation, the most plausible mechanism for discovering the simulators would be the deliberate generation of physical conditions that the underlying engine was not designed to render — high-energy events at scales beyond the resolution of the simulation, in which the engine would either have to produce exotic outputs or reveal its discrete computational substrate through visible glitches. The Large Hadron Collider at CERN, which produces collision energies higher than any artificial source in the history of the planet, is the closest thing humanity has built to such a probe. CERN is the place where the resolution of physical reality is being tested, and the question of whether the test will produce something the standard model cannot account for is structurally identical to the question of whether the simulation will produce a glitch under sufficient computational stress."
 ---
 
 In 2003, Oxford philosopher Nick Bostrom published a paper that reframed an ancient question in the language of probability theory. The argument was simple, the conclusion was not.
