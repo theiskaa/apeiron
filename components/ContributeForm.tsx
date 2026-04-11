@@ -552,7 +552,7 @@ export default function ContributeForm({
                   <div className="min-h-[600px] max-w-full overflow-hidden">
                     {content.trim() ? (
                       <div
-                        className="prose-apeiron max-w-none"
+                        className="prose-apeirron max-w-none"
                         dangerouslySetInnerHTML={{ __html: previewHtml }}
                       />
                     ) : (

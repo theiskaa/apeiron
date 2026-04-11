@@ -58,12 +58,12 @@ body {
 }
 
 /* Prose styles for rendered markdown articles */
-.prose-apeiron h2 {
+.prose-apeirron h2 {
   @apply text-xl font-semibold mt-8 mb-3 relative cursor-pointer;
   color: var(--text-primary);
 }
 
-.prose-apeiron h2::before {
+.prose-apeirron h2::before {
   content: "##";
   position: absolute;
   left: -1.75rem;
@@ -75,16 +75,16 @@ body {
   color: var(--text-muted);
 }
 
-.prose-apeiron h2:hover::before {
+.prose-apeirron h2:hover::before {
   opacity: 0.5;
 }
 
-.prose-apeiron h3 {
+.prose-apeirron h3 {
   @apply text-lg font-medium mt-6 mb-2 relative cursor-pointer;
   color: var(--text-primary);
 }
 
-.prose-apeiron h3::before {
+.prose-apeirron h3::before {
   content: "###";
   position: absolute;
   left: -2.25rem;
@@ -96,62 +96,62 @@ body {
   color: var(--text-muted);
 }
 
-.prose-apeiron h3:hover::before {
+.prose-apeirron h3:hover::before {
   opacity: 0.5;
 }
 
-.prose-apeiron p {
+.prose-apeirron p {
   @apply leading-relaxed mb-4;
   color: var(--text-secondary);
 }
 
-.prose-apeiron ul {
+.prose-apeirron ul {
   @apply list-disc list-inside mb-4 space-y-1;
   color: var(--text-secondary);
 }
 
-.prose-apeiron ol {
+.prose-apeirron ol {
   @apply list-decimal list-inside mb-4 space-y-1;
   color: var(--text-secondary);
 }
 
-.prose-apeiron li {
+.prose-apeirron li {
   @apply leading-relaxed;
 }
 
-.prose-apeiron a {
+.prose-apeirron a {
   @apply text-cyan-400 hover:text-cyan-300 underline underline-offset-2;
 }
 
 /* Wiki-style [[node links]] rendered inline */
-.prose-apeiron a.node-link {
+.prose-apeirron a.node-link {
   @apply no-underline cursor-pointer;
   color: #60a5fa;
   transition: color 0.15s ease;
 }
 
-.prose-apeiron a.node-link::before,
-.prose-apeiron a.node-link::after {
+.prose-apeirron a.node-link::before,
+.prose-apeirron a.node-link::after {
   opacity: 0;
   transition: opacity 0.15s ease;
   color: #3b82f6;
   font-size: 0.85em;
 }
 
-.prose-apeiron a.node-link::before { content: "[["; }
-.prose-apeiron a.node-link::after { content: "]]"; }
+.prose-apeirron a.node-link::before { content: "[["; }
+.prose-apeirron a.node-link::after { content: "]]"; }
 
-.prose-apeiron a.node-link:hover {
+.prose-apeirron a.node-link:hover {
   color: #93c5fd;
 }
 
-.prose-apeiron a.node-link:hover::before,
-.prose-apeiron a.node-link:hover::after {
+.prose-apeirron a.node-link:hover::before,
+.prose-apeirron a.node-link:hover::after {
   opacity: 1;
 }
 
 /* Phantom wiki links (node proposed but not written) */
-.prose-apeiron a.node-link.node-link-phantom {
+.prose-apeirron a.node-link.node-link-phantom {
   color: var(--text-muted);
   text-decoration-line: underline;
   text-decoration-style: dashed;
@@ -159,59 +159,59 @@ body {
   text-decoration-thickness: 1px;
 }
 
-.prose-apeiron a.node-link.node-link-phantom:hover {
+.prose-apeirron a.node-link.node-link-phantom:hover {
   color: var(--text-secondary);
 }
 
-.prose-apeiron a.node-link.node-link-phantom::before,
-.prose-apeiron a.node-link.node-link-phantom::after {
+.prose-apeirron a.node-link.node-link-phantom::before,
+.prose-apeirron a.node-link.node-link-phantom::after {
   color: var(--text-muted);
 }
 
 /* Broken wiki links (target not found) */
-.prose-apeiron .node-link-broken {
+.prose-apeirron .node-link-broken {
   color: var(--text-muted);
 }
 
 /* Sources sidebar compact styling */
-.prose-apeiron-sources ul {
+.prose-apeirron-sources ul {
   @apply list-none !important;
   padding-left: 0 !important;
 }
 
-.prose-apeiron-sources li {
+.prose-apeirron-sources li {
   @apply text-[11px] leading-relaxed mb-3 pb-3;
   color: var(--text-muted);
   border-bottom: 1px solid var(--border);
 }
 
-.prose-apeiron-sources li:last-child {
+.prose-apeirron-sources li:last-child {
   border-bottom: none;
   margin-bottom: 0;
   padding-bottom: 0;
 }
 
-.prose-apeiron-sources a {
+.prose-apeirron-sources a {
   color: #60a5fa;
   font-size: 11px;
 }
 
-.prose-apeiron-sources em {
+.prose-apeirron-sources em {
   color: var(--text-secondary);
 }
 
-.prose-apeiron blockquote {
+.prose-apeirron blockquote {
   @apply pl-4 italic my-4;
   border-left: 2px solid var(--border);
   color: var(--text-muted);
 }
 
-.prose-apeiron strong {
+.prose-apeirron strong {
   @apply font-semibold;
   color: var(--text-primary);
 }
 
-.prose-apeiron hr {
+.prose-apeirron hr {
   @apply my-6;
   border-color: var(--border);
 }

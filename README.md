@@ -4,7 +4,7 @@
 
 An interactive knowledge graph mapping the biggest questions humanity asks — consciousness, ancient civilizations, the nature of reality, hidden power structures, the cosmos and many more — as interconnected nodes in a visual web.
 
-![Apeiron Graph](public/apeirron-graph.svg)
+![Apeirron Graph](public/apeirron-graph.svg)
 
 
 Every idea is a node. Every node links to others. Every connection has a reason. The result is a web of thought where nothing exists in isolation.

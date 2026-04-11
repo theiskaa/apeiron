@@ -73,7 +73,7 @@ export default function MiniPathDiagram({
         paths={pathsProp}
         initialFocusNodeId={currentNodeId}
         hideControls
-        hideApeiron
+        hideApeirron
         persist={false}
       />
     </div>

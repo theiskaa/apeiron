@@ -11,7 +11,7 @@ const MiniPathDiagram = dynamic(() => import("./MiniPathDiagram"), {
 });
 
 type MiniView = "graph" | "path";
-const MINI_VIEW_STORAGE_KEY = "apeiron-node-mini-view";
+const MINI_VIEW_STORAGE_KEY = "apeirron-node-mini-view";
 
 interface TocItem {
   id: string;
@@ -283,7 +283,7 @@ export default function NodeView({
                       Sources
                     </h3>
                     <div
-                      className="prose-apeiron prose-apeiron-sources"
+                      className="prose-apeirron prose-apeirron-sources"
                       dangerouslySetInnerHTML={{ __html: sourcesHtml.replace(/<h2[^>]*>.*?<\/h2>/i, "") }}
                     />
                   </div>
@@ -294,7 +294,7 @@ export default function NodeView({
 
           <div
             ref={contentRef}
-            className="prose-apeiron"
+            className="prose-apeirron"
             dangerouslySetInnerHTML={{ __html: mainHtml }}
           />
 
@@ -344,7 +344,7 @@ export default function NodeView({
                   Sources
                 </h3>
                 <div
-                  className="prose-apeiron prose-apeiron-sources"
+                  className="prose-apeirron prose-apeirron-sources"
                   dangerouslySetInnerHTML={{ __html: sourcesHtml.replace(/<h2[^>]*>.*?<\/h2>/i, "") }}
                 />
               </div>

@@ -12,7 +12,7 @@ import ViewModeToggle, { type ViewMode } from "./ViewModeToggle";
 const Graph = dynamic(() => import("./Graph"), { ssr: false });
 const PathsGraph = dynamic(() => import("./PathsGraph"), { ssr: false });
 
-const VIEW_MODE_STORAGE_KEY = "apeiron-view-mode";
+const VIEW_MODE_STORAGE_KEY = "apeirron-view-mode";
 
 const GRAPH_TAB: Tab = { id: "graph", type: "graph" };
 

@@ -37,7 +37,7 @@ This was not a conspiracy theory. It was a business plan. Bernays had already de
 
 ## The architecture of influence
 
-The question of who holds power is usually framed in terms of governments, elections, and laws. But the deeper question — the one that connects to everything else in Apeiron — is not who holds power, but *how power operates when it is invisible*.
+The question of who holds power is usually framed in terms of governments, elections, and laws. But the deeper question — the one that connects to everything else in Apeirron — is not who holds power, but *how power operates when it is invisible*.
 
 The most effective control systems do not coerce. They shape perception. If you can determine what people pay attention to, what they believe is normal, what they consider possible, and what they never think to question, you do not need to force compliance. It emerges naturally. The cage is invisible because the bars are made of assumptions.
 
