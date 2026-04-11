@@ -141,9 +141,22 @@ interface MegaEdge {
   emphasis: "normal" | "hub";
 }
 
-interface MegaLayout {
+interface MegaPathGroup {
+  pathId: string;
   nodes: MegaNode[];
   edges: MegaEdge[];
+  // SVG rotation: angle (degrees) around (cx, cy).
+  // Pivot is the category's top-center so the Apeiron hub edge endpoint
+  // stays fixed as the path tilts.
+  angleDeg: number;
+  cx: number;
+  cy: number;
+}
+
+interface MegaLayout {
+  apeiron: MegaNode;
+  hubEdges: MegaEdge[];
+  pathGroups: MegaPathGroup[];
   width: number;
   height: number;
 }
@@ -158,6 +171,21 @@ const LINK_K = 0.065;
 const DAMPING = 0.86;
 // Sleep threshold in content pixels — sim halts per-path when below.
 const EPS = 0.08;
+
+// Radians per content-pixel of horizontal displacement-from-target.
+// Average lag of ~60 px should produce ~3° of tilt.
+const DISP_TO_ANGLE = 0.0009;
+// Hard cap (radians, ~5.7°). Keeps the path from looking flipped even on a hard fling.
+const MAX_TILT = 0.1;
+// Spring constants on the angle itself — separate from node physics.
+const ANGLE_K = 0.16;
+const ANGLE_DAMP = 0.82;
+
+// --- Inter-path soft collision ---
+// Per-frame push strength per pixel of (margin-inflated) overlap.
+const COLLISION_K = 0.11;
+// Padding added around each node's AABB so repulsion kicks in before visual contact.
+const COLLISION_MARGIN = 14;
 
 interface SimNode {
   key: string;
@@ -190,10 +218,18 @@ interface PathSim {
   nodes: Map<string, SimNode>;
   links: SimLink[];
   categoryKey: string | null;
+  // Which node is currently pinned to the cursor (null when not dragging).
+  // Replaces categoryKey as the "held" handle so any node can be grabbed.
+  pinnedKey: string | null;
   committedOffset: PointXY;
   liveOffset: PointXY;
   dragging: boolean;
   hot: boolean;
+  // Visual tilt (radians) of the whole path. Rotated around the category's
+  // top-center — which is also where the Apeiron hub edge lands, so that
+  // connection stays visually stable during rotation.
+  angle: number;
+  angleVel: number;
 }
 
 function initSims(): Map<string, PathSim> {
@@ -250,22 +286,93 @@ function initSims(): Map<string, PathSim> {
       nodes,
       links,
       categoryKey,
+      pinnedKey: null,
       committedOffset: { x: 0, y: 0 },
       liveOffset: { x: 0, y: 0 },
       dragging: false,
       hot: false,
+      angle: 0,
+      angleVel: 0,
     });
   }
   return sims;
 }
 
+// Pairwise inter-path soft collision. Runs once per tick across all sims,
+// BEFORE stepSim. Pinned nodes (locked to the cursor) act as immovable walls:
+// they still get tested for overlap, but only the non-pinned counterpart
+// receives the resulting push. Collision wakes any affected sim so it gets
+// integrated this tick.
+function applyInterCollisions(sims: Map<string, PathSim>): void {
+  type Item = { n: SimNode; pid: string; pinned: boolean; sim: PathSim };
+  const items: Item[] = [];
+  for (const [pid, sim] of sims) {
+    const pinKey = sim.dragging ? sim.pinnedKey : null;
+    for (const n of sim.nodes.values()) {
+      items.push({ n, pid, pinned: n.key === pinKey, sim });
+    }
+  }
+
+  for (let i = 0; i < items.length; i++) {
+    const ai = items[i];
+    for (let j = i + 1; j < items.length; j++) {
+      const bj = items[j];
+      if (ai.pid === bj.pid) continue;
+      if (ai.pinned && bj.pinned) continue;
+
+      const a = ai.n;
+      const b = bj.n;
+      const overlapX =
+        Math.min(a.x + a.width, b.x + b.width) -
+        Math.max(a.x, b.x) +
+        COLLISION_MARGIN * 2;
+      if (overlapX <= 0) continue;
+      const overlapY =
+        Math.min(a.y + a.height, b.y + b.height) -
+        Math.max(a.y, b.y) +
+        COLLISION_MARGIN * 2;
+      if (overlapY <= 0) continue;
+
+      const acx = a.x + a.width / 2;
+      const acy = a.y + a.height / 2;
+      const bcx = b.x + b.width / 2;
+      const bcy = b.y + b.height / 2;
+
+      // Push along the axis with the smaller overlap.
+      if (overlapX < overlapY) {
+        const f = overlapX * COLLISION_K * 0.5;
+        const dir = bcx > acx ? 1 : -1;
+        if (!ai.pinned) {
+          a.vx -= dir * f;
+          ai.sim.hot = true;
+        }
+        if (!bj.pinned) {
+          b.vx += dir * f;
+          bj.sim.hot = true;
+        }
+      } else {
+        const f = overlapY * COLLISION_K * 0.5;
+        const dir = bcy > acy ? 1 : -1;
+        if (!ai.pinned) {
+          a.vy -= dir * f;
+          ai.sim.hot = true;
+        }
+        if (!bj.pinned) {
+          b.vy += dir * f;
+          bj.sim.hot = true;
+        }
+      }
+    }
+  }
+}
+
 function stepSim(sim: PathSim): boolean {
   const offX = sim.dragging ? sim.liveOffset.x : sim.committedOffset.x;
   const offY = sim.dragging ? sim.liveOffset.y : sim.committedOffset.y;
-  const catKey = sim.dragging ? sim.categoryKey : null;
+  const pinKey = sim.dragging ? sim.pinnedKey : null;
 
   for (const n of sim.nodes.values()) {
-    if (n.key === catKey) continue;
+    if (n.key === pinKey) continue;
     n.vx += (n.bx + offX - n.x) * POS_K;
     n.vy += (n.by + offY - n.y) * POS_K;
   }
@@ -278,11 +385,11 @@ function stepSim(sim: PathSim): boolean {
     const errY = b.y - a.y - link.restDy;
     const fx = errX * LINK_K;
     const fy = errY * LINK_K;
-    if (a.key !== catKey) {
+    if (a.key !== pinKey) {
       a.vx += fx;
       a.vy += fy;
     }
-    if (b.key !== catKey) {
+    if (b.key !== pinKey) {
       b.vx -= fx;
       b.vy -= fy;
     }
@@ -290,7 +397,7 @@ function stepSim(sim: PathSim): boolean {
 
   let hot = sim.dragging;
   for (const n of sim.nodes.values()) {
-    if (n.key === catKey) {
+    if (n.key === pinKey) {
       n.x = n.bx + offX;
       n.y = n.by + offY;
       n.vx = 0;
@@ -311,6 +418,29 @@ function stepSim(sim: PathSim): boolean {
     }
   }
 
+  // Angle update: lean into horizontal motion. Using displacement-from-target
+  // (instead of raw velocity) so the sign matches intuition — pinned node
+  // moves right, unpinned nodes lag left of target, path rotates CCW,
+  // bottom trails behind the top as it swings.
+  let sumDispX = 0;
+  let count = 0;
+  for (const n of sim.nodes.values()) {
+    if (n.key === pinKey) continue;
+    sumDispX += n.x - (n.bx + offX);
+    count++;
+  }
+  const avgDispX = count > 0 ? sumDispX / count : 0;
+  const targetAngle = Math.max(
+    -MAX_TILT,
+    Math.min(MAX_TILT, avgDispX * DISP_TO_ANGLE)
+  );
+  sim.angleVel += (targetAngle - sim.angle) * ANGLE_K;
+  sim.angleVel *= ANGLE_DAMP;
+  sim.angle += sim.angleVel;
+  if (Math.abs(sim.angle) > 0.0015 || Math.abs(sim.angleVel) > 0.0015) {
+    hot = true;
+  }
+
   if (!hot) {
     for (const n of sim.nodes.values()) {
       n.x = n.bx + offX;
@@ -318,6 +448,8 @@ function stepSim(sim: PathSim): boolean {
       n.vx = 0;
       n.vy = 0;
     }
+    sim.angle = 0;
+    sim.angleVel = 0;
   }
 
   sim.hot = hot;
@@ -325,10 +457,7 @@ function stepSim(sim: PathSim): boolean {
 }
 
 function buildMegaLayout(sims: Map<string, PathSim>): MegaLayout {
-  const nodes: MegaNode[] = [];
-  const edges: MegaEdge[] = [];
-
-  nodes.push({
+  const apeiron: MegaNode = {
     key: APEIRON_ID,
     pathId: APEIRON_ID,
     nodeId: APEIRON_ID,
@@ -339,14 +468,20 @@ function buildMegaLayout(sims: Map<string, PathSim>): MegaLayout {
     height: BASE.apeiron.height,
     color: "#d8d8e0",
     title: "Apeirron",
-  });
+  };
+
+  const hubEdges: MegaEdge[] = [];
+  const pathGroups: MegaPathGroup[] = [];
 
   let maxX = BASE.apeiron.x + BASE.apeiron.width;
   let maxY = BASE.apeiron.y + BASE.apeiron.height;
 
   for (const sim of sims.values()) {
+    const groupNodes: MegaNode[] = [];
+    const groupEdges: MegaEdge[] = [];
+
     for (const n of sim.nodes.values()) {
-      nodes.push({
+      groupNodes.push({
         key: n.key,
         pathId: n.pathId,
         nodeId: n.nodeId,
@@ -367,7 +502,7 @@ function buildMegaLayout(sims: Map<string, PathSim>): MegaLayout {
       const a = sim.nodes.get(link.from);
       const b = sim.nodes.get(link.to);
       if (!a || !b) continue;
-      edges.push({
+      groupEdges.push({
         key: `${link.from}->${link.to}`,
         color: sim.color,
         x1: a.x + a.width / 2,
@@ -378,25 +513,42 @@ function buildMegaLayout(sims: Map<string, PathSim>): MegaLayout {
       });
     }
 
+    // Rotation pivot: category's top-center. Any non-rotating content anchored
+    // at this point (the Apeiron hub edge) stays visually stable while the
+    // path tilts around it.
+    let cx = 0;
+    let cy = 0;
     if (sim.categoryKey) {
       const cat = sim.nodes.get(sim.categoryKey);
       if (cat) {
-        edges.push({
+        cx = cat.x + cat.width / 2;
+        cy = cat.y;
+        hubEdges.push({
           key: `hub->${sim.pathId}`,
           color: sim.color,
           x1: BASE.apeiron.x + BASE.apeiron.width / 2,
           y1: BASE.apeiron.y + BASE.apeiron.height,
-          x2: cat.x + cat.width / 2,
-          y2: cat.y,
+          x2: cx,
+          y2: cy,
           emphasis: "hub",
         });
       }
     }
+
+    pathGroups.push({
+      pathId: sim.pathId,
+      nodes: groupNodes,
+      edges: groupEdges,
+      angleDeg: (sim.angle * 180) / Math.PI,
+      cx,
+      cy,
+    });
   }
 
   return {
-    nodes,
-    edges,
+    apeiron,
+    hubEdges,
+    pathGroups,
     width: Math.max(maxX, BASE.width),
     height: Math.max(maxY, BASE.height),
   };
@@ -422,6 +574,10 @@ export default function PathsGraph({
   const [transform, setTransform] = useState({ x: 0, y: 0, scale: 1 });
   const transformRef = useRef(transform);
 
+  // Set true once a pointerdown has crossed the drag threshold. Read by the
+  // click wrapper so that releasing after a drag doesn't also fire onClick.
+  const dragOccurredRef = useRef(false);
+
   const rafRef = useRef<number | null>(null);
   const runningRef = useRef(false);
 
@@ -432,6 +588,8 @@ export default function PathsGraph({
       const sims = simsRef.current;
       let anyHot = false;
       if (sims) {
+        // Collisions can wake cold sims — run first so stepSim then integrates them.
+        applyInterCollisions(sims);
         for (const sim of sims.values()) {
           if (sim.hot && stepSim(sim)) anyHot = true;
         }
@@ -515,41 +673,121 @@ export default function PathsGraph({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tick]);
 
-  const handleCategoryPointerDown = useCallback(
-    (e: React.PointerEvent, pathId: string) => {
+  const handleNodeClick = useCallback(
+    (nodeId: string) => {
+      // Suppress click that was actually the end of a drag.
+      if (dragOccurredRef.current) {
+        dragOccurredRef.current = false;
+        return;
+      }
+      onNodeClick(nodeId);
+    },
+    [onNodeClick]
+  );
+
+  const handleNodePointerDown = useCallback(
+    (e: React.PointerEvent, pathId: string, nodeKey: string) => {
       e.stopPropagation();
       const sims = simsRef.current;
       if (!sims) return;
       const sim = sims.get(pathId);
       if (!sim) return;
+      if (!sim.nodes.has(nodeKey)) return;
 
       const startClientX = e.clientX;
       const startClientY = e.clientY;
       const startOffset = { ...sim.committedOffset };
-      sim.liveOffset = { ...startOffset };
-      sim.dragging = true;
-      sim.hot = true;
-      setDraggingPathId(pathId);
-      ensureRunning();
+
+      // Hysteresis: only treat as a drag once the pointer has moved enough.
+      // Below threshold we leave the sim untouched so click-through still works.
+      const DRAG_THRESHOLD = 4;
+      let dragActive = false;
+      dragOccurredRef.current = false;
+
+      // Smoothed cursor velocity in content-space px/ms, read on release
+      // to produce fling momentum.
+      let lastMoveTime = performance.now();
+      let lastMoveClientX = startClientX;
+      let lastMoveClientY = startClientY;
+      const cursorVel = { x: 0, y: 0 };
+
+      const activate = () => {
+        dragActive = true;
+        dragOccurredRef.current = true;
+        sim.pinnedKey = nodeKey;
+        sim.dragging = true;
+        sim.liveOffset = { ...startOffset };
+        sim.hot = true;
+        setDraggingPathId(pathId);
+        ensureRunning();
+      };
 
       const handleMove = (ev: PointerEvent) => {
         const scale = transformRef.current.scale || 1;
-        const dx = (ev.clientX - startClientX) / scale;
-        const dy = (ev.clientY - startClientY) / scale;
-        sim.liveOffset = { x: startOffset.x + dx, y: startOffset.y + dy };
+        const dxClient = ev.clientX - startClientX;
+        const dyClient = ev.clientY - startClientY;
+
+        if (!dragActive) {
+          if (Math.hypot(dxClient, dyClient) < DRAG_THRESHOLD) return;
+          activate();
+        }
+
+        sim.liveOffset = {
+          x: startOffset.x + dxClient / scale,
+          y: startOffset.y + dyClient / scale,
+        };
         sim.hot = true;
+
+        // EMA-smoothed velocity, content px/ms
+        const now = performance.now();
+        const dt = Math.max(1, now - lastMoveTime);
+        const vx = (ev.clientX - lastMoveClientX) / dt / scale;
+        const vy = (ev.clientY - lastMoveClientY) / dt / scale;
+        const alpha = 0.35;
+        cursorVel.x = cursorVel.x * (1 - alpha) + vx * alpha;
+        cursorVel.y = cursorVel.y * (1 - alpha) + vy * alpha;
+        lastMoveTime = now;
+        lastMoveClientX = ev.clientX;
+        lastMoveClientY = ev.clientY;
       };
 
       const handleUp = () => {
-        sim.committedOffset = { ...sim.liveOffset };
+        window.removeEventListener("pointermove", handleMove);
+        window.removeEventListener("pointerup", handleUp);
+        window.removeEventListener("pointercancel", handleUp);
+
+        if (!dragActive) return;
+
+        // Stale velocity guard: if the cursor paused before release, don't fling.
+        const now = performance.now();
+        const stale = now - lastMoveTime > 60;
+        const vxMs = stale ? 0 : cursorVel.x;
+        const vyMs = stale ? 0 : cursorVel.y;
+
+        // Extrapolate commit point forward along the velocity so the path
+        // coasts past the release point into its new resting offset.
+        const FLING_COAST_MS = 180;
+        sim.committedOffset = {
+          x: sim.liveOffset.x + vxMs * FLING_COAST_MS,
+          y: sim.liveOffset.y + vyMs * FLING_COAST_MS,
+        };
+
+        // Inject velocity into every node (per-frame, assuming 60fps) so the
+        // motion is continuous across release instead of a teleport+settle.
+        const MS_PER_FRAME = 1000 / 60;
+        const vxFrame = vxMs * MS_PER_FRAME;
+        const vyFrame = vyMs * MS_PER_FRAME;
+        for (const n of sim.nodes.values()) {
+          n.vx += vxFrame;
+          n.vy += vyFrame;
+        }
+
         sim.dragging = false;
+        sim.pinnedKey = null;
         sim.hot = true;
         setDraggingPathId(null);
         persistOffsets();
         ensureRunning();
-        window.removeEventListener("pointermove", handleMove);
-        window.removeEventListener("pointerup", handleUp);
-        window.removeEventListener("pointercancel", handleUp);
       };
 
       window.addEventListener("pointermove", handleMove);
@@ -590,8 +828,8 @@ export default function PathsGraph({
             byId={byId}
             selectedNodeId={selectedNodeId}
             draggingPathId={draggingPathId}
-            onNodeClick={onNodeClick}
-            onCategoryPointerDown={handleCategoryPointerDown}
+            onNodeClick={handleNodeClick}
+            onNodePointerDown={handleNodePointerDown}
           />
         </CanvasViewport>
       </div>
@@ -620,7 +858,11 @@ interface MegaDiagramProps {
   selectedNodeId: string | null;
   draggingPathId: string | null;
   onNodeClick: (id: string) => void;
-  onCategoryPointerDown: (e: React.PointerEvent, pathId: string) => void;
+  onNodePointerDown: (
+    e: React.PointerEvent,
+    pathId: string,
+    nodeKey: string
+  ) => void;
 }
 
 function MegaDiagram({
@@ -629,8 +871,9 @@ function MegaDiagram({
   selectedNodeId,
   draggingPathId,
   onNodeClick,
-  onCategoryPointerDown,
+  onNodePointerDown,
 }: MegaDiagramProps) {
+  const apeiron = layout.apeiron;
   return (
     <svg
       width={layout.width}
@@ -640,34 +883,66 @@ function MegaDiagram({
       role="img"
       aria-label="Apeiron paths map"
     >
+      {/* Hub edges: Apeiron → each category pivot. Pivot is the rotation
+          center, so these endpoints stay anchored no matter how a path tilts. */}
       <g>
-        {layout.edges.map((edge) => (
+        {layout.hubEdges.map((edge) => (
           <EdgePath key={edge.key} edge={edge} />
         ))}
       </g>
-      <g>
-        {layout.nodes.map((n) => (
-          <foreignObject
-            key={n.key}
-            x={n.x}
-            y={n.y}
-            width={n.width}
-            height={n.height}
-          >
-            <NodeBox
-              node={n}
-              real={n.kind === "node" ? byId.get(n.nodeId) : undefined}
-              isSelected={n.kind === "node" && selectedNodeId === n.nodeId}
-              isDragging={n.pathId === draggingPathId}
-              onClick={() => {
-                if (n.kind !== "node") return;
-                if (byId.has(n.nodeId)) onNodeClick(n.nodeId);
-              }}
-              onCategoryPointerDown={onCategoryPointerDown}
-            />
-          </foreignObject>
-        ))}
-      </g>
+      {/* Per-path groups, each rotated around its category top-center. */}
+      {layout.pathGroups.map((g) => (
+        <g
+          key={g.pathId}
+          transform={`rotate(${g.angleDeg} ${g.cx} ${g.cy})`}
+        >
+          <g>
+            {g.edges.map((edge) => (
+              <EdgePath key={edge.key} edge={edge} />
+            ))}
+          </g>
+          <g>
+            {g.nodes.map((n) => (
+              <foreignObject
+                key={n.key}
+                x={n.x}
+                y={n.y}
+                width={n.width}
+                height={n.height}
+              >
+                <NodeBox
+                  node={n}
+                  real={n.kind === "node" ? byId.get(n.nodeId) : undefined}
+                  isSelected={n.kind === "node" && selectedNodeId === n.nodeId}
+                  isDragging={n.pathId === draggingPathId}
+                  onClick={() => {
+                    if (n.kind !== "node") return;
+                    if (byId.has(n.nodeId)) onNodeClick(n.nodeId);
+                  }}
+                  onNodePointerDown={onNodePointerDown}
+                />
+              </foreignObject>
+            ))}
+          </g>
+        </g>
+      ))}
+      {/* Apeiron itself: never rotates, rendered on top. */}
+      <foreignObject
+        key={apeiron.key}
+        x={apeiron.x}
+        y={apeiron.y}
+        width={apeiron.width}
+        height={apeiron.height}
+      >
+        <NodeBox
+          node={apeiron}
+          real={undefined}
+          isSelected={false}
+          isDragging={false}
+          onClick={() => {}}
+          onNodePointerDown={onNodePointerDown}
+        />
+      </foreignObject>
     </svg>
   );
 }
@@ -721,7 +996,11 @@ interface NodeBoxProps {
   isSelected: boolean;
   isDragging: boolean;
   onClick: () => void;
-  onCategoryPointerDown: (e: React.PointerEvent, pathId: string) => void;
+  onNodePointerDown: (
+    e: React.PointerEvent,
+    pathId: string,
+    nodeKey: string
+  ) => void;
 }
 
 function NodeBox({
@@ -730,7 +1009,7 @@ function NodeBox({
   isSelected,
   isDragging,
   onClick,
-  onCategoryPointerDown,
+  onNodePointerDown,
 }: NodeBoxProps) {
   if (node.kind === "apeiron") {
     return (
@@ -759,7 +1038,7 @@ function NodeBox({
   if (node.kind === "category") {
     return (
       <button
-        onPointerDown={(e) => onCategoryPointerDown(e, node.pathId)}
+        onPointerDown={(e) => onNodePointerDown(e, node.pathId, node.key)}
         className={`group relative w-full h-full flex items-center gap-2.5 px-3.5 rounded-lg select-none transition-all ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
@@ -789,11 +1068,16 @@ function NodeBox({
   return (
     <button
       onClick={onClick}
+      onPointerDown={
+        isPhantom
+          ? undefined
+          : (e) => onNodePointerDown(e, node.pathId, node.key)
+      }
       disabled={isPhantom}
       className={`group relative w-full h-full flex items-center gap-2 px-3 text-left rounded-lg transition-all ${
         isPhantom
           ? "cursor-not-allowed opacity-45"
-          : "cursor-pointer hover:brightness-125"
+          : "cursor-grab active:cursor-grabbing hover:brightness-125"
       }`}
       style={{
         backgroundColor:
