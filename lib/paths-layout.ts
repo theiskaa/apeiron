@@ -23,6 +23,8 @@ export interface PathLayout {
   edges: LaidOutEdge[];
   nodeWidth: number;
   nodeHeight: number;
+  categoryNodeWidth: number;
+  categoryNodeHeight: number;
   width: number;
   height: number;
   viewBox: string;
@@ -31,6 +33,8 @@ export interface PathLayout {
 export interface LayoutOptions {
   nodeWidth: number;
   nodeHeight: number;
+  categoryNodeWidth: number;
+  categoryNodeHeight: number;
   gapX: number;
   gapY: number;
   padding: number;
@@ -39,6 +43,8 @@ export interface LayoutOptions {
 export const DEFAULT_LAYOUT_OPTIONS: LayoutOptions = {
   nodeWidth: 190,
   nodeHeight: 74,
+  categoryNodeWidth: 240,
+  categoryNodeHeight: 120,
   gapX: 34,
   gapY: 58,
   padding: 18,
@@ -48,7 +54,7 @@ export function layoutPath(
   path: ReadingPath,
   options: LayoutOptions = DEFAULT_LAYOUT_OPTIONS
 ): PathLayout {
-  const { nodeWidth, nodeHeight, gapX, gapY, padding } = options;
+  const { nodeWidth, nodeHeight, categoryNodeWidth, categoryNodeHeight, gapX, gapY, padding } = options;
   const srcNodes = path.nodes;
 
   if (srcNodes.length === 0) {
@@ -57,6 +63,8 @@ export function layoutPath(
       edges: [],
       nodeWidth,
       nodeHeight,
+      categoryNodeWidth,
+      categoryNodeHeight,
       width: padding * 2,
       height: padding * 2,
       viewBox: `0 0 ${padding * 2} ${padding * 2}`,
@@ -202,6 +210,8 @@ export function layoutPath(
     edges: laidOutEdges,
     nodeWidth,
     nodeHeight,
+    categoryNodeWidth,
+    categoryNodeHeight,
     width: svgWidth,
     height: svgHeight,
     viewBox: `0 0 ${svgWidth} ${svgHeight}`,
@@ -215,8 +225,10 @@ export function layoutPathWithCategory(
   options: LayoutOptions = DEFAULT_LAYOUT_OPTIONS
 ): PathLayout {
   const base = layoutPath(path, options);
-  const { nodeHeight, gapY, padding } = options;
-  const dy = nodeHeight + gapY;
+  const { categoryNodeHeight, categoryNodeWidth, gapY, padding } = options;
+  // Children are shifted down by the category's full vertical footprint so
+  // the category + its edges + the first row all fit without overlap.
+  const dy = categoryNodeHeight + gapY;
 
   const shiftedNodes: LaidOutNode[] = base.nodes.map((n) => ({
     ...n,
@@ -237,7 +249,7 @@ export function layoutPathWithCategory(
     id: `${CATEGORY_NODE_PREFIX}${path.id}`,
     hook: path.description,
     depth: 0,
-    x: centerX - base.nodeWidth / 2,
+    x: centerX - categoryNodeWidth / 2,
     y: padding,
     kind: "category",
   };
@@ -246,7 +258,7 @@ export function layoutPathWithCategory(
     from: categoryNode.id,
     to: root.id,
     x1: centerX,
-    y1: padding + nodeHeight,
+    y1: padding + categoryNodeHeight,
     x2: root.x + base.nodeWidth / 2,
     y2: root.y,
   }));
@@ -256,6 +268,8 @@ export function layoutPathWithCategory(
     edges: [...categoryEdges, ...shiftedEdges],
     nodeWidth: base.nodeWidth,
     nodeHeight: base.nodeHeight,
+    categoryNodeWidth: base.categoryNodeWidth,
+    categoryNodeHeight: base.categoryNodeHeight,
     width: base.width,
     height: base.height + dy,
     viewBox: `0 0 ${base.width} ${base.height + dy}`,

@@ -6,11 +6,9 @@ import ThemeToggle from "./ThemeToggle";
 interface Props {
   onLogoClick?: () => void;
   onSearchClick?: () => void;
-  onExplorerToggle?: () => void;
-  explorerOpen?: boolean;
 }
 
-export default function Navbar({ onLogoClick, onSearchClick, onExplorerToggle, explorerOpen }: Props) {
+export default function Navbar({ onLogoClick, onSearchClick }: Props) {
   const logoContent = (
     <div className="flex flex-col text-left">
       <span className="text-[15px] font-semibold tracking-[0.14em] text-text-primary leading-tight capitalize">
@@ -40,41 +38,6 @@ export default function Navbar({ onLogoClick, onSearchClick, onExplorerToggle, e
         </Link>
       )}
       <div className="flex items-center gap-2 md:gap-4">
-        {onExplorerToggle && (
-          <button
-            onClick={onExplorerToggle}
-            className={`flex items-center justify-center gap-2 px-3 py-1.5 rounded-full transition-all text-[11px] tracking-wide leading-none ${
-              explorerOpen
-                ? "text-text-secondary"
-                : "text-text-muted hover:text-text-secondary"
-            }`}
-            style={{
-              backgroundColor: explorerOpen
-                ? "color-mix(in srgb, var(--text-primary) 9%, transparent)"
-                : "color-mix(in srgb, var(--text-primary) 5%, transparent)",
-              boxShadow: explorerOpen
-                ? "inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 15%, transparent)"
-                : "inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent)",
-            }}
-            aria-label="Toggle explorer"
-          >
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <line x1="9" y1="3" x2="9" y2="21" />
-            </svg>
-            <span className="hidden sm:inline">Explorer</span>
-            <kbd className="hidden md:inline text-[10px] text-text-muted/70 ml-1">⌘B</kbd>
-          </button>
-        )}
         {onSearchClick && (
           <button
             onClick={onSearchClick}

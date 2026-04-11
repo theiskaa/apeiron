@@ -34,8 +34,8 @@ const PATH_COLORS: Record<string, string> = {
 };
 
 const APEIRON_ID = "__apeiron";
-const APEIRON_WIDTH = 260;
-const APEIRON_HEIGHT = 92;
+const APEIRON_WIDTH = 300;
+const APEIRON_HEIGHT = 150;
 const HORIZONTAL_GAP = 16;
 const APEIRON_GAP = 260;
 const APEIRON_TOP_PADDING = 280;
@@ -129,6 +129,7 @@ interface MegaNode {
   height: number;
   color: string;
   title?: string;
+  description?: string;
   orderIndex?: number;
   // CSS transform string (applied around the element's center via
   // transform-origin). Combines velocity squish + settle bounce.
@@ -234,6 +235,9 @@ interface SimNode {
   height: number;
   color: string;
   title?: string;
+  // Short description, set only on category nodes — the inline path blurb
+  // that replaced the old ExplorerPanel.
+  description?: string;
   orderIndex?: number;
   // Physical mass, derived from path depth at init time.
   // invMass = 1/mass is precomputed to avoid per-frame division.
@@ -306,10 +310,15 @@ function initSims(): Map<string, PathSim> {
         y: by,
         vx: 0,
         vy: 0,
-        width: p.layout.nodeWidth,
-        height: p.layout.nodeHeight,
+        width:
+          kind === "category" ? p.layout.categoryNodeWidth : p.layout.nodeWidth,
+        height:
+          kind === "category"
+            ? p.layout.categoryNodeHeight
+            : p.layout.nodeHeight,
         color: p.color,
         title: kind === "category" ? p.path.title : undefined,
+        description: kind === "category" ? p.path.description : undefined,
         orderIndex: kind === "category" ? undefined : p.orderMap.get(n.id),
         mass,
         invMass: 1 / mass,
@@ -659,6 +668,7 @@ function buildMegaLayout(
         height: n.height,
         color: n.color,
         title: n.title,
+        description: n.description,
         orderIndex: n.orderIndex,
         transform,
       });
@@ -1273,6 +1283,7 @@ function MegaDiagram({
                   y={n.y}
                   width={n.width}
                   height={n.height}
+                  overflow="visible"
                 >
                   <NodeBox
                     node={n}
@@ -1299,6 +1310,7 @@ function MegaDiagram({
         y={apeiron.y}
         width={apeiron.width}
         height={apeiron.height}
+        overflow="visible"
       >
         <NodeBox
           node={apeiron}
@@ -1414,23 +1426,20 @@ function NodeBox({
     return (
       <div
         onPointerDown={onApeironPointerDown}
-        className="relative w-full h-full flex items-center justify-center gap-3 rounded-xl select-none cursor-grab active:cursor-grabbing"
+        className="relative w-full h-full flex flex-col items-center justify-center gap-2.5 px-6 py-5 rounded-[36px] select-none text-center cursor-grab active:cursor-grabbing"
         style={{
           backgroundColor: `color-mix(in srgb, ${node.color} 18%, transparent)`,
           boxShadow: `inset 0 0 0 1.5px ${node.color}, 0 4px 28px color-mix(in srgb, ${node.color} 22%, transparent), 0 0 0 6px color-mix(in srgb, ${node.color} 8%, transparent)`,
+          transform: node.transform,
+          transformOrigin: "center",
         }}
       >
-        <span
-          className="w-2 h-2 rounded-full"
-          style={{ backgroundColor: node.color }}
-        />
-        <span className="text-[16px] font-semibold tracking-[0.14em] uppercase text-text-primary leading-tight">
+        <span className="text-[17px] font-semibold tracking-[0.18em] uppercase text-text-primary leading-tight">
           {node.title}
         </span>
-        <span
-          className="w-2 h-2 rounded-full"
-          style={{ backgroundColor: node.color }}
-        />
+        <p className="text-[11px] text-text-secondary leading-snug line-clamp-3 max-w-[85%]">
+          Biggest questions humanity asks
+        </p>
       </div>
     );
   }
@@ -1439,24 +1448,28 @@ function NodeBox({
     return (
       <button
         onPointerDown={(e) => onNodePointerDown(e, node.pathId, node.key)}
-        className={`group relative w-full h-full flex items-center gap-2.5 px-3.5 rounded-lg select-none transition-all ${
+        className={`group relative w-full h-full flex flex-col items-center justify-center gap-2 px-5 py-4 rounded-[28px] select-none text-center transition-all ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
         style={{
-          backgroundColor: `color-mix(in srgb, ${node.color} ${isDragging ? 32 : 22}%, transparent)`,
+          backgroundColor: `color-mix(in srgb, ${node.color} ${isDragging ? 30 : 18}%, transparent)`,
           boxShadow: isDragging
-            ? `inset 0 0 0 2px ${node.color}, 0 8px 24px color-mix(in srgb, ${node.color} 30%, transparent), 0 0 0 4px color-mix(in srgb, ${node.color} 15%, transparent)`
-            : `inset 0 0 0 1.5px ${node.color}, 0 2px 12px color-mix(in srgb, ${node.color} 18%, transparent)`,
+            ? `inset 0 0 0 2px ${node.color}, 0 10px 32px color-mix(in srgb, ${node.color} 32%, transparent), 0 0 0 4px color-mix(in srgb, ${node.color} 15%, transparent)`
+            : `inset 0 0 0 1.5px ${node.color}, 0 3px 16px color-mix(in srgb, ${node.color} 20%, transparent)`,
           transform: node.transform,
           transformOrigin: "center",
           willChange: node.transform ? "transform" : undefined,
         }}
         aria-label={`Drag ${node.title} path`}
       >
-        <DragHandleIcon color={node.color} />
-        <span className="text-[12px] font-semibold uppercase tracking-[0.1em] text-text-primary leading-tight line-clamp-2 flex-1 text-left">
+        <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text-primary leading-tight line-clamp-1">
           {node.title}
         </span>
+        {node.description && (
+          <p className="text-[10.5px] text-text-secondary leading-snug line-clamp-4">
+            {node.description}
+          </p>
+        )}
       </button>
     );
   }
@@ -1477,32 +1490,25 @@ function NodeBox({
           : (e) => onNodePointerDown(e, node.pathId, node.key)
       }
       disabled={isPhantom}
-      className={`group relative w-full h-full flex items-center gap-2 px-3 text-left rounded-lg transition-all ${
+      className={`group relative w-full h-full flex items-center gap-2 px-3.5 text-left rounded-2xl transition-all ${
         isPhantom
           ? "cursor-not-allowed opacity-45"
           : "cursor-grab active:cursor-grabbing hover:brightness-125"
       }`}
       style={{
-        backgroundColor:
-          "color-mix(in srgb, var(--text-primary) 7%, transparent)",
+        // Tint by the node's own category color (GraphNode.color reflects the
+        // node's category, not the path it appears in). Falls back to the
+        // path color for phantoms that have no real GraphNode yet.
+        backgroundColor: `color-mix(in srgb, ${real?.color ?? node.color} ${isPhantom ? 7 : 13}%, transparent)`,
         boxShadow: isSelected
-          ? `inset 0 0 0 1.5px ${node.color}, 0 0 0 3px color-mix(in srgb, ${node.color} 22%, transparent)`
-          : "inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 12%, transparent)",
+          ? `inset 0 0 0 1.5px ${real?.color ?? node.color}, 0 0 0 3px color-mix(in srgb, ${real?.color ?? node.color} 22%, transparent)`
+          : "none",
         transform: node.transform,
         transformOrigin: "center",
         willChange: node.transform ? "transform" : undefined,
       }}
       aria-label={isPhantom ? `${title} (not yet written)` : `Open ${title}`}
     >
-      <span
-        className="w-1.5 h-1.5 rounded-full shrink-0"
-        style={{
-          backgroundColor: isPhantom ? "transparent" : real?.color ?? node.color,
-          border: isPhantom
-            ? `1px dashed color-mix(in srgb, var(--text-primary) 40%, transparent)`
-            : "none",
-        }}
-      />
       {orderLabel && (
         <span className="text-[9px] text-text-muted/60 tabular-nums tracking-wider shrink-0 font-medium">
           {orderLabel}
@@ -1518,27 +1524,6 @@ function NodeBox({
         {title}
       </span>
     </button>
-  );
-}
-
-function DragHandleIcon({ color }: { color: string }) {
-  return (
-    <svg
-      width="10"
-      height="14"
-      viewBox="0 0 10 14"
-      fill="none"
-      className="shrink-0"
-      style={{ color }}
-      aria-hidden="true"
-    >
-      <circle cx="2" cy="2" r="1" fill="currentColor" />
-      <circle cx="8" cy="2" r="1" fill="currentColor" />
-      <circle cx="2" cy="7" r="1" fill="currentColor" />
-      <circle cx="8" cy="7" r="1" fill="currentColor" />
-      <circle cx="2" cy="12" r="1" fill="currentColor" />
-      <circle cx="8" cy="12" r="1" fill="currentColor" />
-    </svg>
   );
 }
 
