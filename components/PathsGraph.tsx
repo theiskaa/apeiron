@@ -133,12 +133,17 @@ interface MegaNode {
 
 interface MegaEdge {
   key: string;
+  pathId: string;
   color: string;
   x1: number;
   y1: number;
   x2: number;
   y2: number;
   emphasis: "normal" | "hub";
+  // 1 = fully slack (vertical-tangent Bezier, the resting curve).
+  // < 1 = tauter (blends toward a straight line from x1,y1 to x2,y2).
+  // > 1 = more slack (bigger bulge, for compressed links).
+  curveScale: number;
 }
 
 interface MegaPathGroup {
@@ -502,14 +507,37 @@ function buildMegaLayout(sims: Map<string, PathSim>): MegaLayout {
       const a = sim.nodes.get(link.from);
       const b = sim.nodes.get(link.to);
       if (!a || !b) continue;
+
+      const x1 = a.x + a.width / 2;
+      const y1 = a.y + a.height;
+      const x2 = b.x + b.width / 2;
+      const y2 = b.y;
+
+      // Strain = how much the edge has stretched relative to its resting length.
+      // Rest endpoints use the base node positions (bx/by) in the same
+      // coordinate system as the live ones, so the ratio is purely physical.
+      const rx1 = a.bx + a.width / 2;
+      const ry1 = a.by + a.height;
+      const rx2 = b.bx + b.width / 2;
+      const ry2 = b.by;
+      const restLen = Math.hypot(rx2 - rx1, ry2 - ry1) || 1;
+      const curLen = Math.hypot(x2 - x1, y2 - y1) || 1;
+      const strain = (curLen - restLen) / restLen;
+      const curveScale = Math.max(
+        0.3,
+        Math.min(1.8, Math.exp(-strain * 1.2))
+      );
+
       groupEdges.push({
         key: `${link.from}->${link.to}`,
+        pathId: sim.pathId,
         color: sim.color,
-        x1: a.x + a.width / 2,
-        y1: a.y + a.height,
-        x2: b.x + b.width / 2,
-        y2: b.y,
+        x1,
+        y1,
+        x2,
+        y2,
         emphasis: "normal",
+        curveScale,
       });
     }
 
@@ -523,14 +551,22 @@ function buildMegaLayout(sims: Map<string, PathSim>): MegaLayout {
       if (cat) {
         cx = cat.x + cat.width / 2;
         cy = cat.y;
+        // Hub edge tautness: as the category is pulled from home, the edge
+        // straightens out. 600 px of pull drops the curve scale to the floor.
+        const homeX = cat.bx + cat.width / 2;
+        const homeY = cat.by;
+        const displace = Math.hypot(cx - homeX, cy - homeY);
+        const hubCurve = Math.max(0.2, 1 - displace / 600);
         hubEdges.push({
           key: `hub->${sim.pathId}`,
+          pathId: sim.pathId,
           color: sim.color,
           x1: BASE.apeiron.x + BASE.apeiron.width / 2,
           y1: BASE.apeiron.y + BASE.apeiron.height,
           x2: cx,
           y2: cy,
           emphasis: "hub",
+          curveScale: hubCurve,
         });
       }
     }
@@ -884,48 +920,67 @@ function MegaDiagram({
       aria-label="Apeiron paths map"
     >
       {/* Hub edges: Apeiron → each category pivot. Pivot is the rotation
-          center, so these endpoints stay anchored no matter how a path tilts. */}
-      <g>
-        {layout.hubEdges.map((edge) => (
-          <EdgePath key={edge.key} edge={edge} />
-        ))}
-      </g>
-      {/* Per-path groups, each rotated around its category top-center. */}
-      {layout.pathGroups.map((g) => (
+          center, so these endpoints stay anchored no matter how a path tilts.
+          Wrapped per-edge so unfocused hubs can dim with their path. */}
+      {layout.hubEdges.map((edge) => (
         <g
-          key={g.pathId}
-          transform={`rotate(${g.angleDeg} ${g.cx} ${g.cy})`}
+          key={edge.key}
+          style={{
+            opacity:
+              draggingPathId == null || edge.pathId === draggingPathId
+                ? 1
+                : 0.35,
+            transition: "opacity 180ms ease",
+          }}
         >
-          <g>
-            {g.edges.map((edge) => (
-              <EdgePath key={edge.key} edge={edge} />
-            ))}
-          </g>
-          <g>
-            {g.nodes.map((n) => (
-              <foreignObject
-                key={n.key}
-                x={n.x}
-                y={n.y}
-                width={n.width}
-                height={n.height}
-              >
-                <NodeBox
-                  node={n}
-                  real={n.kind === "node" ? byId.get(n.nodeId) : undefined}
-                  isSelected={n.kind === "node" && selectedNodeId === n.nodeId}
-                  isDragging={n.pathId === draggingPathId}
-                  onClick={() => {
-                    if (n.kind !== "node") return;
-                    if (byId.has(n.nodeId)) onNodeClick(n.nodeId);
-                  }}
-                  onNodePointerDown={onNodePointerDown}
-                />
-              </foreignObject>
-            ))}
-          </g>
+          <EdgePath edge={edge} />
         </g>
       ))}
+      {/* Per-path groups, each rotated around its category top-center.
+          While one path is being dragged, all others dim for focus. */}
+      {layout.pathGroups.map((g) => {
+        const focused =
+          draggingPathId == null || g.pathId === draggingPathId;
+        return (
+          <g
+            key={g.pathId}
+            transform={`rotate(${g.angleDeg} ${g.cx} ${g.cy})`}
+            style={{
+              opacity: focused ? 1 : 0.35,
+              transition: "opacity 180ms ease",
+            }}
+          >
+            <g>
+              {g.edges.map((edge) => (
+                <EdgePath key={edge.key} edge={edge} />
+              ))}
+            </g>
+            <g>
+              {g.nodes.map((n) => (
+                <foreignObject
+                  key={n.key}
+                  x={n.x}
+                  y={n.y}
+                  width={n.width}
+                  height={n.height}
+                >
+                  <NodeBox
+                    node={n}
+                    real={n.kind === "node" ? byId.get(n.nodeId) : undefined}
+                    isSelected={n.kind === "node" && selectedNodeId === n.nodeId}
+                    isDragging={n.pathId === draggingPathId}
+                    onClick={() => {
+                      if (n.kind !== "node") return;
+                      if (byId.has(n.nodeId)) onNodeClick(n.nodeId);
+                    }}
+                    onNodePointerDown={onNodePointerDown}
+                  />
+                </foreignObject>
+              ))}
+            </g>
+          </g>
+        );
+      })}
       {/* Apeiron itself: never rotates, rendered on top. */}
       <foreignObject
         key={apeiron.key}
@@ -948,6 +1003,7 @@ function MegaDiagram({
 }
 
 function EdgePath({ edge }: { edge: MegaEdge }) {
+  const dx = edge.x2 - edge.x1;
   const dy = edge.y2 - edge.y1;
   const isHub = edge.emphasis === "hub";
   const edgeColor = isHub
@@ -956,18 +1012,47 @@ function EdgePath({ edge }: { edge: MegaEdge }) {
   const arrowColor = `color-mix(in srgb, ${edge.color} 68%, transparent)`;
   const strokeWidth = isHub ? 1.8 : 1.4;
 
-  // Vertical control points — our edges always conceptually emerge from
-  // top/bottom of a box, so tangents are vertical even when horizontal
-  // distance is large (hub edges fanning to far paths).
-  const off = Math.max(30, Math.abs(dy) * 0.5) * Math.sign(dy || 1);
-  const d = `M ${edge.x1} ${edge.y1} C ${edge.x1} ${edge.y1 + off}, ${edge.x2} ${edge.y2 - off}, ${edge.x2} ${edge.y2}`;
+  // "Slack" control points: purely vertical tangents at the endpoints, which
+  // is how the resting edge wants to look (boxes connect top/bottom).
+  const offMag = Math.max(30, Math.abs(dy) * 0.5) * Math.sign(dy || 1);
+  const vcp1x = edge.x1;
+  const vcp1y = edge.y1 + offMag;
+  const vcp2x = edge.x2;
+  const vcp2y = edge.y2 - offMag;
 
-  const tangentY = Math.sign(dy || 1);
+  // "Taut" control points: 1/3 and 2/3 along the straight line from start
+  // to end → the cubic degenerates to a straight line when curveScale → 0.
+  const scp1x = edge.x1 + dx / 3;
+  const scp1y = edge.y1 + dy / 3;
+  const scp2x = edge.x1 + (2 * dx) / 3;
+  const scp2y = edge.y1 + (2 * dy) / 3;
+
+  // Blend: curveScale = 1 → full slack, curveScale = 0 → straight line,
+  // curveScale > 1 → extra bulge (amplifies the vertical tangent offset).
+  const s = edge.curveScale;
+  const cp1x = scp1x + (vcp1x - scp1x) * s;
+  const cp1y = scp1y + (vcp1y - scp1y) * s;
+  const cp2x = scp2x + (vcp2x - scp2x) * s;
+  const cp2y = scp2y + (vcp2y - scp2y) * s;
+
+  const d = `M ${edge.x1} ${edge.y1} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${edge.x2} ${edge.y2}`;
+
+  // Arrowhead tangent at t=1 is the direction from the last control point
+  // to the endpoint. Works for any curve shape including the straight-line
+  // degenerate case and the full-slack vertical case.
+  const tdx = edge.x2 - cp2x;
+  const tdy = edge.y2 - cp2y;
+  const tlen = Math.hypot(tdx, tdy) || 1;
+  const ux = tdx / tlen;
+  const uy = tdy / tlen;
   const backLen = 7;
   const wingLen = 5;
-  const bx = edge.x2;
-  const by = edge.y2 - tangentY * backLen;
-  const arrow = `M ${bx - wingLen} ${by} L ${edge.x2} ${edge.y2} L ${bx + wingLen} ${by}`;
+  const backX = edge.x2 - ux * backLen;
+  const backY = edge.y2 - uy * backLen;
+  // Perpendicular to the tangent for the arrow wings.
+  const perpX = -uy;
+  const perpY = ux;
+  const arrow = `M ${backX + perpX * wingLen} ${backY + perpY * wingLen} L ${edge.x2} ${edge.y2} L ${backX - perpX * wingLen} ${backY - perpY * wingLen}`;
 
   return (
     <g>
@@ -1171,6 +1256,40 @@ function CanvasViewport({
     pointerId: -1,
   });
 
+  // Cursor velocity in screen px/ms, EMA-smoothed during active panning,
+  // read on pointerup to seed the coast-down loop.
+  const panVelRef = useRef({ x: 0, y: 0 });
+  const panLastRef = useRef({ t: 0, x: 0, y: 0 });
+  const panInertiaRafRef = useRef<number | null>(null);
+  // Cleanup for the global pointerdown listener that kills an in-flight coast
+  // the moment the user touches anything — including a node the drag handler
+  // stops propagation on, which the viewport's own pointerdown wouldn't see.
+  const panInertiaCancelRef = useRef<(() => void) | null>(null);
+
+  const stopPanInertia = useCallback(() => {
+    if (panInertiaRafRef.current !== null) {
+      cancelAnimationFrame(panInertiaRafRef.current);
+      panInertiaRafRef.current = null;
+    }
+    if (panInertiaCancelRef.current !== null) {
+      panInertiaCancelRef.current();
+      panInertiaCancelRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (panInertiaRafRef.current !== null) {
+        cancelAnimationFrame(panInertiaRafRef.current);
+        panInertiaRafRef.current = null;
+      }
+      if (panInertiaCancelRef.current !== null) {
+        panInertiaCancelRef.current();
+        panInertiaCancelRef.current = null;
+      }
+    };
+  }, []);
+
   const fitToView = useCallback(() => {
     const el = viewportRef.current;
     if (!el) return;
@@ -1236,6 +1355,9 @@ function CanvasViewport({
     (e: React.PointerEvent) => {
       const target = e.target as HTMLElement;
       if (target.closest("button")) return;
+      // Grabbing the viewport kills any ongoing coast so the user lands on
+      // exactly where they click, not where the decaying velocity drifts to.
+      stopPanInertia();
       panState.current = {
         active: true,
         startX: e.clientX,
@@ -1244,9 +1366,15 @@ function CanvasViewport({
         originY: transform.y,
         pointerId: e.pointerId,
       };
+      panVelRef.current = { x: 0, y: 0 };
+      panLastRef.current = {
+        t: performance.now(),
+        x: e.clientX,
+        y: e.clientY,
+      };
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     },
-    [transform.x, transform.y]
+    [transform.x, transform.y, stopPanInertia]
   );
 
   const handlePointerMove = useCallback(
@@ -1257,19 +1385,77 @@ function CanvasViewport({
         x: panState.current.originX + (e.clientX - panState.current.startX),
         y: panState.current.originY + (e.clientY - panState.current.startY),
       }));
+      // EMA-smoothed cursor velocity in screen px/ms.
+      const now = performance.now();
+      const dt = Math.max(1, now - panLastRef.current.t);
+      const vx = (e.clientX - panLastRef.current.x) / dt;
+      const vy = (e.clientY - panLastRef.current.y) / dt;
+      const alpha = 0.35;
+      panVelRef.current = {
+        x: panVelRef.current.x * (1 - alpha) + vx * alpha,
+        y: panVelRef.current.y * (1 - alpha) + vy * alpha,
+      };
+      panLastRef.current = { t: now, x: e.clientX, y: e.clientY };
     },
     [setTransform]
   );
 
-  const handlePointerUp = useCallback((e: React.PointerEvent) => {
-    if (!panState.current.active) return;
-    panState.current.active = false;
-    try {
-      (e.currentTarget as HTMLElement).releasePointerCapture(
-        panState.current.pointerId
-      );
-    } catch {}
-  }, []);
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent) => {
+      if (!panState.current.active) return;
+      panState.current.active = false;
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(
+          panState.current.pointerId
+        );
+      } catch {}
+
+      // Stale-velocity guard: if the cursor paused before release, don't coast.
+      const now = performance.now();
+      if (now - panLastRef.current.t > 60) {
+        panVelRef.current = { x: 0, y: 0 };
+        return;
+      }
+
+      // Convert px/ms → px/frame (assume 60fps) and decelerate each frame.
+      // Screen-space px; no need to account for scale since transform.x/y
+      // are themselves in screen coordinates.
+      let vx = panVelRef.current.x * (1000 / 60);
+      let vy = panVelRef.current.y * (1000 / 60);
+      const PAN_FRICTION = 0.93;
+      const PAN_MIN_VEL = 0.12;
+
+      if (Math.abs(vx) < PAN_MIN_VEL && Math.abs(vy) < PAN_MIN_VEL) return;
+
+      // Kill the coast on any subsequent touch anywhere — including on a node
+      // whose handler stopPropagation's past the viewport div.
+      const cancelOnInput = () => stopPanInertia();
+      window.addEventListener("pointerdown", cancelOnInput, {
+        once: true,
+        capture: true,
+      });
+      panInertiaCancelRef.current = () => {
+        window.removeEventListener("pointerdown", cancelOnInput, true);
+      };
+
+      const step = () => {
+        setTransform((t) => ({ ...t, x: t.x + vx, y: t.y + vy }));
+        vx *= PAN_FRICTION;
+        vy *= PAN_FRICTION;
+        if (Math.abs(vx) < PAN_MIN_VEL && Math.abs(vy) < PAN_MIN_VEL) {
+          panInertiaRafRef.current = null;
+          if (panInertiaCancelRef.current !== null) {
+            panInertiaCancelRef.current();
+            panInertiaCancelRef.current = null;
+          }
+          return;
+        }
+        panInertiaRafRef.current = requestAnimationFrame(step);
+      };
+      panInertiaRafRef.current = requestAnimationFrame(step);
+    },
+    [setTransform, stopPanInertia]
+  );
 
   const zoomAtCenter = useCallback(
     (factor: number) => {
