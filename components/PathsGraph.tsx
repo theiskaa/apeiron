@@ -186,11 +186,17 @@ const MAX_TILT = 0.1;
 const ANGLE_K = 0.16;
 const ANGLE_DAMP = 0.82;
 
-// --- Inter-path soft collision ---
 // Per-frame push strength per pixel of (margin-inflated) overlap.
 const COLLISION_K = 0.11;
 // Padding added around each node's AABB so repulsion kicks in before visual contact.
 const COLLISION_MARGIN = 14;
+
+// Per-frame gravitational acceleration (acceleration, not force — mass-independent).
+// Kept small so resting sag is imperceptible (~1–2 px under the position spring).
+const GRAVITY = 0.02;
+// Mass formula from path depth: mass = 1 + depth * DEPTH_MASS_COEFF.
+// Root nodes are light, leaves are heavier → ripple slows as it propagates.
+const DEPTH_MASS_COEFF = 0.35;
 
 interface SimNode {
   key: string;
@@ -208,6 +214,10 @@ interface SimNode {
   color: string;
   title?: string;
   orderIndex?: number;
+  // Physical mass, derived from path depth at init time.
+  // invMass = 1/mass is precomputed to avoid per-frame division.
+  mass: number;
+  invMass: number;
 }
 
 interface SimLink {
@@ -235,6 +245,13 @@ interface PathSim {
   // connection stays visually stable during rotation.
   angle: number;
   angleVel: number;
+  // Moment of inertia around the pivot, Σ mᵢ·rᵢ² in rest-geometry.
+  // Bigger (more/heavier/further nodes) → harder to rotate.
+  inertia: number;
+  // Multiplier on the angle spring torque so heavier paths rotate slower.
+  // Computed as I_ref / inertia where I_ref is the average across all paths,
+  // so the "typical" path keeps roughly the old feel.
+  inertiaScale: number;
 }
 
 function initSims(): Map<string, PathSim> {
@@ -250,6 +267,9 @@ function initSims(): Map<string, PathSim> {
       const by = n.y + p.baseOffsetY;
       const kind: "category" | "node" =
         n.kind === "category" ? "category" : "node";
+      // Layout depth: 0 = category, 1 = roots, deeper = further along the path.
+      const depth = n.depth ?? 0;
+      const mass = 1 + depth * DEPTH_MASS_COEFF;
       const sn: SimNode = {
         key,
         pathId: p.path.id,
@@ -266,6 +286,8 @@ function initSims(): Map<string, PathSim> {
         color: p.color,
         title: kind === "category" ? p.path.title : undefined,
         orderIndex: kind === "category" ? undefined : p.orderMap.get(n.id),
+        mass,
+        invMass: 1 / mass,
       };
       nodes.set(key, sn);
       byLocalId.set(n.id, sn);
@@ -285,6 +307,23 @@ function initSims(): Map<string, PathSim> {
       });
     }
 
+    // Moment of inertia around the category pivot, using resting node
+    // centers. Computed once at init because the rest geometry is fixed.
+    let inertia = 0;
+    if (categoryKey) {
+      const cat = nodes.get(categoryKey);
+      if (cat) {
+        const pivotX = cat.bx + cat.width / 2;
+        const pivotY = cat.by;
+        for (const n of nodes.values()) {
+          if (n.key === categoryKey) continue;
+          const rx = n.bx + n.width / 2 - pivotX;
+          const ry = n.by + n.height / 2 - pivotY;
+          inertia += n.mass * (rx * rx + ry * ry);
+        }
+      }
+    }
+
     sims.set(p.path.id, {
       pathId: p.path.id,
       color: p.color,
@@ -298,8 +337,26 @@ function initSims(): Map<string, PathSim> {
       hot: false,
       angle: 0,
       angleVel: 0,
+      inertia: inertia || 1,
+      inertiaScale: 1, // filled in by the second pass below
     });
   }
+
+  // Second pass: normalize so the average path has inertiaScale ≈ 1.
+  // Heavier paths get a smaller scale (rotate slower under the same torque),
+  // lighter paths a larger scale. The typical feel of the old displacement-
+  // driven formula is preserved for the mean path.
+  let totalI = 0;
+  let count = 0;
+  for (const sim of sims.values()) {
+    totalI += sim.inertia;
+    count++;
+  }
+  const I_REF = count > 0 ? totalI / count : 1;
+  for (const sim of sims.values()) {
+    sim.inertiaScale = I_REF / sim.inertia;
+  }
+
   return sims;
 }
 
@@ -343,27 +400,30 @@ function applyInterCollisions(sims: Map<string, PathSim>): void {
       const bcx = b.x + b.width / 2;
       const bcy = b.y + b.height / 2;
 
-      // Push along the axis with the smaller overlap.
+      // Push along the axis with the smaller overlap. Equal-and-opposite
+      // impulse of magnitude f is applied to both sides; dividing by each
+      // side's invMass makes the resulting velocity change reflect mass
+      // (lighter nodes accelerate more from the same impulse).
       if (overlapX < overlapY) {
         const f = overlapX * COLLISION_K * 0.5;
         const dir = bcx > acx ? 1 : -1;
         if (!ai.pinned) {
-          a.vx -= dir * f;
+          a.vx -= dir * f * a.invMass;
           ai.sim.hot = true;
         }
         if (!bj.pinned) {
-          b.vx += dir * f;
+          b.vx += dir * f * b.invMass;
           bj.sim.hot = true;
         }
       } else {
         const f = overlapY * COLLISION_K * 0.5;
         const dir = bcy > acy ? 1 : -1;
         if (!ai.pinned) {
-          a.vy -= dir * f;
+          a.vy -= dir * f * a.invMass;
           ai.sim.hot = true;
         }
         if (!bj.pinned) {
-          b.vy += dir * f;
+          b.vy += dir * f * b.invMass;
           bj.sim.hot = true;
         }
       }
@@ -376,12 +436,16 @@ function stepSim(sim: PathSim): boolean {
   const offY = sim.dragging ? sim.liveOffset.y : sim.committedOffset.y;
   const pinKey = sim.dragging ? sim.pinnedKey : null;
 
+  // Position spring: F = k·(target−pos), a = F/m → v += F·invMass.
   for (const n of sim.nodes.values()) {
     if (n.key === pinKey) continue;
-    n.vx += (n.bx + offX - n.x) * POS_K;
-    n.vy += (n.by + offY - n.y) * POS_K;
+    n.vx += (n.bx + offX - n.x) * POS_K * n.invMass;
+    n.vy += (n.by + offY - n.y) * POS_K * n.invMass;
   }
 
+  // Link spring: equal-and-opposite force on each endpoint. Dividing each
+  // side by its own invMass conserves momentum across a link regardless
+  // of the mass ratio.
   for (const link of sim.links) {
     const a = sim.nodes.get(link.from);
     const b = sim.nodes.get(link.to);
@@ -391,13 +455,20 @@ function stepSim(sim: PathSim): boolean {
     const fx = errX * LINK_K;
     const fy = errY * LINK_K;
     if (a.key !== pinKey) {
-      a.vx += fx;
-      a.vy += fy;
+      a.vx += fx * a.invMass;
+      a.vy += fy * a.invMass;
     }
     if (b.key !== pinKey) {
-      b.vx -= fx;
-      b.vy -= fy;
+      b.vx -= fx * b.invMass;
+      b.vy -= fy * b.invMass;
     }
+  }
+
+  // Gravity: acceleration, not force — applied to all non-pinned nodes
+  // regardless of mass (every object falls the same).
+  for (const n of sim.nodes.values()) {
+    if (n.key === pinKey) continue;
+    n.vy += GRAVITY;
   }
 
   let hot = sim.dragging;
@@ -423,10 +494,9 @@ function stepSim(sim: PathSim): boolean {
     }
   }
 
-  // Angle update: lean into horizontal motion. Using displacement-from-target
-  // (instead of raw velocity) so the sign matches intuition — pinned node
-  // moves right, unpinned nodes lag left of target, path rotates CCW,
-  // bottom trails behind the top as it swings.
+  // Angle update: second-order spring (momentum + damping) on the path's
+  // tilt. Now scaled by inertiaScale so heavier paths (more/deeper nodes)
+  // resist rotation proportionally — the torque→α divide by I made physical.
   let sumDispX = 0;
   let count = 0;
   for (const n of sim.nodes.values()) {
@@ -439,7 +509,7 @@ function stepSim(sim: PathSim): boolean {
     -MAX_TILT,
     Math.min(MAX_TILT, avgDispX * DISP_TO_ANGLE)
   );
-  sim.angleVel += (targetAngle - sim.angle) * ANGLE_K;
+  sim.angleVel += (targetAngle - sim.angle) * ANGLE_K * sim.inertiaScale;
   sim.angleVel *= ANGLE_DAMP;
   sim.angle += sim.angleVel;
   if (Math.abs(sim.angle) > 0.0015 || Math.abs(sim.angleVel) > 0.0015) {
@@ -447,9 +517,13 @@ function stepSim(sim: PathSim): boolean {
   }
 
   if (!hot) {
+    // Cold snap: we let the sim settle at (target + gravity sag) rather than
+    // exactly at target, since gravity is a constant force that shifts the
+    // spring equilibrium slightly below base. The sag magnitude per node is
+    // GRAVITY/(POS_K·invMass) — tiny with current constants.
     for (const n of sim.nodes.values()) {
       n.x = n.bx + offX;
-      n.y = n.by + offY;
+      n.y = n.by + offY + GRAVITY / (POS_K * n.invMass);
       n.vx = 0;
       n.vy = 0;
     }
