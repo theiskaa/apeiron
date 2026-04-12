@@ -4,13 +4,13 @@ title: "The Las Vegas Shooting"
 category: "modern"
 connections:
   - target: "mass-surveillance"
-    reason: "The Mandalay Bay Resort and Casino was one of the most heavily surveilled buildings in Las Vegas — a city where thousands of cameras blanket every casino floor, hallway, elevator, and parking structure, monitored around the clock by dedicated security teams whose express purpose is to detect anomalous behavior. Stephen Paddock moved more than twenty firearms, thousands of rounds of ammunition, and multiple suitcases into a 32nd-floor suite over the course of several days, using luggage carts and making multiple trips. The surveillance infrastructure that can detect a card counter from a single hand of blackjack somehow failed to flag a guest moving an arsenal into a high-floor suite. Yet more critically, after the shooting, the FBI's 20-month investigation vacuumed up massive quantities of surveillance data — hotel footage, cell tower records, financial transaction logs, internet history — and virtually none of it has been released to the public. The gap between the surveillance state's demonstrated capabilities and the public's access to information about what happened that night is not incidental to the conspiracy theories. It is the engine that drives them."
+    reason: "Mandalay Bay's surveillance that can spot a card counter somehow missed Paddock moving 20+ firearms into a suite over days. After the shooting, the FBI vacuumed up the footage and transaction logs and released almost none of it. The gap between capability and disclosure is what drives the conspiracy theories."
   - target: "nine-eleven"
-    reason: "The 1 October shooting and September 11 are the deadliest mass shooting and the deadliest terrorist attack in modern American history, respectively, and the structural parallels between their aftermaths are striking. Both produced official investigations that left foundational questions unanswered — the 9/11 Commission acknowledged it was 'set up to fail,' and the FBI's Vegas investigation concluded without identifying a motive, an outcome without precedent for a mass casualty event of this scale. Both involved the rapid destruction or classification of critical evidence — the EPA's premature all-clear at Ground Zero, the missing hard drive from Paddock's laptop, the sealed search warrants. Both generated conspiracy theories that the events served as pretexts for policy changes — the Patriot Act after 9/11, bump stock bans and renewed surveillance debates after Vegas. And the 'crisis actor' interpretive framework, developed in the conspiracy culture that emerged after 9/11 and refined through Sandy Hook, was immediately and aggressively applied to Vegas survivors and victims' families, creating a direct lineage of conspiratorial methodology connecting the two events."
+    reason: "Both investigations left foundational questions unanswered — the 9/11 Commission 'set up to fail,' the FBI closing Vegas with no motive identified. Both involved rapid classification of critical evidence, and both produced policy changes (Patriot Act, bump stock bans) framed by the same conspiracy-culture methodology."
   - target: "deep-state"
-    reason: "The FBI's handling of the Las Vegas investigation is, for deep-state theorists, a case study in institutional opacity functioning as its own form of cover-up. The Bureau conducted a 20-month investigation into the deadliest mass shooting in modern American history and produced no final public report, identified no motive, sealed dozens of search warrants, classified significant portions of the evidence, and closed the case. Aaron Rouse, the FBI's special agent in charge of the Las Vegas field office who led the investigation, later ran for the U.S. Senate in Nevada in 2022. Sheriff Joe Lombardo, whose LVMPD changed the official shooting timeline three times under pressure, was elected governor of Nevada in 2022. The institutional players were not punished for the investigation's failures — they were promoted. The deep-state framework holds that this is not incompetence but function: the investigation was never designed to produce a public accounting. It was designed to collect, classify, and contain."
+    reason: "The FBI closed its 20-month investigation with no final public report, no motive, and sealed warrants. Aaron Rouse, the agent in charge, later ran for Senate; Sheriff Lombardo, whose LVMPD changed the timeline three times, became Nevada's governor in 2022. The institutional players were promoted, not punished."
   - target: "epstein"
-    reason: "The conspiracy theories linking Paddock to the intelligence-criminal underworld draw on the same structural logic as the Epstein case. Paddock lived as a high-roller in the casino ecosystem — a world where intelligence agencies, organized crime, and legitimate business have overlapped since Bugsy Siegel built the Flamingo. His financial profile was anomalous: a retired postal worker and accountant whose real estate holdings and gambling patterns involved millions of dollars in transactions, with over 200 currency transaction reports filed by casinos. The arms-dealing theory — that Paddock was involved in illegal weapons sales, possibly as part of a sting operation — places him in the same shadow economy of intelligence-adjacent criminality that Epstein inhabited. Both men operated in the casino and hospitality sector where vast sums of money move with minimal transparency. Both had financial profiles that did not match their stated occupations. And in both cases, the official investigation conspicuously declined to explore the most troubling questions about how these men acquired their wealth and who they were connected to."
+    reason: "Paddock's anomalous wealth — over 200 casino currency transaction reports on a retired accountant — and the arms-dealing theory place him in the same intelligence-adjacent shadow economy Epstein inhabited. In both cases the official investigation declined to explore how these men acquired their wealth."
 ---
 
 At 10:05 p.m. Pacific Daylight Time on Sunday, October 1, 2017, a 64-year-old man named Stephen Craig Paddock opened fire from the windows of Suite 32-135 on the 32nd floor of the Mandalay Bay Resort and Casino in Las Vegas, Nevada. His targets were the 22,000 concertgoers attending the Route 91 Harvest country music festival on the Las Vegas Strip, an open-air venue directly across Las Vegas Boulevard from the hotel, approximately 490 yards from his elevated position. The shooting lasted between ten and eleven minutes. Paddock fired more than 1,000 rounds using a collection of semiautomatic rifles fitted with bump stock devices that allowed them to simulate fully automatic fire. When it was over, 60 people were dead and 411 had been wounded by gunfire, with an additional 456 injured in the ensuing stampede — a total of 867 casualties. It was the deadliest mass shooting in modern American history, surpassing the Pulse nightclub massacre in Orlando just sixteen months earlier, and the deadliest incident of mass gun violence committed by a single individual in the nation's history.
@@ -165,32 +165,32 @@ Sixty people are dead. The most powerful investigative agency in the world says 
 
 ## Sources
 
-1. Las Vegas Metropolitan Police Department, "1 October After Action Review," January 2018, and "Criminal Investigative Report of the 1 October Mass Casualty Shooting," LVMPD Force Investigation Team, August 3, 2018.
+- Las Vegas Metropolitan Police Department, "1 October After Action Review," January 2018, and "Criminal Investigative Report of the 1 October Mass Casualty Shooting," LVMPD Force Investigation Team, August 3, 2018.
 
-2. Federal Bureau of Investigation, Behavioral Analysis Unit, "Key Findings of the Federal Bureau of Investigation's Behavioral Analysis Unit, Las Vegas," January 29, 2019.
+- Federal Bureau of Investigation, Behavioral Analysis Unit, "Key Findings of the Federal Bureau of Investigation's Behavioral Analysis Unit, Las Vegas," January 29, 2019.
 
-3. Anjeanette Damon, "Lots of Questions, Few Answers as Vegas Shooting Investigation Closes," *Las Vegas Review-Journal*, January 29, 2019.
+- Anjeanette Damon, "Lots of Questions, Few Answers as Vegas Shooting Investigation Closes," *Las Vegas Review-Journal*, January 29, 2019.
 
-4. Jeff German and Arthur Kane, "Las Vegas Shooter's Girlfriend Used Two Social Security Numbers," *Las Vegas Review-Journal*, January 15, 2018.
+- Jeff German and Arthur Kane, "Las Vegas Shooter's Girlfriend Used Two Social Security Numbers," *Las Vegas Review-Journal*, January 15, 2018.
 
-5. Nate Schweber, "The Guest in Room 32-134: A Timeline of the Las Vegas Gunman's Final Days," *New York Times*, October 7, 2017.
+- Nate Schweber, "The Guest in Room 32-134: A Timeline of the Las Vegas Gunman's Final Days," *New York Times*, October 7, 2017.
 
-6. Richard A. Serrano, "FBI Releases Final Report on Las Vegas Concert Massacre; Closes Investigation Without Finding Motive," *Los Angeles Times*, January 29, 2019.
+- Richard A. Serrano, "FBI Releases Final Report on Las Vegas Concert Massacre; Closes Investigation Without Finding Motive," *Los Angeles Times*, January 29, 2019.
 
-7. Josh Margolin and Brian Ross, "Las Vegas Gunman Stephen Paddock Had Lost Significant Amount of Wealth in Recent Years, Investigators Say," *ABC News*, October 5, 2017.
+- Josh Margolin and Brian Ross, "Las Vegas Gunman Stephen Paddock Had Lost Significant Amount of Wealth in Recent Years, Investigators Say," *ABC News*, October 5, 2017.
 
-8. Brian Joseph, "Mandalay Bay Owner MGM Sues Victims of Las Vegas Shooting," *Reveal News / Center for Investigative Reporting*, July 17, 2018.
+- Brian Joseph, "Mandalay Bay Owner MGM Sues Victims of Las Vegas Shooting," *Reveal News / Center for Investigative Reporting*, July 17, 2018.
 
-9. Associated Press, "Vegas Guard Campos Breaks Silence on Ellen DeGeneres Show," *AP News*, October 18, 2017.
+- Associated Press, "Vegas Guard Campos Breaks Silence on Ellen DeGeneres Show," *AP News*, October 18, 2017.
 
-10. Clark County Office of the Coroner/Medical Examiner, Autopsy Report, Stephen Craig Paddock, Case No. 17-10856, December 21, 2017.
+- Clark County Office of the Coroner/Medical Examiner, Autopsy Report, Stephen Craig Paddock, Case No. 17-10856, December 21, 2017.
 
-11. Anjeanette Damon and Arthur Kane, "The Key Casino Financial Reports on Las Vegas Shooter Are Secret. Here's Why," *Las Vegas Review-Journal*, March 14, 2018.
+- Anjeanette Damon and Arthur Kane, "The Key Casino Financial Reports on Las Vegas Shooter Are Secret. Here's Why," *Las Vegas Review-Journal*, March 14, 2018.
 
-12. David Montero, "Why Can't the FBI Determine a Motive for the Las Vegas Massacre?", *Los Angeles Times*, January 30, 2019.
+- David Montero, "Why Can't the FBI Determine a Motive for the Las Vegas Massacre?", *Los Angeles Times*, January 30, 2019.
 
-13. ProPublica, "Two Guns, a Tripod, and Calculations for Maximizing Carnage," *ProPublica*, November 29, 2017.
+- ProPublica, "Two Guns, a Tripod, and Calculations for Maximizing Carnage," *ProPublica*, November 29, 2017.
 
-14. Rachel Crosby, "Judge Orders Gradual Unsealing of Las Vegas Shooting Search Warrants," *Las Vegas Review-Journal*, January 12, 2018.
+- Rachel Crosby, "Judge Orders Gradual Unsealing of Las Vegas Shooting Search Warrants," *Las Vegas Review-Journal*, January 12, 2018.
 
-15. Benjamin Weiser, "MGM Resorts to Pay Up to $800 Million to Settle Las Vegas Shooting Lawsuits," *New York Times*, October 3, 2019.
+- Benjamin Weiser, "MGM Resorts to Pay Up to $800 Million to Settle Las Vegas Shooting Lawsuits," *New York Times*, October 3, 2019.

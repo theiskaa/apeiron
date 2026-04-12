@@ -18,7 +18,13 @@ connections:
   - target: "qanon"
     reason: "QAnon was heavily amplified by bots, algorithms, and coordinated fake accounts. It showed how easy it is to manufacture a mass movement online, supporting the dead internet theory's claims."
   - target: "bernays"
-    reason: "Bernays began the engineering of consent in the 1920s as a deliberate human professional practice; the dead internet is what happens when that practice is fully automated, removed from the constraints of human labor, and deployed at the speed of light against attention as the scarce resource. Unbroken methodological lineage."
+    reason: "Bernays began the engineering of consent in the 1920s as human professional practice; the dead internet is what happens when that practice is fully automated and deployed at machine speed against attention as the scarce resource."
+  - target: "seth-rich"
+    reason: "Bot-amplified and coordinated social-media campaigns turned the Rich story into a canonical example of how manufactured amplification shapes political narratives."
+  - target: "sandy-hook"
+    reason: "Viral spread of Sandy Hook content became the landmark test case for platform content moderation — YouTube, Facebook, Twitter all eventually banned denial content."
+  - target: "election-fraud"
+    reason: "2020 election fraud claims spread through the same bot networks and algorithmic amplification mechanisms characteristic of the dead internet."
 ---
 
 In the summer of 2021, an anonymous user with the handle IlluminatiPirate posted a long, unsettling essay on Agora Road's Macintosh Café — a small, retro-themed online forum dedicated to vaporwave aesthetics and internet nostalgia. The essay bore a title that, in any previous era of the internet, might have seemed like the ravings of a paranoid mind: "Dead Internet Theory: Most of the Internet is Fake." The thesis was blunt. The internet, as a space of genuine human connection and organic discourse, had died sometime around 2016 or 2017. What remained — the websites, the social media feeds, the comment sections, the trending topics, the viral content — was largely a simulation of human activity, generated and maintained by bots, artificial intelligence, algorithmic curation, and coordinated manipulation campaigns operated by governments, corporations, and intelligence agencies. The humans were still there, somewhere, but they were outnumbered, outpaced, and increasingly irrelevant. The internet had become a puppet show, and most of the audience did not realize they were watching puppets.

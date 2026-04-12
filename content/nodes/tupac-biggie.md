@@ -4,11 +4,11 @@ title: "The Tupac and Biggie Murders"
 category: "modern"
 connections:
   - target: "cointelpro"
-    reason: "Tupac Shakur was the son of Afeni Shakur, a member of the Black Panther Party's New York chapter who was indicted in the Panther 21 case — one of COINTELPRO's most aggressive operations against the Black liberation movement. The FBI maintained active surveillance files on Tupac himself throughout the 1990s, monitoring his political activism and connections to former Panthers. The manufactured East Coast/West Coast hip-hop war that culminated in both murders directly mirrors COINTELPRO's documented tactic of engineering factional conflicts within Black political and cultural movements — the same Bureau that forged letters to create splits between the Black Panthers and US Organization in 1969 (resulting in the murders of Alprentice 'Bunchy' Carter and John Huggins at UCLA) was still conducting domestic surveillance operations against Black cultural figures two decades later. The destruction of two of the most politically articulate voices in Black America through an engineered feud is structurally identical to COINTELPRO's systematic elimination of Black leadership."
+    reason: "Tupac's mother Afeni was a Panther 21 defendant, his godfather was Geronimo Pratt, and the FBI maintained active surveillance files on Tupac himself through the 1990s. The manufactured East Coast/West Coast war mirrors COINTELPRO's documented tactic of engineering factional conflicts — the same Bureau that forged letters splitting the Panthers from US Organization in 1969 was still targeting Black cultural figures two decades later."
   - target: "cia-drugs"
-    reason: "Death Row Records operated at the direct intersection of the entertainment industry and the crack cocaine economy that the CIA's operations helped create. Suge Knight's empire was built on money and muscle from the Mob Piru Bloods, a gang whose territory was saturated with crack during the exact period when CIA-backed Contra supply networks were flooding South Central Los Angeles with cocaine — as documented by Gary Webb and confirmed by the CIA Inspector General's 1998 report. The LAPD Rampart CRASH scandal, which exposed officers working as enforcers for drug gangs, revealed that the same officers implicated in the Biggie Smalls murder investigation — David Mack and Rafael Perez — were themselves embedded in the drug distribution networks that the CIA's Contra operations had helped establish. The crack economy created the gang infrastructure, the gang infrastructure created Death Row Records, and the corruption of LAPD officers by that same drug economy is what made the cover-up of Biggie's murder possible."
+    reason: "Suge Knight's Death Row empire was built on money and muscle from the Mob Piru Bloods, whose territory was saturated with crack during the exact period Gary Webb documented CIA-backed Contra networks flooding South Central with cocaine. LAPD officers Mack and Perez, implicated in the Biggie investigation, were embedded in those same distribution networks — the crack economy created the gang infrastructure that made the cover-up possible."
   - target: "shadow-elite"
-    reason: "The LAPD's institutional corruption in the Tupac and Biggie cases represents the shadow elite operating at the municipal level. Detective Russell Poole's investigation into Biggie's murder was systematically obstructed not by low-level incompetence but by command-level decisions — Chief Bernard Parks personally shut down the investigation when it pointed toward LAPD officers. The Rampart CRASH scandal revealed that an entire unit of the LAPD was functioning as a criminal enterprise: officers were robbing drug dealers, fabricating evidence, shooting unarmed suspects, and working as private security for Death Row Records while on duty. When this corruption was exposed, the institutional response was not accountability but containment — the city of Los Angeles paid over $125 million in settlements while ensuring that the full scope of the scandal, particularly its connections to the Biggie murder, was never publicly adjudicated. The Wallace family's wrongful death lawsuit against the City of Los Angeles was twice dismissed under circumstances that investigators described as deliberate institutional sabotage."
+    reason: "Detective Russell Poole's Biggie investigation was shut down at command level by Chief Bernard Parks when it pointed toward LAPD officers. The Rampart CRASH scandal revealed an entire unit functioning as a criminal enterprise working as Death Row security; the city paid $125 million in settlements while ensuring the scandal's connections to the Biggie murder were never publicly adjudicated."
 ---
 
 On the night of September 7, 1996, Tupac Amaru Shakur — twenty-five years old, the most commercially successful and politically provocative rapper in America, a man whose very name was a revolutionary invocation — was sitting in the passenger seat of a black BMW 750iL sedan on East Flamingo Road in Las Vegas, Nevada. The driver was Marion "Suge" Knight, the 6-foot-3, 315-pound co-founder and CEO of Death Row Records, the most powerful label in hip-hop. They had just left the MGM Grand Garden Arena, where they had watched Mike Tyson knock out Bruce Seldon in the first round. At a red light near the intersection of Flamingo Road and Koval Lane, a white Cadillac pulled alongside the BMW. Someone in the Cadillac — the identity of this person would remain officially unknown for over two decades — opened fire with a .40 caliber Glock semiautomatic pistol. Thirteen rounds were fired. Four of them struck Tupac: one in the right hand, one in the pelvis, and two in the chest, one of which punctured his right lung. Suge Knight was grazed by a bullet fragment or shrapnel. Tupac was rushed to the University Medical Center of Southern Nevada, where he underwent emergency surgery. He was placed in a medically induced coma. Six days later, on September 13, 1996, at 4:03 p.m., Tupac Shakur was pronounced dead.
@@ -169,32 +169,32 @@ Tupac Shakur's final album, released posthumously, was titled *R U Still Down? (
 
 ## Sources
 
-1. Sullivan, Randall. *LAbyrinth: A Detective Investigates the Murders of Tupac Shakur and Notorious B.I.G., the Implication of Death Row Records' Suge Knight, and the Origins of the Los Angeles Police Scandal*. New York: Grove Press, 2002.
+- Sullivan, Randall. *LAbyrinth: A Detective Investigates the Murders of Tupac Shakur and Notorious B.I.G., the Implication of Death Row Records' Suge Knight, and the Origins of the Los Angeles Police Scandal*. New York: Grove Press, 2002.
 
-2. Kading, Greg. *Murder Rap: The Untold Story of the Biggie Smalls & Tupac Shakur Murder Investigations*. Los Angeles: One Time Publishing, 2011.
+- Kading, Greg. *Murder Rap: The Untold Story of the Biggie Smalls & Tupac Shakur Murder Investigations*. Los Angeles: One Time Publishing, 2011.
 
-3. Scott, Cathy. *The Killing of Tupac Shakur*. Las Vegas: Huntington Press, 1997; revised edition 2002.
+- Scott, Cathy. *The Killing of Tupac Shakur*. Las Vegas: Huntington Press, 1997; revised edition 2002.
 
-4. Philips, Chuck, and Matt Lait. "Ex-FBI Informant Convicted in Rapper's Death." *Los Angeles Times*, April 19, 2003.
+- Philips, Chuck, and Matt Lait. "Ex-FBI Informant Convicted in Rapper's Death." *Los Angeles Times*, April 19, 2003.
 
-5. Webb, Gary. *Dark Alliance: The CIA, the Contras, and the Crack Cocaine Explosion*. New York: Seven Stories Press, 1998.
+- Webb, Gary. *Dark Alliance: The CIA, the Contras, and the Crack Cocaine Explosion*. New York: Seven Stories Press, 1998.
 
-6. Churchill, Ward, and Jim Vander Wall. *Agents of Repression: The FBI's Secret Wars Against the Black Panther Party and the American Indian Movement*. Boston: South End Press, 1988.
+- Churchill, Ward, and Jim Vander Wall. *Agents of Repression: The FBI's Secret Wars Against the Black Panther Party and the American Indian Movement*. Boston: South End Press, 1988.
 
-7. Davis, Duane "Keffe D," with Don Charles. *Compton Street Legend*. Self-published, 2019.
+- Davis, Duane "Keffe D," with Don Charles. *Compton Street Legend*. Self-published, 2019.
 
-8. Broomfield, Nick, dir. *Biggie & Tupac*. Documentary film. Filmfour, 2002.
+- Broomfield, Nick, dir. *Biggie & Tupac*. Documentary film. Filmfour, 2002.
 
-9. Berlinger, Joe, dir. *Unsolved: The Murders of Tupac and The Notorious B.I.G.* Television series. USA Network, 2018.
+- Berlinger, Joe, dir. *Unsolved: The Murders of Tupac and The Notorious B.I.G.* Television series. USA Network, 2018.
 
-10. Poole, Russell, and Randall Sullivan. Investigative files and depositions from *Wallace v. City of Los Angeles*, Case No. CV 02-9065 (C.D. Cal.).
+- Poole, Russell, and Randall Sullivan. Investigative files and depositions from *Wallace v. City of Los Angeles*, Case No. CV 02-9065 (C.D. Cal.).
 
-11. U.S. Department of Justice, Office of the Inspector General. *The CIA-Contra-Crack Cocaine Controversy: A Review of the Justice Department's Investigations and Prosecutions*. Washington, D.C., 1997.
+- U.S. Department of Justice, Office of the Inspector General. *The CIA-Contra-Crack Cocaine Controversy: A Review of the Justice Department's Investigations and Prosecutions*. Washington, D.C., 1997.
 
-12. Board of Inquiry, Los Angeles Police Department. *Rampart Area Corruption Incident: Public Report*. March 2000.
+- Board of Inquiry, Los Angeles Police Department. *Rampart Area Corruption Incident: Public Report*. March 2000.
 
-13. Guy, Jasmine. *Afeni Shakur: Evolution of a Revolutionary*. New York: Atria Books, 2004.
+- Guy, Jasmine. *Afeni Shakur: Evolution of a Revolutionary*. New York: Atria Books, 2004.
 
-14. Joseph, Jamal. *Panther Baby: A Life of Rebellion and Transformation*. Chapel Hill: Algonquin Books, 2012.
+- Joseph, Jamal. *Panther Baby: A Life of Rebellion and Transformation*. Chapel Hill: Algonquin Books, 2012.
 
-15. FBI files on Tupac Shakur, obtained through Freedom of Information Act requests, partially declassified, available through the FBI Vault (vault.fbi.gov).
+- FBI files on Tupac Shakur, obtained through Freedom of Information Act requests, partially declassified, available through the FBI Vault (vault.fbi.gov).

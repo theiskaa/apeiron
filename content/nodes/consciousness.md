@@ -22,7 +22,7 @@ connections:
   - target: "secret-societies"
     reason: "Secret societies from the Eleusinian Mysteries to the Hermetic orders have centered their teachings on the idea that normal waking consciousness hides a deeper reality"
   - target: "jung"
-    reason: "Carl Jung is the indispensable depth-psychological investigator of consciousness — the trained psychiatrist who arrived through clinical observation at the conclusion that ordinary waking consciousness is a small, recent illuminated zone within a vastly larger unconscious that is itself structured, autonomous, and trans-personal. His doctrine of the collective unconscious and the archetypes is the most sustained empirical case ever made for the existence of a layer of mind that is not personal, not learned, and not culturally transmitted, but is structurally inherited and shared across the species. Any serious modern inquiry into the nature of consciousness that ignores Jung is incomplete by construction."
+    reason: "Jung is the depth-psychological investigator who concluded that waking consciousness is a small illuminated zone within a vastly larger, structured unconscious. His collective unconscious and archetypes remain the most sustained empirical case for a trans-personal layer of mind."
   - target: "cern"
     reason: "The deepest unresolved problem in quantum mechanics — the role of the observer in determining physical outcomes — is more empirically pressed at CERN than anywhere else in contemporary science. Some interpretations require consciousness as constitutive of physical reality. Whatever the LHC discovers about matter, it cannot avoid intersecting with what 'discovery' itself is."
 ---

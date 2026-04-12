@@ -14,7 +14,17 @@ connections:
   - target: "mkultra"
     reason: "Both Northwoods and MKUltra came out of the same Cold War military and intelligence agencies, which believed fighting Communism justified harming American citizens."
   - target: "operation-gladio"
-    reason: "Northwoods is the proposal. Gladio is the execution. The doctrine of staging false-flag terrorist attacks and blaming them on a designated enemy to justify a predetermined political objective — proposed by Lemnitzer's Joint Chiefs in 1962 and rejected by Kennedy — was the same doctrine Lemnitzer personally oversaw as Supreme Allied Commander Europe from January 1963 to July 1969, the period during which the strategy of tension was being inaugurated in Italy. The man Kennedy removed for proposing Northwoods was placed in command of the European stay-behind apparatus that ran Northwoods-style operations against European civilians for the next four decades. The continuity is documented at the level of personnel."
+    reason: "Northwoods is the proposal; Gladio is the execution. Kennedy removed Lemnitzer for proposing Northwoods, then Lemnitzer served as SACEUR from 1963-69 — the exact period Italy's strategy of tension was inaugurated. The man who proposed the doctrine personally commanded its European execution."
+  - target: "gulf-of-tonkin"
+    reason: "The doctrine Northwoods proposed — fabricating a naval incident to justify war — was executed two years later in the Gulf of Tonkin."
+  - target: "pearl-harbor-foreknowledge"
+    reason: "The McCollum Memo is Northwoods' direct ancestor: an eight-step plan to provoke Japan into firing the first shot."
+  - target: "uss-liberty"
+    reason: "Northwoods proposed sinking a US Navy ship and blaming Cuba; five years later a Navy SIGINT vessel was attacked and the crew silenced."
+  - target: "lusitania"
+    reason: "The 'Remember the Maine' template Northwoods explicitly cites traces back through Lusitania — allowing an incident to manufacture a casus belli."
+  - target: "waco"
+    reason: "The ATF's fabricated drug-nexus to justify military involvement at Waco repeats the institutional willingness to deceive Congress documented in Northwoods."
 ---
 
 On March 13, 1962, General Lyman Louis Lemnitzer, Chairman of the Joint Chiefs of Staff, presented a document to Secretary of Defense Robert McNamara. The document was titled "Justification for US Military Intervention in Cuba." It carried the full endorsement of the Joint Chiefs — the highest-ranking military officers in the United States. It was not a contingency plan for responding to Cuban aggression. It was a detailed proposal for fabricating Cuban aggression. The plan called for the United States government to stage terrorist attacks against its own citizens, blow up American ships, hijack American airplanes, orchestrate bombings in American cities, and blame every act on Fidel Castro's government — all to manufacture the public outrage necessary to justify a full-scale military invasion of Cuba. The document was classified top secret. It remained buried for thirty-five years. When it was finally declassified in 1997, it did not merely confirm what conspiracy researchers had long suspected. It exceeded it. Here was proof, signed and stamped and filed in the National Archives, that the highest military authority in the United States had proposed a campaign of state-sponsored terrorism against the American people.

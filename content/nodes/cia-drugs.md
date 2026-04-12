@@ -17,6 +17,18 @@ connections:
     reason: "Monroe's death by barbiturate overdose occurred in a period when the CIA was actively studying pharmaceutical methods for incapacitation and assassination. The CIA-Mafia networks active in Hollywood overlapped with Monroe's social world."
   - target: "operation-paperclip"
     reason: "Paperclip and CIA drug trafficking are built on the same moral architecture: the national security establishment allying with perpetrators of atrocities — Nazi war criminals in one case, cocaine cartels in the other — because Cold War strategic calculus made the ends justify the means. Both required institutional lying, record falsification, and the systematic suppression of accountability."
+  - target: "malcolm-x"
+    reason: "Destruction of Black radical leadership coincided with CIA-facilitated heroin flooding the same communities — the counter-institutions Malcolm built couldn't survive it."
+  - target: "tupac-biggie"
+    reason: "Death Row Records was built on crack-economy money; LAPD Rampart officers on its payroll traced back to CIA-Contra supply networks."
+  - target: "operation-ajax"
+    reason: "The Shah's regime installed by Ajax became a major heroin-trade node — a pattern Ajax set for every subsequent CIA client state."
+  - target: "operation-condor"
+    reason: "Condor regimes became narco-states; the 1980 Bolivian 'Cocaine Coup' was run by Garcia Meza with DINA drug-network support."
+  - target: "iran-contra"
+    reason: "Iran-Contra IS the cia-drugs story operationalized — Contra cocaine flights, Barry Seal, Mena Arkansas, Gary Webb's investigation."
+  - target: "rex-84"
+    reason: "Oliver North ran Rex 84 and the Contra drug-resupply Enterprise simultaneously — same personnel, same parallel command structure."
 ---
 
 In April 1989, after the Iran-Contra affair had been sanitized by the Tower Commission and the congressional hearings had ended with no senior official serving meaningful prison time, Senator John Kerry released a report from the Senate Subcommittee on Terrorism, Narcotics, and International Operations. The report concluded: "It is clear that individuals who provided support for the Contras were involved in drug trafficking, the supply network of the Contras was used by drug trafficking organizations, and elements of the Contras themselves knowingly received financial and material assistance from drug traffickers." The report was 1,166 pages long. It was based on hundreds of depositions, interviews, and classified documents. It was ignored by nearly every major newspaper in the United States. The *New York Times* gave it a single story, buried deep in the paper. The *Washington Post* ran a brief inside-page article. Television news barely mentioned it. A United States Senate subcommittee had documented, with evidence, that the American government's proxy army in Central America was entangled with cocaine traffickers — and the story simply disappeared. The question of why it disappeared is inseparable from the story itself.

@@ -15,6 +15,12 @@ connections:
     reason: "QAnon borrowed its basic logic from the 9/11 truth movement: the idea that major public events are staged by hidden actors to serve a secret agenda."
   - target: "operation-mockingbird"
     reason: "Operation Mockingbird showed the CIA had infiltrated major media outlets. QAnon uses this history to argue that mainstream media still serves the government rather than the public."
+  - target: "seth-rich"
+    reason: "Rich's murder was absorbed into QAnon mythology as evidence of the 'deep state' killing whistleblowers — a foundational story in the movement."
+  - target: "sandy-hook"
+    reason: "The crisis-actor framework that QAnon inherited from earlier conspiracy culture had Sandy Hook as its definitive case study."
+  - target: "election-fraud"
+    reason: "QAnon absorbed 2020 election fraud claims as core doctrine — 'The Storm' was to begin with the exposure of electoral fraud; January 6 followed from the belief."
 ---
 
 On the evening of October 28, 2017, an anonymous user posted on the /pol/ board of 4chan — the politically incorrect subforum of the anarchic imageboard that had, over the previous decade, become the incubator for some of the internet's most potent cultural and political movements. The post was formatted like an intelligence briefing. It read, in part: "HRC extradition already in motion effective yesterday with several countries in case of cross border run. Passport approved to be flagged effective 10/30 @ 12:01am. Expect massive riots organized in defiance and target. US M's will conduct the operation while NG activated." HRC was Hillary Rodham Clinton. US M's was the United States Marines. NG was the National Guard. The anonymous poster — who would come to be known as Q, or Q Clearance Patriot, a reference to the Department of Energy's top-secret security classification — was claiming that Hillary Clinton was about to be arrested, that the military was prepared to contain the resulting unrest, and that the storm that President Trump had cryptically referenced at a White House gathering of military leaders on October 5, 2017 ("You guys know what this represents? Maybe it's the calm before the storm") was real. It was happening.

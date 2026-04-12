@@ -11,6 +11,12 @@ connections:
     reason: "Epstein's documented social network — Clinton, Gates, Prince Andrew, Ehud Barak, Leon Black, Les Wexner — constitutes a map of the shadow elite. His operation functioned as an interface between extreme wealth, political power, and intelligence services."
   - target: "mkultra"
     reason: "MKUltra's Operation Midnight Climax was the direct precursor: a CIA program that used prostitutes in Agency-controlled apartments rigged with hidden cameras and two-way mirrors to film targets for blackmail. Epstein's operation used the same method — sexual compromise recorded by hidden surveillance — at industrial scale."
+  - target: "princess-diana"
+    reason: "Both cases involve global elite networks with intelligence-service overlap and the strategic management of compromising information about the powerful."
+  - target: "project-monarch"
+    reason: "The handler-controlled programmed-victim framework has been applied to Epstein's operation: trauma bonding, dissociative control, Acosta's 'belonged to intelligence' line."
+  - target: "las-vegas-shooting"
+    reason: "Paddock's high-roller casino lifestyle, unexplained wealth, and alleged arms-dealing place him in the same intelligence-adjacent casino/hospitality world Epstein operated in."
 ---
 
 In the summer of 1955, a CIA officer named George Hunter White sat behind a two-way mirror in an apartment at 225 Chestnut Street in San Francisco's Telegraph Hill neighborhood. On the other side of the glass, a man who had been lured to the apartment by a prostitute on the Agency's payroll was consuming a drink laced with lysergic acid diethylamide. White watched from behind the mirror, a pitcher of martinis at his elbow, taking notes. The apartment was wired for sound. A camera captured what happened next. The man on the other side of the glass did not know he was being watched, did not know he had been drugged, and did not know that everything he did and said was being recorded by the Central Intelligence Agency of the United States.

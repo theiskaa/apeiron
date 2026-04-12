@@ -35,6 +35,10 @@ connections:
     reason: "Skull and Bones is the most powerful American secret society — fifteen Yale seniors per year, bound by coffin rituals and lifelong secrecy, producing three presidents, multiple CIA directors, and the leadership of Wall Street."
   - target: "saturn-black-cube"
     reason: "Saturn worship — under the names El, Kronos, Moloch, and Saturn — is alleged to be the hidden religion threading through secret societies from the ancient mystery schools to modern elite orders, with the Black Cube as its recurring symbol across millennia."
+  - target: "princess-diana"
+    reason: "The symbolism of Pont de l'Alma ('bridge of the soul'), the 13th pillar, and esoteric readings of the crash site have produced a substantial occult literature."
+  - target: "celebrity-27-club"
+    reason: "The Faustian-bargain and blood-sacrifice narratives — Robert Johnson's crossroads as template — are central to the occult interpretation of the 27 Club."
 ---
 
 In 1798, John Robison — professor of natural philosophy at the University of Edinburgh and fellow of the Royal Society — published *Proofs of a Conspiracy Against All the Religions and Governments of Europe*. His claim was specific: a network of secret societies, centered on the [[illuminati]] and infiltrating [[freemasonry]] lodges across Europe, had engineered the French Revolution. The book was not the work of a crank. Robison was one of the most respected scientists in Britain. George Washington read it and wrote in a letter dated October 24, 1798, that he did not doubt "the Doctrines of the Illuminati, and principles of Jacobinism had not spread in the United States."

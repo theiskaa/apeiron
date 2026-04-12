@@ -12,9 +12,19 @@ connections:
   - target: "mkultra"
     reason: "Oswald had intelligence connections and a bizarre defection history, and Jack Ruby's behavior fits patterns seen in MKUltra-style programming."
   - target: "marilyn-monroe"
-    reason: "Monroe's death came sixteen months before JFK's assassination. Both were entangled with the Kennedys, both knew secrets about CIA operations, and both died under circumstances the official record has never convincingly explained."
+    reason: "Monroe died sixteen months before JFK, both entangled with the Kennedys and CIA operations, both under circumstances the official record never convincingly explained."
   - target: "operation-gladio"
-    reason: "Kennedy removed Lyman Lemnitzer as Chairman of the Joint Chiefs after Lemnitzer endorsed the Northwoods proposals — and reassigned him to NATO Supreme Allied Commander Europe in January 1963, where Lemnitzer commanded the operational infrastructure of Operation Gladio for the next six years. The same institutional culture that produced Northwoods produced Gladio. The European stay-behind apparatus that Lemnitzer ran was already conducting on European soil exactly the kinds of false-flag operations Kennedy had refused to authorize against Cuba. The strategy of tension was being inaugurated in Italy during the same months Kennedy was alive in 1963. The question of why Kennedy was killed cannot be cleanly separated from the question of what kinds of operations the supranational intelligence apparatus he was trying to constrain was already running on the territory of America's NATO allies."
+    reason: "Kennedy reassigned Lemnitzer — the general who endorsed Northwoods — to NATO Supreme Allied Commander Europe in 1963, where he commanded Gladio's stay-behind apparatus running the same false-flag operations Kennedy had refused to authorize."
+  - target: "rfk-assassination"
+    reason: "RFK intended to reopen the JFK investigation if elected; the same CIA/mafia apparatus that killed his brother neutralized him 4.5 years later in the middle of his presidential campaign."
+  - target: "mlk-assassination"
+    reason: "The JFK/MLK/RFK assassinations between 1963 and 1968 removed the three leaders most capable of mobilizing mass political power against the Vietnam War and the national security establishment."
+  - target: "malcolm-x"
+    reason: "Malcolm X was killed 15 months after JFK by the same COINTELPRO-era FBI/NYPD infiltration apparatus, as the 2021 exoneration of Aziz and Islam confirmed."
+  - target: "princess-diana"
+    reason: "Diana's landmine campaign threatened the arms industry just as Kennedy's moves threatened the military-industrial complex; both died in officially-ruled accidents with forensic anomalies pointing to intelligence involvement."
+  - target: "gulf-of-tonkin"
+    reason: "Kennedy signed NSAM 263 ordering Vietnam withdrawal in October 1963; four days after his death Johnson reversed it with NSAM 273, and Tonkin eight months later provided the pretext for the war Kennedy had refused to fight."
 ---
 
 At 12:30 p.m. on November 22, 1963, the presidential motorcade turned left from Houston Street onto Elm Street in Dealey Plaza, Dallas, Texas. President John Fitzgerald Kennedy sat in the rear seat of the open Lincoln Continental limousine, SS-100-X, next to his wife Jacqueline. In front of them sat Texas Governor John Connally and his wife Nellie. The sun was out. The crowds were large and enthusiastic. Nellie Connally turned to the President and said, "Mr. President, you can't say Dallas doesn't love you." Kennedy replied, "No, you certainly can't." Seconds later, he was shot. Within thirty minutes, he was dead at Parkland Memorial Hospital. He was forty-six years old.

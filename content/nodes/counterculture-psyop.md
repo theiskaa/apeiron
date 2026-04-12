@@ -19,6 +19,16 @@ connections:
     reason: "If the counterculture was steered by intelligence agencies through media and entertainment, predictive programming is the same mechanism applied forward — using fiction not to redirect a movement but to pre-script public acceptance of future events."
   - target: "bernays"
     reason: "If the 1960s counterculture was steered through media and entertainment, the techniques are Bernays's. His 1929 'Torches of Freedom' campaign — engineering the public smoking of cigarettes by women as a staged feminist gesture at the New York Easter Parade — is the operational prototype: a fabricated movement designed to look organic, deployed at a moment of cultural readiness, exploiting an authentic desire for liberation."
+  - target: "john-lennon"
+    reason: "Lennon was the counterculture figure who kept converting cultural power into political power — the one who broke the depoliticization containment."
+  - target: "celebrity-27-club"
+    reason: "Jones, Hendrix, Joplin, Morrison — four canonical counterculture voices dead in 1969-71, the precise window the counterculture was being neutralized."
+  - target: "kurt-cobain"
+    reason: "Grunge was authentically oppositional; Cobain's death decapitated the movement, which survived only as style stripped of substance."
+  - target: "paul-is-dead"
+    reason: "The theory emerged in 1969 at the precise inflection point of the counterculture's fragmentation — redirecting fan attention from political engagement to puzzle-solving."
+  - target: "operation-chaos"
+    reason: "CHAOS infiltrated the very anti-war and Black activist movements the counterculture-psyop thesis concerns — with agents embedded at operational levels."
 ---
 
 On April 17, 1965, between fifteen and twenty-five thousand people marched on Washington, D.C. to protest the escalation of the Vietnam War. The march was organized by Students for a Democratic Society — SDS — and it was serious. Paul Potter, the president of SDS, stood before the crowd and delivered a speech that named the problem with a precision that made powerful men uncomfortable. "What kind of system is it," Potter asked, "that justifies the United States or any country seizing the destinies of the Vietnamese people and using them callously for its own purpose? What kind of system is it that disenfranchises people in the South, leaves millions upon millions of people throughout the country impoverished and excluded from the mainstream and promise of American society, and creates combatants for Vietnam that come from the very communities it is responsible for destroying?"

@@ -4,17 +4,17 @@ title: "The RFK Assassination"
 category: "operations"
 connections:
   - target: "jfk"
-    reason: "Robert Kennedy's assassination cannot be understood apart from his brother's. RFK had privately told confidants — including Arthur Schlesinger Jr., Richard Goodwin, and journalist Jack Newfield — that he believed the CIA and organized crime were responsible for Dallas and that he intended to reopen the investigation once he held presidential power. His murder on the night he won the California primary eliminated the one man with both the motive and the authority to crack open the JFK case. The two assassinations are not parallel events; they are sequential moves in the same operation, five years apart, by forces that could not afford a Kennedy restoration."
+    reason: "RFK had told Schlesinger, Goodwin, and Jack Newfield privately that he believed the CIA and organized crime killed his brother and intended to reopen the case from the White House. His murder the night he won California eliminated the one man with the motive and authority to crack Dallas open."
   - target: "mkultra"
-    reason: "Sirhan Sirhan is the single most plausible case of a real-world MKULTRA hypnotic assassin. His documented amnesia for the shooting, his trance-like state in the pantry, his notebooks filled with involuntary repetitive writing ('RFK must die RFK must die'), his susceptibility to hypnosis confirmed by multiple psychiatrists including Dr. Bernard Diamond, and the CIA's own declassified documents showing that Project ARTICHOKE successfully created hypno-programmed subjects who could carry out acts and retain no memory — all converge on the possibility that Sirhan was not a political assassin but a programmed patsy, the operational product of the mind control research the Agency had been conducting since 1953."
+    reason: "Sirhan is the most plausible real-world case of an MKULTRA hypnotic assassin: documented amnesia for the shooting, trance state in the pantry, notebooks full of involuntary repetitive writing, extreme hypnotic susceptibility confirmed by Dr. Bernard Diamond — matching exactly what declassified Project ARTICHOKE documents describe as the programmed-assassin objective."
   - target: "cointelpro"
-    reason: "RFK's assassination occurred in the same period that COINTELPRO was actively targeting and neutralizing political leaders who threatened the established power structure. The FBI under Hoover despised both Kennedys — Hoover had wiretapped RFK, had attempted to destroy Martin Luther King Jr., and was running covert operations against the entire spectrum of progressive political leadership. RFK's assassination, King's assassination two months earlier, and the broader COINTELPRO campaign represent a single season of political decapitation in 1968 that eliminated every transformational leader who might have redirected American power."
+    reason: "Hoover's FBI wiretapped RFK, ran COINTELPRO against MLK, and was targeting the entire spectrum of progressive leadership. RFK's murder in June 1968, King's in April, and the broader COINTELPRO campaign form a single season of political decapitation that eliminated every transformational leader at once."
   - target: "shadow-elite"
-    reason: "Robert Kennedy had made enemies of every major node in the shadow elite network: the CIA (which he blamed for the Bay of Pigs and suspected of killing his brother), organized crime (which he had prosecuted relentlessly as Attorney General, targeting Hoffa, Marcello, Giancana, and Trafficante), the military-industrial complex (which he opposed through his stance against Vietnam), and the intelligence establishment broadly. His candidacy in 1968 threatened to bring a hostile actor into the White House who had both intimate knowledge of how the shadow state operated and personal motivation to dismantle it."
+    reason: "RFK had made enemies of every shadow elite node: the CIA (Bay of Pigs, suspected JFK plotters), organized crime (Hoffa, Marcello, Giancana, Trafficante whom he'd prosecuted as AG), and the military-industrial complex through his Vietnam opposition. His 1968 candidacy threatened to put a hostile insider in the White House."
   - target: "operation-mockingbird"
-    reason: "The media's treatment of the RFK assassination followed the Mockingbird template precisely: immediate acceptance of the lone-gunman narrative, dismissal of eyewitness testimony contradicting the official account, failure to investigate the autopsy's devastating implications, and active suppression of alternative theories. The LAPD's destruction of evidence — including ceiling panels, door frames containing extra bullet holes, and over 2,400 photographs — went unreported by major outlets for years. When investigative journalists like Robert Kaiser and later researchers did produce dissenting accounts, they were marginalized rather than amplified."
+    reason: "Media coverage followed Mockingbird's template: immediate lone-gunman acceptance, dismissal of contradicting eyewitnesses, and silence on the autopsy's devastating implications. The LAPD's destruction of ceiling panels, door frames with extra bullet holes, and 2,400+ photographs went unreported by major outlets for years."
   - target: "deep-state"
-    reason: "The RFK assassination is a case study in how deep state infrastructure operates: the LAPD's Special Unit Senator (SUS) investigation was run by officers with intelligence community ties, evidence was systematically destroyed before it could be independently examined, witnesses who contradicted the official narrative were intimidated or discredited, and the institutional machinery of law enforcement functioned not to solve the crime but to close the case. The parallel between SUS and the Warren Commission — both nominally independent investigations that served to ratify a predetermined conclusion — reveals a repeating institutional pattern."
+    reason: "The LAPD's Special Unit Senator (SUS) investigation was run by officers with intelligence ties, evidence was destroyed before independent examination, and contradicting witnesses were intimidated — law enforcement functioning not to solve but to close the case. SUS mirrors the Warren Commission's predetermined-conclusion pattern."
 ---
 
 At 12:15 a.m. on June 5, 1968, Robert Francis Kennedy stood at the podium in the Embassy Ballroom of the Ambassador Hotel in Los Angeles, California. He had just won the California Democratic presidential primary, defeating Senator Eugene McCarthy by a margin of 46% to 42%. The victory was decisive. Combined with his earlier win in the South Dakota primary the same day, it gave Kennedy unstoppable momentum toward the Democratic nomination. He was forty-two years old, electric with possibility, and for the first time since Dallas he looked like a man who believed the future could be reclaimed. His speech was brief and buoyant. He thanked his supporters, praised Cesar Chavez and Dolores Huerta, acknowledged the divisions tearing the country apart, and called for reconciliation. His last public words were: "Now it's on to Chicago, and let's win there." He flashed a V for victory, turned from the podium, and was led by maitre d' Karl Uecker through a back passageway — the kitchen pantry — toward a press conference in the Colonial Room. He never arrived.
@@ -161,32 +161,32 @@ The question is not whether there is evidence of conspiracy in the RFK assassina
 
 ## Sources
 
-1. Noguchi, Thomas T., with Joseph DiMona. *Coroner*. New York: Simon & Schuster, 1983.
+- Noguchi, Thomas T., with Joseph DiMona. *Coroner*. New York: Simon & Schuster, 1983.
 
-2. Turner, William W., and Jonn G. Christian. *The Assassination of Robert F. Kennedy: The Conspiracy and Coverup*. New York: Thunder's Mouth Press, 1978; revised edition, 2006.
+- Turner, William W., and Jonn G. Christian. *The Assassination of Robert F. Kennedy: The Conspiracy and Coverup*. New York: Thunder's Mouth Press, 1978; revised edition, 2006.
 
-3. Melanson, Philip H. *The Robert F. Kennedy Assassination: New Revelations on the Conspiracy and Cover-Up*. New York: Shapolsky Publishers, 1991.
+- Melanson, Philip H. *The Robert F. Kennedy Assassination: New Revelations on the Conspiracy and Cover-Up*. New York: Shapolsky Publishers, 1991.
 
-4. Moldea, Dan E. *The Killing of Robert F. Kennedy: An Investigation of Motive, Means, and Opportunity*. New York: W.W. Norton, 1995.
+- Moldea, Dan E. *The Killing of Robert F. Kennedy: An Investigation of Motive, Means, and Opportunity*. New York: W.W. Norton, 1995.
 
-5. Kaiser, Robert Blair. *"R.F.K. Must Die!": Chasing the Mystery of the Robert Kennedy Assassination*. New York: E.P. Dutton, 1970.
+- Kaiser, Robert Blair. *"R.F.K. Must Die!": Chasing the Mystery of the Robert Kennedy Assassination*. New York: E.P. Dutton, 1970.
 
-6. Pepper, William F., and Laurie Dusek. Habeas Corpus Petition on behalf of Sirhan Bishara Sirhan, filed in United States District Court, Central District of California, 2011.
+- Pepper, William F., and Laurie Dusek. Habeas Corpus Petition on behalf of Sirhan Bishara Sirhan, filed in United States District Court, Central District of California, 2011.
 
-7. Brown, Daniel P. Declaration in support of Sirhan Sirhan habeas corpus petition, 2011. Filed as exhibit in *Sirhan v. Horan*.
+- Brown, Daniel P. Declaration in support of Sirhan Sirhan habeas corpus petition, 2011. Filed as exhibit in *Sirhan v. Horan*.
 
-8. Van Praag, Philip. Forensic acoustic analysis of the Pruszynski recording, presented to the American Academy of Forensic Sciences, 2008.
+- Van Praag, Philip. Forensic acoustic analysis of the Pruszynski recording, presented to the American Academy of Forensic Sciences, 2008.
 
-9. Harper, William W. Affidavit regarding ballistic evidence, filed with Los Angeles County Superior Court, December 28, 1970.
+- Harper, William W. Affidavit regarding ballistic evidence, filed with Los Angeles County Superior Court, December 28, 1970.
 
-10. Special Unit Senator investigative files, Los Angeles Police Department, declassified 1988. Available at the California State Archives, Sacramento.
+- Special Unit Senator investigative files, Los Angeles Police Department, declassified 1988. Available at the California State Archives, Sacramento.
 
-11. U.S. Senate Select Committee to Study Governmental Operations with Respect to Intelligence Activities (Church Committee). *Final Report*, Books I-VI. Washington, D.C.: U.S. Government Printing Office, 1976.
+- U.S. Senate Select Committee to Study Governmental Operations with Respect to Intelligence Activities (Church Committee). *Final Report*, Books I-VI. Washington, D.C.: U.S. Government Printing Office, 1976.
 
-12. CIA declassified documents on Project ARTICHOKE and MKULTRA, available through the CIA Freedom of Information Act Electronic Reading Room (www.cia.gov/readingroom).
+- CIA declassified documents on Project ARTICHOKE and MKULTRA, available through the CIA Freedom of Information Act Electronic Reading Room (www.cia.gov/readingroom).
 
-13. Klaber, William, and Philip H. Melanson. *Shadow Play: The Murder of Robert F. Kennedy, the Trial of Sirhan Sirhan, and the Failure of American Justice*. New York: St. Martin's Press, 1997.
+- Klaber, William, and Philip H. Melanson. *Shadow Play: The Murder of Robert F. Kennedy, the Trial of Sirhan Sirhan, and the Failure of American Justice*. New York: St. Martin's Press, 1997.
 
-14. Ayton, Mel. *The Forgotten Terrorist: Sirhan Sirhan and the Assassination of Robert F. Kennedy*. Washington, D.C.: Potomac Books, 2007.
+- Ayton, Mel. *The Forgotten Terrorist: Sirhan Sirhan and the Assassination of Robert F. Kennedy*. Washington, D.C.: Potomac Books, 2007.
 
-15. Talbot, David. *Brothers: The Hidden History of the Kennedy Years*. New York: Free Press, 2007.
+- Talbot, David. *Brothers: The Hidden History of the Kennedy Years*. New York: Free Press, 2007.

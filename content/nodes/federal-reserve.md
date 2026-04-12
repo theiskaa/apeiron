@@ -23,6 +23,12 @@ connections:
     reason: "The Rothschild international banking network — five brothers across Frankfurt, London, Paris, Vienna, and Naples coordinating government finance via a private courier system — was the historical prototype for the trans-national private central banking the Fed institutionalized for the US in 1913."
   - target: "rockefeller"
     reason: "Senator Nelson W. Aldrich, principal political architect of the Federal Reserve Act of 1913, was the father of Abby Aldrich Rockefeller — wife of John D. Rockefeller Jr. The marriage that fused the wealthiest American family of the period to the senator who built the central banking system."
+  - target: "operation-ajax"
+    reason: "Anglo-Iranian Oil Company control of Iranian oil revenues was Ajax's economic motive; the Fed-backed war-state protected extraction rights abroad."
+  - target: "iran-contra"
+    reason: "The Enterprise's Swiss accounts, BCCI, and Saudi intermediaries used the same offshore banking infrastructure the dollar-reserve system depends on."
+  - target: "lusitania"
+    reason: "Two years after the Fed's creation, JP Morgan's $500M Anglo-French loans gave the new central-banking system a direct stake in Allied victory."
 ---
 
 On a cold November night in 1910, a private railway car sat waiting at a train station in Hoboken, New Jersey. The men who boarded it were under strict instructions: use first names only, do not acknowledge one another to the staff, and if anyone asks, you are going on a duck-hunting trip to the coast of Georgia. The destination was Jekyll Island — a private retreat owned by some of the wealthiest families in America. The purpose was to design a central banking system for the United States. The men who gathered in that rail car represented, by some estimates, one-quarter of the entire wealth of the world. What they produced over nine days of secret deliberation would become the Federal Reserve System — the institution that controls the American money supply, sets interest rates for the global economy, and operates with less public accountability than a municipal water board. The story of its creation is not a conspiracy theory. It is documented history, confirmed by the participants themselves. The question the story raises — whether a monetary system designed in secret, by bankers, for bankers, can ever truly serve the public interest — remains unanswered more than a century later.

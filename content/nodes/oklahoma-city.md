@@ -4,15 +4,15 @@ title: "The Oklahoma City Bombing"
 category: "modern"
 connections:
   - target: "waco"
-    reason: "The Oklahoma City bombing was a direct, causal, and intentional response to the destruction of the Branch Davidian compound at Waco. Timothy McVeigh chose April 19, 1995, because it was the second anniversary of the April 19, 1993, fire that ended the 51-day siege. McVeigh had traveled to Waco during the siege itself, selling bumper stickers on the perimeter and telling reporters he was outraged by the government's actions. He described Waco in letters, interviews, and his authorized biography as the event that radicalized him. Terry Nichols attended gun shows where Waco was the dominant grievance. The militia movement that incubated both men was overwhelmingly a product of Waco's aftermath. The radicalization pipeline from Waco to Oklahoma City is not inferred or speculative — it is documented, causal, and acknowledged by the perpetrator himself. Without Waco, there is no Oklahoma City."
+    reason: "McVeigh chose April 19, 1995 — the second anniversary of the Waco fire — and had traveled to Waco during the siege itself, selling bumper stickers and telling reporters he was outraged. He named Waco as the event that radicalized him. Without Waco, there is no Oklahoma City."
   - target: "nine-eleven"
-    reason: "The Oklahoma City bombing was the deadliest terrorist attack on American soil until September 11, 2001. Both events involved the catastrophic destruction of large federal or commercial buildings, both generated persistent questions about whether the official account — a small cell of extremists acting without state assistance — was complete, both produced witnesses and physical evidence that contradicted the official narrative, and both were followed by massive expansions of federal surveillance and executive power. The 1996 Antiterrorism and Effective Death Penalty Act, passed in direct response to the Oklahoma City bombing, was the legislative template for the USA PATRIOT Act passed after 9/11. The institutional pattern is identical: a spectacular act of violence, an immediate official narrative, suppression of contradictory evidence, and a pre-drafted legislative package expanding state power that passes with minimal debate in the atmosphere of national grief. OKC was the rehearsal; 9/11 was the full production."
+    reason: "OKC was the deadliest terrorist attack on US soil until 9/11, and the 1996 Antiterrorism and Effective Death Penalty Act was the direct legislative template for the Patriot Act. The institutional pattern was identical — spectacular violence, suppressed contradictory evidence, pre-drafted legislation passed amid national grief."
   - target: "mass-surveillance"
-    reason: "The 1996 Antiterrorism and Effective Death Penalty Act, signed by President Clinton on April 24, 1996 — almost exactly one year after the bombing — was the first major post-Cold War expansion of federal surveillance and law enforcement powers directed at domestic targets. It expanded the government's wiretapping authority, restricted habeas corpus for federal prisoners, gave the executive branch new powers to designate foreign terrorist organizations and freeze their assets, and funded a dramatic expansion of federal law enforcement capacity. It was the direct legislative precursor to the Patriot Act. The political logic was identical: a catastrophic terrorist attack creates an emotional environment in which civil liberties protections are treated as obstacles to security rather than as the purpose of the state. The surveillance state that Edward Snowden would expose in 2013 has its domestic legislative origin not on September 12, 2001, but on April 19, 1995."
+    reason: "Clinton's 1996 Antiterrorism and Effective Death Penalty Act, passed a year after OKC, expanded wiretap authority, restricted habeas corpus, and funded a dramatic growth in federal law enforcement — the first major post-Cold War expansion of domestic surveillance and the direct legislative precursor to the Patriot Act."
   - target: "deep-state"
-    reason: "The Oklahoma City bombing raises the most disturbing questions about the relationship between federal law enforcement, its network of informants and undercover agents, and the white supremacist and militia networks in which Timothy McVeigh operated. The ATF had an informant — Carol Howe — inside the Elohim City compound who warned of an imminent attack months before the bombing. The FBI had multiple informants in the same networks. Andreas Strassmeir, a German national living at Elohim City with apparent intelligence connections, had direct contact with McVeigh. The question is not whether the federal government had penetrated the networks that produced the bombing — it had. The question is whether the bombing could have been prevented, whether it was allowed to proceed, and why the investigation was so aggressively narrowed to exclude these connections. The Jesse Trentadue FOIA litigation produced documents suggesting that the FBI had foreknowledge through its informant network and deliberately concealed this from the prosecution and the public."
+    reason: "ATF informant Carol Howe warned of an imminent attack from Elohim City months before the bombing, and Andreas Strassmeir — a German national with apparent intelligence ties living there — had direct contact with McVeigh. The federal government had deeply penetrated the networks that produced the bombing, and the Trentadue FOIA litigation suggests foreknowledge was concealed."
   - target: "operation-gladio"
-    reason: "The structural pattern of the Oklahoma City bombing conforms precisely to the 'strategy of tension' framework documented in Operation Gladio: a spectacular act of violence against civilians, attributed to extremists at the political margin, followed by an expansion of state security powers that had been legislatively prepared in advance. Vincenzo Vinciguerra's description of Gladio's operational logic — 'You had to attack civilians, the people, women, children, innocent people... to force these people to turn to the State to ask for greater security' — describes the political function of Oklahoma City with uncomfortable precision. The theory is not that McVeigh was a Gladio operative, but that the same institutional logic applies: an act of terrorism by a penetrated network, which the security state had the intelligence to prevent, is allowed to proceed because the political consequences of the attack — the expansion of state power — serve the interests of the institutions that failed to prevent it."
+    reason: "OKC conforms to Gladio's 'strategy of tension' — violence against civilians attributed to political extremists, followed by pre-prepared expansion of state power. Vinciguerra's description of Gladio's logic ('attack civilians… to force these people to turn to the State') describes OKC's political function with uncomfortable precision."
 ---
 
 At 9:02 a.m. on April 19, 1995, a Ryder rental truck packed with approximately 4,800 pounds of ammonium nitrate fertilizer and nitromethane — an improvised explosive device known as ANFO, for ammonium nitrate/fuel oil — detonated in front of the Alfred P. Murrah Federal Building in downtown Oklahoma City, Oklahoma. The blast tore the entire north face off the nine-story reinforced concrete structure, collapsing floors onto floors in a cascading pancake of steel, concrete, glass, and human bodies. One hundred and sixty-eight people were killed, including nineteen children in the America's Kids daycare center on the building's second floor. More than six hundred and eighty others were injured. Three hundred and twenty-four buildings within a sixteen-block radius sustained damage. Eighty-six cars in the vicinity were destroyed or burned. The blast was felt and heard thirty miles away. It registered 3.0 on the Richter scale at the Oklahoma Geological Survey's seismographic station in Norman, twenty miles to the south.
@@ -179,32 +179,32 @@ This is the question that the official investigation was designed never to ask. 
 
 ## Sources
 
-1. Michel, Lou, and Dan Herbeck. *American Terrorist: Timothy McVeigh and the Oklahoma City Bombing*. New York: Regan Books, 2001.
+- Michel, Lou, and Dan Herbeck. *American Terrorist: Timothy McVeigh and the Oklahoma City Bombing*. New York: Regan Books, 2001.
 
-2. Wright, Stuart A. *Patriots, Politics, and the Oklahoma City Bombing*. Cambridge: Cambridge University Press, 2007.
+- Wright, Stuart A. *Patriots, Politics, and the Oklahoma City Bombing*. Cambridge: Cambridge University Press, 2007.
 
-3. Hamm, Mark S. *In Bad Company: America's Terrorist Underground*. Boston: Northeastern University Press, 2002.
+- Hamm, Mark S. *In Bad Company: America's Terrorist Underground*. Boston: Northeastern University Press, 2002.
 
-4. Trentadue, Jesse. FOIA litigation documents, *Trentadue v. FBI*, U.S. District Court for the District of Utah, Case No. 2:04-cv-00772 (2004-2015).
+- Trentadue, Jesse. FOIA litigation documents, *Trentadue v. FBI*, U.S. District Court for the District of Utah, Case No. 2:04-cv-00772 (2004-2015).
 
-5. Partin, Benton K. "Bomb Damage Analysis of Alfred P. Murrah Federal Building, Oklahoma City, Oklahoma." Technical memorandum to members of Congress, July 30, 1995.
+- Partin, Benton K. "Bomb Damage Analysis of Alfred P. Murrah Federal Building, Oklahoma City, Oklahoma." Technical memorandum to members of Congress, July 30, 1995.
 
-6. Charles Key, Chairman. *Final Report of the Oklahoma Bombing Investigation Committee*. Oklahoma City: Oklahoma State Legislature, 2001.
+- Charles Key, Chairman. *Final Report of the Oklahoma Bombing Investigation Committee*. Oklahoma City: Oklahoma State Legislature, 2001.
 
-7. Hoffman, David. *The Oklahoma City Bombing and the Politics of Terror*. Venice, CA: Feral House, 1998.
+- Hoffman, David. *The Oklahoma City Bombing and the Politics of Terror*. Venice, CA: Feral House, 1998.
 
-8. Briley, Ron. "The Oklahoma City Bombing: Lessons of the Heartland." *The History Teacher* 31, no. 4 (1998): 469-492.
+- Briley, Ron. "The Oklahoma City Bombing: Lessons of the Heartland." *The History Teacher* 31, no. 4 (1998): 469-492.
 
-9. Serrano, Richard A. *One of Ours: Timothy McVeigh and the Oklahoma City Bombing*. New York: W.W. Norton, 1998.
+- Serrano, Richard A. *One of Ours: Timothy McVeigh and the Oklahoma City Bombing*. New York: W.W. Norton, 1998.
 
-10. Jones, Stephen, and Peter Israel. *Others Unknown: Timothy McVeigh and the Oklahoma City Bombing Conspiracy*. New York: PublicAffairs, 2001.
+- Jones, Stephen, and Peter Israel. *Others Unknown: Timothy McVeigh and the Oklahoma City Bombing Conspiracy*. New York: PublicAffairs, 2001.
 
-11. Linenthal, Edward T. *The Unfinished Bombing: Oklahoma City in American Memory*. Oxford: Oxford University Press, 2001.
+- Linenthal, Edward T. *The Unfinished Bombing: Oklahoma City in American Memory*. Oxford: Oxford University Press, 2001.
 
-12. Final Report of the United States Senate Subcommittee on Terrorism, Technology, and Government Information, "The FBI's Handling of Allegations of the Use of Informants in the Oklahoma City Bombing Case," 1995-1997.
+- Final Report of the United States Senate Subcommittee on Terrorism, Technology, and Government Information, "The FBI's Handling of Allegations of the Use of Informants in the Oklahoma City Bombing Case," 1995-1997.
 
-13. McCurtain Daily Gazette investigative series on Elohim City and the Strassmeir connection, 1996-1997.
+- McCurtain Daily Gazette investigative series on Elohim City and the Strassmeir connection, 1996-1997.
 
-14. Transcript, KFOR-TV (Oklahoma City, NBC), live broadcast coverage, April 19, 1995. Archived footage.
+- Transcript, KFOR-TV (Oklahoma City, NBC), live broadcast coverage, April 19, 1995. Archived footage.
 
-15. Crothers, Lane. *Rage on the Right: The American Militia Movement from Ruby Ridge to the Department of Homeland Security*. Lanham, MD: Rowman & Littlefield, 2012.
+- Crothers, Lane. *Rage on the Right: The American Militia Movement from Ruby Ridge to the Department of Homeland Security*. Lanham, MD: Rowman & Littlefield, 2012.

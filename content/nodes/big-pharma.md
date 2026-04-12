@@ -21,6 +21,8 @@ connections:
     reason: "The pandemic was the proof of concept for the Great Reset's governance model — global coordination between governments, pharmaceutical corporations, and international organizations, with vaccine passports as digital ID infrastructure."
   - target: "chemtrails"
     reason: "Chemtrail health claims — respiratory disease, neurological damage, immune suppression from aerosolized aluminum and barium — describe a population made chronically ill by atmospheric exposure, creating perpetual demand for pharmaceutical intervention. Critics frame this not as a side effect but as a business model."
+  - target: "tuskegee-experiment"
+    reason: "Tuskegee established the institutional template of prioritizing research data over patient welfare that pharmaceutical scandals continued to repeat."
 ---
 
 In September 2009, Pfizer Inc. — the world's largest pharmaceutical company — pleaded guilty to a federal criminal charge of misbranding Bextra, a painkiller the company had promoted for uses the FDA had explicitly declined to approve, and agreed to pay $2.3 billion in fines and settlements. It was the largest healthcare fraud settlement in the history of the United States Department of Justice. The company paid the fine. Its stock barely moved. No executive went to prison. Within a decade, Pfizer would become the most recognized pharmaceutical brand on Earth, its name synonymous not with criminal fraud but with the vaccine that was supposed to end a pandemic. The settlement, the largest of its kind in human history, had been absorbed into the cost of doing business — a rounding error in the moral accounting of an industry whose annual global revenues exceed $1.4 trillion.
