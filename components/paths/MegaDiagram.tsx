@@ -14,10 +14,6 @@ interface MegaDiagramProps {
     pathId: string,
     nodeKey: string
   ) => void;
-  onApeirronPointerDown: (e: React.PointerEvent) => void;
-  // When true, skip rendering Apeirron itself and its hub edges. Used by
-  // MiniPathDiagram where the single-path view doesn't need the root hub.
-  hideApeirron?: boolean;
 }
 
 export default function MegaDiagram({
@@ -27,10 +23,7 @@ export default function MegaDiagram({
   draggingPathId,
   onNodeClick,
   onNodePointerDown,
-  onApeirronPointerDown,
-  hideApeirron,
 }: MegaDiagramProps) {
-  const apeirron = layout.apeirron;
   return (
     <svg
       width={layout.width}
@@ -40,25 +33,6 @@ export default function MegaDiagram({
       role="img"
       aria-label="Apeirron paths map"
     >
-      {/* Hub edges: Apeirron → each category pivot. Pivot is the rotation
-          center, so these endpoints stay anchored no matter how a path tilts.
-          Wrapped per-edge so unfocused hubs can dim with their path.
-          Skipped entirely when Apeirron is hidden (mini view). */}
-      {!hideApeirron &&
-        layout.hubEdges.map((edge) => (
-          <g
-            key={edge.key}
-            style={{
-              opacity:
-                draggingPathId == null || edge.pathId === draggingPathId
-                  ? 1
-                  : 0.35,
-              transition: "opacity 180ms ease",
-            }}
-          >
-            <EdgePath edge={edge} />
-          </g>
-        ))}
       {/* Per-path groups, each rotated around its category top-center.
           While one path is being dragged, all others dim for focus. */}
       {layout.pathGroups.map((g) => {
@@ -105,28 +79,6 @@ export default function MegaDiagram({
           </g>
         );
       })}
-      {/* Apeirron itself: never rotates, rendered on top. Grabbing it drags
-          the whole diagram via a global offset. */}
-      {!hideApeirron && (
-        <foreignObject
-          key={apeirron.key}
-          x={apeirron.x}
-          y={apeirron.y}
-          width={apeirron.width}
-          height={apeirron.height}
-          overflow="visible"
-        >
-          <NodeBox
-            node={apeirron}
-            real={undefined}
-            isSelected={false}
-            isDragging={false}
-            onClick={() => {}}
-            onNodePointerDown={onNodePointerDown}
-            onApeirronPointerDown={onApeirronPointerDown}
-          />
-        </foreignObject>
-      )}
     </svg>
   );
 }
@@ -134,12 +86,9 @@ export default function MegaDiagram({
 function EdgePath({ edge }: { edge: MegaEdge }) {
   const dx = edge.x2 - edge.x1;
   const dy = edge.y2 - edge.y1;
-  const isHub = edge.emphasis === "hub";
-  const edgeColor = isHub
-    ? `color-mix(in srgb, ${edge.color} 55%, transparent)`
-    : `color-mix(in srgb, ${edge.color} 32%, transparent)`;
+  const edgeColor = `color-mix(in srgb, ${edge.color} 32%, transparent)`;
   const arrowColor = `color-mix(in srgb, ${edge.color} 68%, transparent)`;
-  const strokeWidth = isHub ? 1.8 : 1.4;
+  const strokeWidth = 1.4;
 
   // "Slack" control points: purely vertical tangents at the endpoints, which
   // is how the resting edge wants to look (boxes connect top/bottom).
@@ -215,7 +164,6 @@ interface NodeBoxProps {
     pathId: string,
     nodeKey: string
   ) => void;
-  onApeirronPointerDown?: (e: React.PointerEvent) => void;
 }
 
 function NodeBox({
@@ -225,30 +173,7 @@ function NodeBox({
   isDragging,
   onClick,
   onNodePointerDown,
-  onApeirronPointerDown,
 }: NodeBoxProps) {
-  if (node.kind === "apeirron") {
-    return (
-      <div
-        onPointerDown={onApeirronPointerDown}
-        className="relative w-full h-full flex flex-col items-center justify-center gap-2.5 px-6 py-5 rounded-[36px] select-none text-center cursor-grab active:cursor-grabbing"
-        style={{
-          backgroundColor: `color-mix(in srgb, ${node.color} 18%, transparent)`,
-          boxShadow: `inset 0 0 0 1.5px ${node.color}, 0 4px 28px color-mix(in srgb, ${node.color} 22%, transparent), 0 0 0 6px color-mix(in srgb, ${node.color} 8%, transparent)`,
-          transform: node.transform,
-          transformOrigin: "center",
-        }}
-      >
-        <span className="text-[17px] font-semibold tracking-[0.18em] uppercase text-text-primary leading-tight">
-          {node.title}
-        </span>
-        <p className="text-[11px] text-text-secondary leading-snug line-clamp-3 max-w-[85%]">
-          Biggest questions humanity asks
-        </p>
-      </div>
-    );
-  }
-
   if (node.kind === "category") {
     return (
       <button

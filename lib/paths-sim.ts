@@ -6,13 +6,15 @@
 import type { ReadingPath } from "./paths";
 import { layoutPathWithCategory, type PathLayout } from "./paths-layout";
 
-export const APEIRRON_ID = "__apeirron";
-export const APEIRRON_WIDTH = 300;
-export const APEIRRON_HEIGHT = 150;
-export const HORIZONTAL_GAP = 16;
-export const APEIRRON_GAP = 260;
-export const APEIRRON_TOP_PADDING = 280;
-export const CANVAS_BOTTOM_PADDING = 100;
+export const HORIZONTAL_GAP = 48;
+export const VERTICAL_GAP = 96;
+export const CANVAS_SIDE_PADDING = 60;
+export const CANVAS_TOP_PADDING = 80;
+export const CANVAS_BOTTOM_PADDING = 80;
+// Minimum usable width. If the caller doesn't know the viewport yet (e.g.
+// first render before measurement), we fall back to this so the layout still
+// produces something sensible. Real viewport widths override this.
+export const FALLBACK_VIEWPORT_WIDTH = 1400;
 
 export const PATH_COLORS: Record<string, string> = {
   "genesis": "#c4855c",
@@ -81,16 +83,13 @@ export interface BasePlacement {
   orderMap: Map<string, number>;
 }
 
-export interface ApeirronPos {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
 export interface BaseLayout {
   placements: BasePlacement[];
-  apeirron: ApeirronPos;
+  // Y-coordinate of each row's top and the row's height. Used by the
+  // viewport's default focus to zoom-fit the first 2 rows + a peek of
+  // row 3, rather than the whole diagram vertically.
+  rowTops: number[];
+  rowHeights: number[];
   width: number;
   height: number;
 }
@@ -162,7 +161,7 @@ export interface MegaNode {
   key: string;
   pathId: string;
   nodeId: string;
-  kind: "apeirron" | "category" | "node";
+  kind: "category" | "node";
   x: number;
   y: number;
   width: number;
@@ -204,16 +203,36 @@ export interface MegaPathGroup {
 }
 
 export interface MegaLayout {
-  apeirron: MegaNode;
-  hubEdges: MegaEdge[];
   pathGroups: MegaPathGroup[];
   width: number;
   height: number;
 }
 
-// --- Base layout (Apeirron + path placements, one row) ---
+// Pick columns per row. Goal: aim for ~2 rows total so the user sees the
+// whole paths atlas without scrolling. On narrow viewports we cap the
+// column count so individual cards don't become unreadably small. Beyond
+// the cap we'd rather have more rows than cram too many columns into a
+// phone screen.
+function getTargetColumns(viewportWidth: number, pathCount: number): number {
+  // ceil(N/2) columns puts every path into a 2-row grid. For 9 paths that's
+  // a 5 + 4 layout; for 8 it's a clean 4 + 4. On narrower viewports we cap
+  // the column count so individual cards don't become too small.
+  const twoRowCols = Math.ceil(pathCount / 2);
+  if (viewportWidth < 700) return 1;
+  if (viewportWidth < 1000) return Math.min(twoRowCols, 2);
+  if (viewportWidth < 1300) return Math.min(twoRowCols, 3);
+  if (viewportWidth < 1700) return Math.min(twoRowCols, 4);
+  return twoRowCols;
+}
 
-export function computeBase(paths: ReadingPath[]): BaseLayout {
+// Distribute paths across a fixed number of columns with row-major ordering.
+// Each row's width is the sum of its path widths + gaps; canvas width is the
+// widest row. Paths in the same column index across rows don't align in x —
+// the goal is just a visually balanced grid, not a strict table.
+export function computeBase(
+  paths: ReadingPath[],
+  viewportWidth: number = FALLBACK_VIEWPORT_WIDTH
+): BaseLayout {
   const allLayouts = paths.map((path) => {
     const orderMap = new Map<string, number>();
     path.nodes.forEach((pn, i) => orderMap.set(pn.id, i + 1));
@@ -228,61 +247,76 @@ export function computeBase(paths: ReadingPath[]): BaseLayout {
   if (allLayouts.length === 0) {
     return {
       placements: [],
-      apeirron: {
-        x: 0,
-        y: APEIRRON_TOP_PADDING,
-        width: APEIRRON_WIDTH,
-        height: APEIRRON_HEIGHT,
-      },
-      width: APEIRRON_WIDTH + 400,
-      height:
-        APEIRRON_TOP_PADDING +
-        APEIRRON_HEIGHT +
-        APEIRRON_GAP +
-        CANVAS_BOTTOM_PADDING,
+      rowTops: [],
+      rowHeights: [],
+      width: viewportWidth,
+      height: 400,
     };
   }
 
-  const maxHeight = Math.max(...allLayouts.map((l) => l.layout.height));
-  const rowWidth =
-    allLayouts.reduce((sum, l) => sum + l.layout.width, 0) +
-    (allLayouts.length - 1) * HORIZONTAL_GAP;
+  const cols = Math.min(
+    getTargetColumns(viewportWidth, allLayouts.length),
+    allLayouts.length
+  );
 
-  const canvasWidth = Math.max(rowWidth, APEIRRON_WIDTH + 400);
-  const rowStartX = (canvasWidth - rowWidth) / 2;
-  const apeirronY = APEIRRON_TOP_PADDING;
-  const rowY = apeirronY + APEIRRON_HEIGHT + APEIRRON_GAP;
-  const canvasHeight = rowY + maxHeight + CANVAS_BOTTOM_PADDING;
-  const apeirronX = canvasWidth / 2 - APEIRRON_WIDTH / 2;
+  // Chunk paths row-major into rows of `cols`. Each path keeps its own
+  // actual width — tight packing with HORIZONTAL_GAP between neighbours.
+  type Row = {
+    items: typeof allLayouts;
+    width: number;
+    maxHeight: number;
+  };
+  const rows: Row[] = [];
+  for (let i = 0; i < allLayouts.length; i += cols) {
+    const items = allLayouts.slice(i, i + cols);
+    const width =
+      items.reduce((s, l) => s + l.layout.width, 0) +
+      (items.length - 1) * HORIZONTAL_GAP;
+    const maxHeight = Math.max(...items.map((l) => l.layout.height));
+    rows.push({ items, width, maxHeight });
+  }
 
-  let cursorX = rowStartX;
-  const placements: BasePlacement[] = allLayouts.map((l) => {
-    const offsetX = cursorX;
-    cursorX += l.layout.width + HORIZONTAL_GAP;
-    return {
-      path: l.path,
-      layout: l.layout,
-      color: l.color,
-      baseOffsetX: offsetX,
-      baseOffsetY: rowY,
-      orderMap: l.orderMap,
-    };
-  });
+  const widestRow = Math.max(...rows.map((r) => r.width));
+  const canvasWidth = Math.max(
+    widestRow + CANVAS_SIDE_PADDING * 2,
+    viewportWidth
+  );
+
+  const placements: BasePlacement[] = [];
+  const rowTops: number[] = [];
+  const rowHeights: number[] = [];
+  let cursorY = CANVAS_TOP_PADDING;
+  for (let ri = 0; ri < rows.length; ri++) {
+    const row = rows[ri];
+    const rowStartX = (canvasWidth - row.width) / 2;
+    rowTops.push(cursorY);
+    rowHeights.push(row.maxHeight);
+    let cursorX = rowStartX;
+    for (const l of row.items) {
+      placements.push({
+        path: l.path,
+        layout: l.layout,
+        color: l.color,
+        baseOffsetX: cursorX,
+        baseOffsetY: cursorY,
+        orderMap: l.orderMap,
+      });
+      cursorX += l.layout.width + HORIZONTAL_GAP;
+    }
+    cursorY += row.maxHeight;
+    if (ri < rows.length - 1) cursorY += VERTICAL_GAP;
+  }
+  const canvasHeight = cursorY + CANVAS_BOTTOM_PADDING;
 
   return {
     placements,
-    apeirron: {
-      x: apeirronX,
-      y: apeirronY,
-      width: APEIRRON_WIDTH,
-      height: APEIRRON_HEIGHT,
-    },
+    rowTops,
+    rowHeights,
     width: canvasWidth,
     height: canvasHeight,
   };
 }
 
-// --- Sim initialization ---
 
 export function initSims(base: BaseLayout): Map<string, PathSim> {
   const sims = new Map<string, PathSim>();
@@ -398,8 +432,6 @@ export function initSims(base: BaseLayout): Map<string, PathSim> {
   return sims;
 }
 
-// --- Inter-path collisions ---
-
 // Pairwise inter-path soft collision. Runs once per tick across all sims,
 // BEFORE stepSim. Pinned nodes (locked to the cursor) act as immovable walls:
 // they still get tested for overlap, but only the non-pinned counterpart
@@ -471,13 +503,11 @@ export function applyInterCollisions(sims: Map<string, PathSim>): void {
   }
 }
 
-export function stepSim(sim: PathSim, globalOffset: PointXY): boolean {
-  // Effective target offset is the path's own offset plus the global offset
-  // from an Apeirron drag. Both additively shift where each node wants to be.
-  const offX =
-    (sim.dragging ? sim.liveOffset.x : sim.committedOffset.x) + globalOffset.x;
-  const offY =
-    (sim.dragging ? sim.liveOffset.y : sim.committedOffset.y) + globalOffset.y;
+export function stepSim(sim: PathSim): boolean {
+  // Each path is fully independent — its target offset is just its own drag
+  // offset (live while dragging, committed after release).
+  const offX = sim.dragging ? sim.liveOffset.x : sim.committedOffset.x;
+  const offY = sim.dragging ? sim.liveOffset.y : sim.committedOffset.y;
   const pinKey = sim.dragging ? sim.pinnedKey : null;
 
   // Position spring: F = k·(target−pos), a = F/m → v += F·invMass.
@@ -602,32 +632,12 @@ export function stepSim(sim: PathSim, globalOffset: PointXY): boolean {
 
 export function buildMegaLayout(
   sims: Map<string, PathSim>,
-  globalOffset: PointXY,
   base: BaseLayout
 ): MegaLayout {
-  // Apeirron is the only thing that renders at globalOffset directly — every
-  // other node's sim position already reflects the global shift via stepSim's
-  // target calculation.
-  const apeirronX = base.apeirron.x + globalOffset.x;
-  const apeirronY = base.apeirron.y + globalOffset.y;
-  const apeirron: MegaNode = {
-    key: APEIRRON_ID,
-    pathId: APEIRRON_ID,
-    nodeId: APEIRRON_ID,
-    kind: "apeirron",
-    x: apeirronX,
-    y: apeirronY,
-    width: base.apeirron.width,
-    height: base.apeirron.height,
-    color: "#d8d8e0",
-    title: "Apeirron",
-  };
-
-  const hubEdges: MegaEdge[] = [];
   const pathGroups: MegaPathGroup[] = [];
 
-  let maxX = apeirronX + base.apeirron.width;
-  let maxY = apeirronY + base.apeirron.height;
+  let maxX = 0;
+  let maxY = 0;
 
   const now = performance.now();
 
@@ -720,9 +730,8 @@ export function buildMegaLayout(
       });
     }
 
-    // Rotation pivot: category's top-center. Any non-rotating content anchored
-    // at this point (the Apeirron hub edge) stays visually stable while the
-    // path tilts around it.
+    // Rotation pivot: category's top-center (where the path visually "hangs
+    // from"). Kept so per-path tilt still looks natural when dragged.
     let cx = 0;
     let cy = 0;
     if (sim.categoryKey) {
@@ -730,23 +739,6 @@ export function buildMegaLayout(
       if (cat) {
         cx = cat.x + cat.width / 2;
         cy = cat.y;
-        // Hub edge tautness: as the category is pulled from home, the edge
-        // straightens out. 600 px of pull drops the curve scale to the floor.
-        const homeX = cat.bx + cat.width / 2;
-        const homeY = cat.by;
-        const displace = Math.hypot(cx - homeX, cy - homeY);
-        const hubCurve = Math.max(0.2, 1 - displace / 600);
-        hubEdges.push({
-          key: `hub->${sim.pathId}`,
-          pathId: sim.pathId,
-          color: sim.color,
-          x1: apeirronX + base.apeirron.width / 2,
-          y1: apeirronY + base.apeirron.height,
-          x2: cx,
-          y2: cy,
-          emphasis: "hub",
-          curveScale: hubCurve,
-        });
       }
     }
 
@@ -761,8 +753,6 @@ export function buildMegaLayout(
   }
 
   return {
-    apeirron,
-    hubEdges,
     pathGroups,
     width: Math.max(maxX, base.width),
     height: Math.max(maxY, base.height),

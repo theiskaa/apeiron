@@ -7,8 +7,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { APEIRRON_WIDTH } from "@/lib/paths-sim";
-
 interface CanvasViewportProps {
   transform: { x: number; y: number; scale: number };
   setTransform: React.Dispatch<
@@ -19,9 +17,19 @@ interface CanvasViewportProps {
   onResetLayout: () => void;
   hasDrags: boolean;
   // If set, the viewport centers + zooms on this content-space point at
-  // mount instead of running focusApeirron. Used by MiniPathDiagram to
-  // start zoomed on the currently-viewed node.
+  // mount instead of running the default fit-content logic.
+  //   - {x,y}  → focus on this point
+  //   - null   → no focus requested, use default fit
+  //   - undefined → focus requested but data not ready yet, wait before
+  //     initializing (prevents a flash of "default fit" before the real
+  //     focus point arrives when the viewport is still being measured)
   initialFocusPoint?: { x: number; y: number } | null;
+  // Optional target content-space height for default focus. When set, the
+  // scale is picked so this height fits in the viewport (instead of the
+  // full contentHeight). Used to show only the first ~2 rows of the grid
+  // with a peek of the 3rd, rather than zooming all the way out to fit
+  // every row.
+  focusHeight?: number | null;
   hideControls?: boolean;
   // When true, keep the content's center inside the viewport after every
   // transform update. Prevents pan / fling / wheel from launching content
@@ -43,6 +51,7 @@ export default function CanvasViewport({
   onResetLayout,
   hasDrags,
   initialFocusPoint,
+  focusHeight,
   hideControls,
   clampTransform,
   children,
@@ -147,33 +156,46 @@ export default function CanvasViewport({
     });
   }, [contentWidth, contentHeight, setClampedTransform]);
 
-  const focusApeirron = useCallback(() => {
+  // Default focus: scale so the content width fits with breathing room AND
+  // `focusHeight` (typically 2 rows + peek of the 3rd) fits vertically.
+  // Top-align so Genesis and its row-mates sit at the top of the viewport
+  // and the user pans/scrolls down for subsequent rows. Capped at 1× to
+  // avoid ballooning densely-packed cards.
+  const focusContent = useCallback(() => {
     const el = viewportRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const scale = Math.min(
-      0.35,
-      Math.max(0.18, (rect.width * 0.14) / (APEIRRON_WIDTH * 2.5))
-    );
+    if (rect.width === 0 || rect.height === 0) return;
+    const widthFit = (rect.width - 120) / contentWidth;
+    const targetH = focusHeight && focusHeight > 0 ? focusHeight : contentHeight;
+    const heightFit = (rect.height - 80) / targetH;
+    const scale = Math.max(MIN_SCALE, Math.min(1, widthFit, heightFit));
     setClampedTransform({
-      x: rect.width / 2 - (contentWidth / 2) * scale,
-      y: rect.height / 2 - (contentHeight / 2) * scale,
+      x: (rect.width - contentWidth * scale) / 2,
+      y: 32,
       scale,
     });
-  }, [contentWidth, contentHeight, setClampedTransform]);
+  }, [contentWidth, contentHeight, focusHeight, setClampedTransform]);
 
   useLayoutEffect(() => {
     if (initialized) return;
-    // If the caller provided a specific content-space point to focus on,
-    // zoom + center on it. Otherwise fall back to the generic
-    // focusApeirron() logic used by the main view.
+    // Tri-state on initialFocusPoint: undefined means "waiting for the
+    // focus point to be computed" (data not ready yet) — we must not fall
+    // back to focusContent() yet, or we'll lock in a center-fit view
+    // before the real focus target arrives.
+    if (initialFocusPoint === undefined) return;
     if (initialFocusPoint) {
       const el = viewportRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
       const scale = INITIAL_FOCUS_SCALE;
-      setClampedTransform({
+      // Use the raw setTransform (not setClampedTransform) so applyClamp
+      // doesn't force the content's center back into the viewport — when
+      // the target node is near the top/bottom of a tall path and the
+      // content is taller than the viewport, clamping would pull the
+      // view back toward the content's center, defeating the focus.
+      setTransform({
         x: rect.width / 2 - initialFocusPoint.x * scale,
         y: rect.height / 2 - initialFocusPoint.y * scale,
         scale,
@@ -181,9 +203,9 @@ export default function CanvasViewport({
       setInitialized(true);
       return;
     }
-    focusApeirron();
+    focusContent();
     setInitialized(true);
-  }, [focusApeirron, initialized, initialFocusPoint, setClampedTransform]);
+  }, [focusContent, initialized, initialFocusPoint, setTransform, setClampedTransform]);
 
   useEffect(() => {
     const el = viewportRef.current;
@@ -376,7 +398,7 @@ export default function CanvasViewport({
           onZoomIn={() => zoomAtCenter(1.2)}
           onZoomOut={() => zoomAtCenter(1 / 1.2)}
           onFit={fitToView}
-          onFocus={focusApeirron}
+          onFocus={focusContent}
           onResetLayout={onResetLayout}
           hasDrags={hasDrags}
         />
@@ -441,7 +463,7 @@ function ViewControls({
         onClick={onFocus}
         className="h-8 px-3 rounded-full flex items-center justify-center gap-1.5 text-[10px] text-text-muted hover:text-text-secondary tracking-wide transition-colors"
         style={btnStyle}
-        aria-label="Focus Apeirron"
+        aria-label="Focus content"
       >
         <svg
           width="11"

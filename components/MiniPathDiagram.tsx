@@ -73,7 +73,6 @@ export default function MiniPathDiagram({
         paths={pathsProp}
         initialFocusNodeId={currentNodeId}
         hideControls
-        hideApeirron
         persist={false}
         clampTransform
       />

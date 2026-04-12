@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -30,15 +31,12 @@ interface Props {
   // the full READING_PATHS set used by the main view.
   paths?: ReadingPath[];
   // If set, the viewport centers + zooms on this node at mount instead of
-  // running the default focusApeirron logic.
+  // running the default fit-content logic.
   initialFocusNodeId?: string | null;
   // Hide the bottom-right Focus/Reset/zoom controls.
   hideControls?: boolean;
-  // Hide the Apeirron root card and its hub edges entirely. Used by
-  // MiniPathDiagram — the single-path view doesn't need the root hub.
-  hideApeirron?: boolean;
-  // Persist path offsets and global offset to localStorage. Default true;
-  // set false for secondary instances like MiniPathDiagram.
+  // Persist path offsets to localStorage. Default true; set false for
+  // secondary instances like MiniPathDiagram.
   persist?: boolean;
   // Stop running the rAF physics loop. Used by PageClient when the user
   // navigates away from the graph view — the component stays mounted but
@@ -49,7 +47,6 @@ interface Props {
 }
 
 const OFFSETS_STORAGE_KEY = "apeirron-path-offsets";
-const GLOBAL_OFFSET_STORAGE_KEY = "apeirron-global-offset";
 
 export default function PathsGraph({
   graphData,
@@ -58,17 +55,40 @@ export default function PathsGraph({
   paths,
   initialFocusNodeId,
   hideControls,
-  hideApeirron,
   persist = true,
   paused = false,
   clampTransform,
 }: Props) {
-  // Compute the base layout for this instance's paths. Stable referential
-  // equality on the paths array means this only recomputes when the caller
-  // actually passes a different `paths`.
+  // Viewport-width tracking so the grid layout can wrap paths responsively.
+  // Start at 0 to signal "unmeasured"; we render nothing until the real
+  // width arrives via useLayoutEffect (which runs before paint, so the
+  // first visible frame already has the correct column count and focus).
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [viewportWidth, setViewportWidth] = useState(0);
+
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.width > 0) {
+        setViewportWidth((prev) =>
+          Math.abs(prev - rect.width) < 1 ? prev : rect.width
+        );
+      }
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Compute the base layout for this instance's paths. Recomputes when the
+  // caller passes a different `paths` array OR when the viewport width
+  // crosses a wrap threshold.
   const base = useMemo(
-    () => computeBase(paths ?? READING_PATHS),
-    [paths]
+    () => computeBase(paths ?? READING_PATHS, viewportWidth),
+    [paths, viewportWidth]
   );
 
   const byId = useMemo(
@@ -77,8 +97,32 @@ export default function PathsGraph({
   );
 
   const simsRef = useRef<Map<string, PathSim> | null>(null);
-  if (simsRef.current === null) {
-    simsRef.current = initSims(base);
+  const baseRef = useRef(base);
+  // Re-init sims whenever the base layout changes (viewport resize across
+  // wrap threshold, or paths array changes). Preserve any in-progress drag
+  // offsets where the path still exists.
+  if (simsRef.current === null || baseRef.current !== base) {
+    const prevOffsets = new Map<string, PointXY>();
+    if (simsRef.current) {
+      for (const [id, sim] of simsRef.current) {
+        if (sim.committedOffset.x !== 0 || sim.committedOffset.y !== 0) {
+          prevOffsets.set(id, { ...sim.committedOffset });
+        }
+      }
+    }
+    const fresh = initSims(base);
+    for (const [id, off] of prevOffsets) {
+      const sim = fresh.get(id);
+      if (!sim) continue;
+      sim.committedOffset = { ...off };
+      sim.liveOffset = { ...off };
+      for (const n of sim.nodes.values()) {
+        n.x = n.bx + off.x;
+        n.y = n.by + off.y;
+      }
+    }
+    simsRef.current = fresh;
+    baseRef.current = base;
   }
 
   const [tick, setTick] = useState(0);
@@ -89,19 +133,6 @@ export default function PathsGraph({
   // Set true once a pointerdown has crossed the drag threshold. Read by the
   // click wrapper so that releasing after a drag doesn't also fire onClick.
   const dragOccurredRef = useRef(false);
-
-  // Global offset — set by dragging Apeirron, shifts every path's target
-  // position uniformly. Apeirron renders at base + global; paths render at
-  // their sim position (which physics pulls toward base + path + global).
-  const globalOffsetRef = useRef<PointXY>({ x: 0, y: 0 });
-  const globalLiveOffsetRef = useRef<PointXY>({ x: 0, y: 0 });
-  const draggingGlobalRef = useRef(false);
-
-  const getEffectiveGlobalOffset = useCallback((): PointXY => {
-    return draggingGlobalRef.current
-      ? globalLiveOffsetRef.current
-      : globalOffsetRef.current;
-  }, []);
 
   const rafRef = useRef<number | null>(null);
   const runningRef = useRef(false);
@@ -127,11 +158,10 @@ export default function PathsGraph({
       const sims = simsRef.current;
       let anyHot = false;
       if (sims) {
-        const globalOffset = getEffectiveGlobalOffset();
         // Collisions can wake cold sims — run first so stepSim then integrates them.
         applyInterCollisions(sims);
         for (const sim of sims.values()) {
-          if (sim.hot && stepSim(sim, globalOffset)) anyHot = true;
+          if (sim.hot && stepSim(sim)) anyHot = true;
         }
       }
       setTick((t) => t + 1);
@@ -143,7 +173,7 @@ export default function PathsGraph({
       }
     };
     rafRef.current = requestAnimationFrame(loop);
-  }, [getEffectiveGlobalOffset]);
+  }, []);
 
   // Pause transitions: cancel in-flight rAF when paused goes true; resume the
   // loop when paused goes false if any sim is still hot from before.
@@ -195,26 +225,6 @@ export default function PathsGraph({
           }
         }
       }
-      const savedGlobal = localStorage.getItem(GLOBAL_OFFSET_STORAGE_KEY);
-      if (savedGlobal) {
-        const parsed = JSON.parse(savedGlobal);
-        if (parsed && typeof parsed === "object") {
-          const v = parsed as { x?: number; y?: number };
-          const g = { x: v.x ?? 0, y: v.y ?? 0 };
-          globalOffsetRef.current = g;
-          globalLiveOffsetRef.current = { ...g };
-          // Snap every sim's live positions to the shifted rest so the
-          // reload doesn't trigger a physics "catch up" on mount.
-          for (const sim of sims.values()) {
-            for (const n of sim.nodes.values()) {
-              n.x = n.bx + sim.committedOffset.x + g.x;
-              n.y = n.by + sim.committedOffset.y + g.y;
-              n.vx = 0;
-              n.vy = 0;
-            }
-          }
-        }
-      }
       setTick((t) => t + 1);
     } catch {}
   }, [persist]);
@@ -242,28 +252,29 @@ export default function PathsGraph({
     } catch {}
   }, [persist]);
 
-  const persistGlobalOffset = useCallback(() => {
-    if (!persist) return;
-    try {
-      const g = globalOffsetRef.current;
-      if (g.x === 0 && g.y === 0) {
-        localStorage.removeItem(GLOBAL_OFFSET_STORAGE_KEY);
-      } else {
-        localStorage.setItem(GLOBAL_OFFSET_STORAGE_KEY, JSON.stringify(g));
-      }
-    } catch {}
-  }, [persist]);
-
   const megaLayout = useMemo(
-    () => buildMegaLayout(simsRef.current!, getEffectiveGlobalOffset(), base),
+    () => buildMegaLayout(simsRef.current!, base),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [tick, base]
   );
 
+  // Content-space height that the default focus should fit into vertically.
+  // If there are 3+ rows, we aim to show rows 1 and 2 fully plus ~30% of
+  // row 3 as a "there's more below" hint. Otherwise, null → fit everything.
+  const focusHeight = useMemo(() => {
+    if (base.rowTops.length < 3) return null;
+    const row3Top = base.rowTops[2];
+    const peek = base.rowHeights[2] * 0.3;
+    return row3Top + peek;
+  }, [base]);
+
   // Compute the initial focus point from the layout if an initialFocusNodeId
-  // is provided. CanvasViewport uses this at mount to center + zoom on the
-  // specific node instead of running its default focusApeirron logic.
-  const initialFocusPoint = useMemo(() => {
+  // is provided. Tri-state so CanvasViewport can distinguish "no focus
+  // requested" (null → use default fit) from "focus requested but data
+  // not ready yet" (undefined → wait) from "ready" ({x,y} → center on it).
+  const initialFocusPoint = useMemo<
+    { x: number; y: number } | null | undefined
+  >(() => {
     if (!initialFocusNodeId) return null;
     for (const g of megaLayout.pathGroups) {
       for (const n of g.nodes) {
@@ -272,15 +283,13 @@ export default function PathsGraph({
         }
       }
     }
-    return null;
+    return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialFocusNodeId, megaLayout]);
 
   const hasDrags = useMemo(() => {
     const sims = simsRef.current;
     if (!sims) return false;
-    const g = globalOffsetRef.current;
-    if (g.x !== 0 || g.y !== 0) return true;
     for (const sim of sims.values()) {
       if (sim.committedOffset.x !== 0 || sim.committedOffset.y !== 0) return true;
     }
@@ -412,112 +421,6 @@ export default function PathsGraph({
     [ensureRunning, persistOffsets]
   );
 
-  const handleApeirronPointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      e.stopPropagation();
-      const sims = simsRef.current;
-      if (!sims) return;
-
-      const startClientX = e.clientX;
-      const startClientY = e.clientY;
-      const startOffset = { ...globalOffsetRef.current };
-
-      const DRAG_THRESHOLD = 4;
-      let dragActive = false;
-      dragOccurredRef.current = false;
-
-      let lastMoveTime = performance.now();
-      let lastMoveClientX = startClientX;
-      let lastMoveClientY = startClientY;
-      const cursorVel = { x: 0, y: 0 };
-
-      const markAllHot = () => {
-        for (const sim of sims.values()) sim.hot = true;
-      };
-
-      const activate = () => {
-        dragActive = true;
-        dragOccurredRef.current = true;
-        draggingGlobalRef.current = true;
-        globalLiveOffsetRef.current = { ...startOffset };
-        markAllHot();
-        ensureRunning();
-      };
-
-      const handleMove = (ev: PointerEvent) => {
-        const scale = transformRef.current.scale || 1;
-        const dxClient = ev.clientX - startClientX;
-        const dyClient = ev.clientY - startClientY;
-
-        if (!dragActive) {
-          if (Math.hypot(dxClient, dyClient) < DRAG_THRESHOLD) return;
-          activate();
-        }
-
-        globalLiveOffsetRef.current = {
-          x: startOffset.x + dxClient / scale,
-          y: startOffset.y + dyClient / scale,
-        };
-        markAllHot();
-
-        const now = performance.now();
-        const dt = Math.max(1, now - lastMoveTime);
-        const vx = (ev.clientX - lastMoveClientX) / dt / scale;
-        const vy = (ev.clientY - lastMoveClientY) / dt / scale;
-        const alpha = 0.35;
-        cursorVel.x = cursorVel.x * (1 - alpha) + vx * alpha;
-        cursorVel.y = cursorVel.y * (1 - alpha) + vy * alpha;
-        lastMoveTime = now;
-        lastMoveClientX = ev.clientX;
-        lastMoveClientY = ev.clientY;
-      };
-
-      const handleUp = () => {
-        window.removeEventListener("pointermove", handleMove);
-        window.removeEventListener("pointerup", handleUp);
-        window.removeEventListener("pointercancel", handleUp);
-
-        if (!dragActive) return;
-
-        const now = performance.now();
-        const stale = now - lastMoveTime > 60;
-        const vxMs = stale ? 0 : cursorVel.x;
-        const vyMs = stale ? 0 : cursorVel.y;
-
-        // Fling coast: commit the global offset forward along velocity so
-        // the whole diagram glides past the release point, then settles.
-        const FLING_COAST_MS = 180;
-        globalOffsetRef.current = {
-          x: globalLiveOffsetRef.current.x + vxMs * FLING_COAST_MS,
-          y: globalLiveOffsetRef.current.y + vyMs * FLING_COAST_MS,
-        };
-        globalLiveOffsetRef.current = { ...globalOffsetRef.current };
-
-        // Inject velocity into every node so the coast carries every path
-        // (otherwise they'd start from rest against the new coasted target).
-        const MS_PER_FRAME = 1000 / 60;
-        const vxFrame = vxMs * MS_PER_FRAME;
-        const vyFrame = vyMs * MS_PER_FRAME;
-        for (const sim of sims.values()) {
-          for (const n of sim.nodes.values()) {
-            n.vx += vxFrame;
-            n.vy += vyFrame;
-          }
-        }
-
-        draggingGlobalRef.current = false;
-        markAllHot();
-        persistGlobalOffset();
-        ensureRunning();
-      };
-
-      window.addEventListener("pointermove", handleMove);
-      window.addEventListener("pointerup", handleUp);
-      window.addEventListener("pointercancel", handleUp);
-    },
-    [ensureRunning, persistGlobalOffset]
-  );
-
   const handleResetLayout = useCallback(() => {
     const sims = simsRef.current;
     if (!sims) return;
@@ -526,19 +429,17 @@ export default function PathsGraph({
       sim.liveOffset = { x: 0, y: 0 };
       sim.hot = true;
     }
-    globalOffsetRef.current = { x: 0, y: 0 };
-    globalLiveOffsetRef.current = { x: 0, y: 0 };
-    draggingGlobalRef.current = false;
     persistOffsets();
-    persistGlobalOffset();
     ensureRunning();
-  }, [ensureRunning, persistOffsets, persistGlobalOffset]);
+  }, [ensureRunning, persistOffsets]);
 
   return (
     <div
+      ref={containerRef}
       className="absolute inset-0 overflow-hidden"
       style={{ backgroundColor: "var(--graph-bg, #262626)" }}
     >
+      {viewportWidth > 0 && (
       <div className="absolute inset-0">
         <CanvasViewport
           transform={transform}
@@ -548,6 +449,7 @@ export default function PathsGraph({
           onResetLayout={handleResetLayout}
           hasDrags={hasDrags}
           initialFocusPoint={initialFocusPoint}
+          focusHeight={focusHeight}
           hideControls={hideControls}
           clampTransform={clampTransform}
         >
@@ -558,11 +460,10 @@ export default function PathsGraph({
             draggingPathId={draggingPathId}
             onNodeClick={handleNodeClick}
             onNodePointerDown={handleNodePointerDown}
-            onApeirronPointerDown={handleApeirronPointerDown}
-            hideApeirron={hideApeirron}
           />
         </CanvasViewport>
       </div>
+      )}
     </div>
   );
 }

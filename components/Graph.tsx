@@ -101,12 +101,17 @@ export default function Graph({
     fg.d3Force("link").distance(linkDist).strength(linkStr);
     fg.d3Force("center", null);
 
-    const p = isMobile ? 20 : 200;
-    const t1 = setTimeout(() => fg.zoomToFit(600, p), 500);
-    const t2 = setTimeout(() => fg.zoomToFit(800, p), 1500);
-    const t3 = setTimeout(() => fg.zoomToFit(800, p), 3000);
+    const p = isMobile ? 40 : 120;
+    // Multiple fit passes to track the still-alive simulation as it spreads.
+    // With 100+ nodes the graph keeps expanding for several seconds — a single
+    // early fit leaves nodes drifting off-screen.
+    const t1 = setTimeout(() => fg.zoomToFit(400, p), 300);
+    const t2 = setTimeout(() => fg.zoomToFit(600, p), 1200);
+    const t3 = setTimeout(() => fg.zoomToFit(800, p), 2800);
+    const t4 = setTimeout(() => fg.zoomToFit(800, p), 5000);
+    const t5 = setTimeout(() => fg.zoomToFit(1000, p), 8000);
 
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dimensions.width]);
 
@@ -444,7 +449,7 @@ export default function Graph({
         onNodeDragEnd={handleNodeDragEnd}
         backgroundColor={graphBg}
         onRenderFramePre={paintBefore}
-        warmupTicks={0}
+        warmupTicks={150}
         d3AlphaDecay={0.04}
         d3AlphaMin={0}
         cooldownTime={Infinity}
