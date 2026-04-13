@@ -2,7 +2,37 @@
 
 import { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import ForceGraph2D from "react-force-graph-2d";
+import { forceCollide } from "d3-force";
 import type { GraphNode } from "@/lib/types";
+
+// sub-linear zoom response: screen radius = base * scale^ZOOM_K.
+// k<1 damps the zoom: nodes look smaller than expected when zoomed in,
+// bigger than expected when zoomed out, staying readable at every zoom.
+const ZOOM_K = 0.65;
+const ZOOM_FACTOR_MIN = 0.6;
+const ZOOM_FACTOR_MAX = 1.6;
+
+function baseRadius(node: { val?: number }, isMobile: boolean): number {
+  const connections = node.val || 1;
+  return isMobile
+    ? Math.sqrt(connections) * 3 + 2.5
+    : Math.sqrt(connections) * 4.5 + 3.5;
+}
+
+function zoomFactor(globalScale: number): number {
+  return Math.min(
+    ZOOM_FACTOR_MAX,
+    Math.max(ZOOM_FACTOR_MIN, Math.pow(globalScale, ZOOM_K - 1))
+  );
+}
+
+function nodeRadius(
+  node: { val?: number },
+  globalScale: number,
+  isMobile: boolean
+): number {
+  return baseRadius(node, isMobile) * zoomFactor(globalScale);
+}
 
 interface GraphData {
   nodes: GraphNode[];
@@ -95,11 +125,25 @@ export default function Graph({
     const chargeStrength = isMobile ? -250 : -600;
     const chargeMax = isMobile ? 400 : 800;
     const linkDist = isMobile ? 80 : 160;
-    const linkStr = isMobile ? 0.3 : 0.15;
+    const linkStr = isMobile ? 0.2 : 0.08;
+    const collidePad = isMobile ? 1.5 : 2;
 
     fg.d3Force("charge").strength(chargeStrength).distanceMax(chargeMax);
     fg.d3Force("link").distance(linkDist).strength(linkStr);
     fg.d3Force("center", null);
+    // Hard non-overlap. Collide uses the *max* zoom-inflated radius so circles
+    // never visually touch, even when zoomed out (where world-radius inflates).
+    fg.d3Force(
+      "collide",
+      forceCollide()
+        .radius(
+          (n) =>
+            baseRadius(n as { val?: number }, isMobile) * ZOOM_FACTOR_MAX +
+            collidePad
+        )
+        .strength(1)
+        .iterations(3)
+    );
 
     const p = isMobile ? 40 : 120;
     // Multiple fit passes to track the still-alive simulation as it spreads.
@@ -236,10 +280,7 @@ export default function Graph({
       const isDimmed = somethingHovered && !isHovered && !isNeighbor;
 
       const isMobile = dimensions.width < 768;
-      const connections = node.val || 1;
-      const radius = isMobile
-        ? Math.sqrt(connections) * 3 + 2.5
-        : Math.sqrt(connections) * 4.5 + 3.5;
+      const radius = nodeRadius(node, globalScale, isMobile);
 
       let nodeAlpha = 1;
       if (somethingHovered && isNeighbor) {
@@ -304,12 +345,9 @@ export default function Graph({
 
   const paintNodeArea = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (node: any, color: string, ctx: CanvasRenderingContext2D) => {
+    (node: any, color: string, ctx: CanvasRenderingContext2D, globalScale: number) => {
       const isMobile = dimensions.width < 768;
-      const connections = node.val || 1;
-      const radius = isMobile
-        ? Math.sqrt(connections) * 3 + 2.5
-        : Math.sqrt(connections) * 4.5 + 3.5;
+      const radius = nodeRadius(node, globalScale, isMobile);
       // Bigger hit area on mobile for fat fingers
       const hitRadius = isMobile ? Math.max(radius * 1.5, 12) : radius;
       ctx.beginPath();
