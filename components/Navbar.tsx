@@ -21,7 +21,9 @@ export default function Navbar({ onLogoClick, onSearchClick }: Props) {
   );
 
   return (
-    <nav className="relative z-10 flex items-center justify-between px-4 md:px-8 h-14 md:h-16 shrink-0">
+    <nav
+      className="relative z-10 flex items-center justify-between shrink-0 pt-[env(safe-area-inset-top)] pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:pl-[max(2rem,env(safe-area-inset-left))] md:pr-[max(2rem,env(safe-area-inset-right))] h-[calc(3.5rem+env(safe-area-inset-top))] md:h-[calc(4rem+env(safe-area-inset-top))]"
+    >
       {onLogoClick ? (
         <button
           onClick={onLogoClick}
