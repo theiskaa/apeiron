@@ -67,6 +67,25 @@ export default function CanvasViewport({
     pointerId: -1,
   });
 
+  // Active pointers (pointerId → last screen coords). Used to distinguish a
+  // single-finger pan from a two-finger pinch on touch devices.
+  const pointersRef = useRef<Map<number, { x: number; y: number }>>(new Map());
+  // Pinch gesture state. Captured on the second pointerdown and cleared when
+  // the pinch ends (pointer count drops below 2).
+  const pinchRef = useRef<{
+    active: boolean;
+    startDist: number;
+    startCenterX: number;
+    startCenterY: number;
+    startTransform: { x: number; y: number; scale: number };
+  }>({
+    active: false,
+    startDist: 0,
+    startCenterX: 0,
+    startCenterY: 0,
+    startTransform: { x: 0, y: 0, scale: 1 },
+  });
+
   // Cursor velocity in screen px/ms, EMA-smoothed during active panning,
   // read on pointerup to seed the coast-down loop.
   const panVelRef = useRef({ x: 0, y: 0 });
@@ -244,6 +263,30 @@ export default function CanvasViewport({
       // Grabbing the viewport kills any ongoing coast so the user lands on
       // exactly where they click, not where the decaying velocity drifts to.
       stopPanInertia();
+
+      pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+
+      // Second finger down → switch from single-finger pan to two-finger
+      // pinch. Cancel the active pan; the pinch handler takes over until
+      // one finger lifts.
+      if (pointersRef.current.size >= 2) {
+        const pts = Array.from(pointersRef.current.values());
+        const [a, b] = pts;
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        pinchRef.current = {
+          active: true,
+          startDist: Math.max(1, Math.hypot(dx, dy)),
+          startCenterX: (a.x + b.x) / 2,
+          startCenterY: (a.y + b.y) / 2,
+          startTransform: { ...transform },
+        };
+        panState.current.active = false;
+        panVelRef.current = { x: 0, y: 0 };
+        return;
+      }
+
       panState.current = {
         active: true,
         startX: e.clientX,
@@ -258,14 +301,56 @@ export default function CanvasViewport({
         x: e.clientX,
         y: e.clientY,
       };
-      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     },
-    [transform.x, transform.y, stopPanInertia]
+    [transform, stopPanInertia]
   );
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
+      if (!pointersRef.current.has(e.pointerId)) return;
+      pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      // Two-finger pinch: scale about the initial centroid, translate by
+      // centroid drift. Computed against the transform captured at pinch
+      // start so the gesture is absolute (no drift from frame to frame).
+      if (pinchRef.current.active && pointersRef.current.size >= 2) {
+        const el = viewportRef.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const pts = Array.from(pointersRef.current.values());
+        const [a, b] = pts;
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const dist = Math.max(1, Math.hypot(dx, dy));
+        const cx = (a.x + b.x) / 2;
+        const cy = (a.y + b.y) / 2;
+        const start = pinchRef.current.startTransform;
+        const ratio = dist / pinchRef.current.startDist;
+        const newScale = Math.max(
+          MIN_SCALE,
+          Math.min(MAX_SCALE, start.scale * ratio)
+        );
+        const effectiveRatio = newScale / start.scale;
+        // Anchor point in the viewport (screen coords relative to the
+        // viewport rect) is the initial pinch centroid.
+        const ax = pinchRef.current.startCenterX - rect.left;
+        const ay = pinchRef.current.startCenterY - rect.top;
+        // Centroid drift since pinch start, applied as extra translation.
+        const tx = cx - pinchRef.current.startCenterX;
+        const ty = cy - pinchRef.current.startCenterY;
+        setClampedTransform(() => ({
+          x: ax - (ax - start.x) * effectiveRatio + tx,
+          y: ay - (ay - start.y) * effectiveRatio + ty,
+          scale: newScale,
+        }));
+        return;
+      }
+
       if (!panState.current.active) return;
+      // Only the pointer that started the pan drives it — stray pointers
+      // (e.g. a tentative second finger) would otherwise jerk the view.
+      if (e.pointerId !== panState.current.pointerId) return;
+
       setClampedTransform((t) => ({
         ...t,
         x: panState.current.originX + (e.clientX - panState.current.startX),
@@ -288,13 +373,37 @@ export default function CanvasViewport({
 
   const handlePointerUp = useCallback(
     (e: React.PointerEvent) => {
-      if (!panState.current.active) return;
-      panState.current.active = false;
+      pointersRef.current.delete(e.pointerId);
       try {
-        (e.currentTarget as HTMLElement).releasePointerCapture(
-          panState.current.pointerId
-        );
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
       } catch {}
+
+      // Ending a pinch: if one finger is still down, resume panning from
+      // that finger's current position so the view doesn't jump.
+      if (pinchRef.current.active) {
+        if (pointersRef.current.size < 2) {
+          pinchRef.current.active = false;
+          const remaining = Array.from(pointersRef.current.entries())[0];
+          if (remaining) {
+            const [id, pt] = remaining;
+            panState.current = {
+              active: true,
+              startX: pt.x,
+              startY: pt.y,
+              originX: transform.x,
+              originY: transform.y,
+              pointerId: id,
+            };
+            panVelRef.current = { x: 0, y: 0 };
+            panLastRef.current = { t: performance.now(), x: pt.x, y: pt.y };
+          }
+        }
+        return;
+      }
+
+      if (!panState.current.active) return;
+      if (e.pointerId !== panState.current.pointerId) return;
+      panState.current.active = false;
 
       // Stale-velocity guard: if the cursor paused before release, don't coast.
       const now = performance.now();
@@ -340,7 +449,7 @@ export default function CanvasViewport({
       };
       panInertiaRafRef.current = requestAnimationFrame(step);
     },
-    [setClampedTransform, stopPanInertia]
+    [setClampedTransform, stopPanInertia, transform]
   );
 
   const zoomAtCenter = useCallback(
