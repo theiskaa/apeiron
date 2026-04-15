@@ -21,13 +21,7 @@ export default function Navbar({ onLogoClick, onSearchClick }: Props) {
   );
 
   return (
-    <nav
-      className="relative z-10 flex items-center justify-between shrink-0 h-14 md:h-16 px-4 md:px-8"
-      style={{
-        paddingTop: "env(safe-area-inset-top)",
-        boxSizing: "content-box",
-      }}
-    >
+    <nav className="relative z-10 flex items-center justify-between px-4 md:px-8 pt-12 md:pt-0 h-24 md:h-16 shrink-0">
       {onLogoClick ? (
         <button
           onClick={onLogoClick}
