@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import ThemeToggle from "./ThemeToggle";
+import ThemePicker from "./ThemePicker";
 
 interface Props {
   onLogoClick?: () => void;
@@ -10,14 +10,15 @@ interface Props {
 
 export default function Navbar({ onLogoClick, onSearchClick }: Props) {
   const logoContent = (
-    <div className="flex flex-col text-left">
-      <span className="text-[15px] font-semibold tracking-[0.14em] text-text-primary leading-tight capitalize">
-        Apeirron
-      </span>
-      <span className="hidden md:block text-[10px] text-text-muted tracking-[0.06em] mt-0.5">
-        Biggest questions humanity asks
-      </span>
-    </div>
+    <span
+      className="text-[22px] font-semibold tracking-[0.04em] leading-tight text-text-primary"
+      style={{
+        fontFamily: "var(--font-title), sans-serif",
+        fontStretch: "75%",
+      }}
+    >
+      Apeirron
+    </span>
   );
 
   return (
@@ -79,7 +80,7 @@ export default function Navbar({ onLogoClick, onSearchClick }: Props) {
           </svg>
           <span className="hidden sm:inline">New Node</span>
         </Link>
-        <ThemeToggle />
+        <ThemePicker />
         <a
           href="https://github.com/theiskaa/apeirron"
           target="_blank"

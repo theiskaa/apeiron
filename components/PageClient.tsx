@@ -191,7 +191,7 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
       {activeNode && !showGraph && (
         <div className="absolute inset-0 bg-background overflow-hidden">
           <div className="flex flex-col h-full">
-            <div className="chrome-surface sticky top-0 z-10" style={{ borderTop: "none", borderLeft: "none", borderRight: "none" }}>
+            <div className="sticky top-0 z-10 bg-background">
               <Navbar onLogoClick={() => setActiveTabId("graph")} onSearchClick={openSearch} />
               {hasNodeTabs && (
                 <TabBar
@@ -216,10 +216,7 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
       )}
 
       {showGraph && (
-        <div
-          className="chrome-surface absolute top-0 left-0 right-0 z-10"
-          style={{ borderTop: "none", borderLeft: "none", borderRight: "none" }}
-        >
+        <div className="absolute top-0 left-0 right-0 z-10 bg-background">
           <Navbar onLogoClick={() => setActiveTabId("graph")} onSearchClick={openSearch} />
           {hasNodeTabs && (
             <TabBar

@@ -1,8 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Noto_Sans_Georgian } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
+const notoGeorgian = Noto_Sans_Georgian({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-title",
+});
 
 export const viewport: Viewport = {
   viewportFit: "cover",
@@ -55,7 +60,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="" suppressHydrationWarning>
+    <html lang="en" className={notoGeorgian.variable} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem("theme");if(t==="dark"||t==="warm"||t==="black")document.documentElement.classList.add(t);}catch(e){}`,
+          }}
+        />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );

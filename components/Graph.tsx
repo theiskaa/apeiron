@@ -90,6 +90,8 @@ export default function Graph({
     labelDim: "rgba(160,160,175,0.08)",
     grid: "rgba(120,120,140,0.04)",
     ring: "rgba(220,220,230,0.3)",
+    traverseTrail: "rgba(90,90,105,0.08)",
+    traverseHeadRgb: "160, 160, 180",
   });
 
   useEffect(() => {
@@ -107,6 +109,8 @@ export default function Graph({
         labelDim: g("--graph-label-dim", "rgba(160,160,175,0.08)"),
         grid: g("--graph-grid", "rgba(120,120,140,0.04)"),
         ring: g("--graph-ring", "rgba(220,220,230,0.3)"),
+        traverseTrail: g("--graph-traverse-trail", "rgba(90,90,105,0.08)"),
+        traverseHeadRgb: g("--graph-traverse-head-rgb", "160, 160, 180"),
       };
     };
     readTheme();
@@ -517,7 +521,7 @@ export default function Graph({
           ctx.beginPath();
           ctx.moveTo(midX, midY);
           ctx.lineTo(toX, toY);
-          ctx.strokeStyle = "rgba(90, 90, 105, 0.08)";
+          ctx.strokeStyle = themeVars.current.traverseTrail;
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }
@@ -525,7 +529,7 @@ export default function Graph({
         ctx.beginPath();
         ctx.moveTo(fromX, fromY);
         ctx.lineTo(midX, midY);
-        ctx.strokeStyle = `rgba(160, 160, 180, ${0.2 + eased * 0.4})`;
+        ctx.strokeStyle = `rgba(${themeVars.current.traverseHeadRgb}, ${0.2 + eased * 0.4})`;
         ctx.lineWidth = 1.0 + eased * 0.6;
         ctx.stroke();
       } else if (isSelectedLink) {

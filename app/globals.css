@@ -4,7 +4,7 @@
 
 /* Light theme (default) */
 :root {
-  --background: #ffffff;
+  --background: #f8f8fa;
   --surface: #f5f5f7;
   --surface-elevated: #ffffff;
   --border: #e4e4e8;
@@ -43,6 +43,8 @@
   --graph-label-dim: rgba(40, 40, 50, 0.1);
   --graph-grid: rgba(0, 0, 0, 0.03);
   --graph-ring: rgba(40, 40, 50, 0.2);
+  --graph-traverse-trail: rgba(100, 100, 120, 0.06);
+  --graph-traverse-head-rgb: 80, 80, 100;
 }
 
 /* Dark theme */
@@ -79,6 +81,84 @@
   --graph-label-dim: rgba(160, 160, 175, 0.08);
   --graph-grid: rgba(120, 120, 140, 0.04);
   --graph-ring: rgba(220, 220, 230, 0.3);
+  --graph-traverse-trail: rgba(90, 90, 105, 0.08);
+  --graph-traverse-head-rgb: 160, 160, 180;
+}
+
+/* Warm theme — soft parchment, balanced warmth */
+.warm {
+  --background: #f4ead3;
+  --surface: #ecdebe;
+  --surface-elevated: #f9efda;
+  --border: #d6c49d;
+  --border-subtle: rgba(75, 50, 22, 0.09);
+  --border-strong: rgba(75, 50, 22, 0.18);
+  --text-primary: #3c291a;
+  --text-secondary: #6c5230;
+  --text-muted: #a18760;
+
+  --accent: #c17430;
+  --accent-hover: #a25e25;
+  --accent-soft: rgba(193, 116, 48, 0.13);
+  --accent-ring: rgba(193, 116, 48, 0.38);
+
+  --chrome-bg: rgba(248, 238, 215, 0.82);
+  --chrome-border: rgba(75, 50, 22, 0.06);
+  --chrome-fill: rgba(75, 50, 22, 0.05);
+  --chrome-fill-hover: rgba(75, 50, 22, 0.1);
+  --chrome-fill-active: rgba(75, 50, 22, 0.13);
+  --chrome-shadow: 0 1px 2px rgba(75, 50, 22, 0.06), 0 8px 24px rgba(75, 50, 22, 0.12);
+
+  --graph-bg: #f4ead3;
+  --graph-line: rgba(132, 90, 45, 0.24);
+  --graph-line-hover: rgba(90, 58, 25, 0.55);
+  --graph-line-dim: rgba(132, 90, 45, 0.06);
+  --graph-node-dim: rgba(185, 152, 110, 0.3);
+  --graph-label: rgba(75, 50, 22, 0.56);
+  --graph-label-hover: rgba(40, 22, 8, 0.9);
+  --graph-label-dim: rgba(75, 50, 22, 0.1);
+  --graph-grid: rgba(75, 50, 22, 0.04);
+  --graph-ring: rgba(75, 50, 22, 0.22);
+  --graph-traverse-trail: rgba(132, 90, 45, 0.09);
+  --graph-traverse-head-rgb: 155, 110, 60;
+}
+
+/* True-black theme — pure #000, OLED-friendly */
+.black {
+  --background: #000000;
+  --surface: #0a0a0a;
+  --surface-elevated: #141414;
+  --border: #1f1f1f;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.13);
+  --text-primary: #eaeaea;
+  --text-secondary: #9a9a9a;
+  --text-muted: #5e5e5e;
+
+  --accent: #60a5fa;
+  --accent-hover: #93c5fd;
+  --accent-soft: rgba(96, 165, 250, 0.1);
+  --accent-ring: rgba(96, 165, 250, 0.4);
+
+  --chrome-bg: rgba(0, 0, 0, 0.92);
+  --chrome-border: rgba(255, 255, 255, 0.03);
+  --chrome-fill: rgba(255, 255, 255, 0.04);
+  --chrome-fill-hover: rgba(255, 255, 255, 0.07);
+  --chrome-fill-active: rgba(255, 255, 255, 0.1);
+  --chrome-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 8px 24px rgba(0, 0, 0, 0.6);
+
+  --graph-bg: #000000;
+  --graph-line: rgba(130, 130, 150, 0.45);
+  --graph-line-hover: rgba(185, 185, 210, 0.75);
+  --graph-line-dim: rgba(110, 110, 130, 0.12);
+  --graph-node-dim: rgba(100, 100, 115, 0.38);
+  --graph-label: rgba(180, 180, 200, 0.65);
+  --graph-label-hover: rgba(240, 240, 250, 0.95);
+  --graph-label-dim: rgba(180, 180, 200, 0.14);
+  --graph-grid: rgba(170, 170, 190, 0.06);
+  --graph-ring: rgba(240, 240, 250, 0.45);
+  --graph-traverse-trail: rgba(110, 110, 130, 0.18);
+  --graph-traverse-head-rgb: 190, 190, 215;
 }
 
 html {
@@ -86,6 +166,14 @@ html {
 }
 
 html.dark {
+  color-scheme: dark;
+}
+
+html.warm {
+  color-scheme: light;
+}
+
+html.black {
   color-scheme: dark;
 }
 
@@ -159,13 +247,19 @@ body {
 }
 
 .prose-apeirron a {
-  @apply text-cyan-400 hover:text-cyan-300 underline underline-offset-2;
+  @apply underline underline-offset-2;
+  color: var(--accent);
+  transition: color 0.15s ease;
+}
+
+.prose-apeirron a:hover {
+  color: var(--accent-hover);
 }
 
 /* Wiki-style [[node links]] rendered inline */
 .prose-apeirron a.node-link {
   @apply no-underline cursor-pointer;
-  color: #60a5fa;
+  color: var(--accent);
   transition: color 0.15s ease;
 }
 
@@ -173,7 +267,7 @@ body {
 .prose-apeirron a.node-link::after {
   opacity: 0;
   transition: opacity 0.15s ease;
-  color: #3b82f6;
+  color: var(--accent-hover);
   font-size: 0.85em;
 }
 
@@ -181,7 +275,7 @@ body {
 .prose-apeirron a.node-link::after { content: "]]"; }
 
 .prose-apeirron a.node-link:hover {
-  color: #93c5fd;
+  color: var(--accent-hover);
 }
 
 .prose-apeirron a.node-link:hover::before,
@@ -231,7 +325,7 @@ body {
 }
 
 .prose-apeirron-sources a {
-  color: #60a5fa;
+  color: var(--accent);
   font-size: 11px;
 }
 
@@ -292,6 +386,21 @@ body {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--chrome-border);
+}
+
+/* Theme picker row items — circular, CSS-only hover/active */
+.theme-picker-item {
+  background-color: transparent;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.theme-picker-item:hover {
+  background-color: var(--chrome-fill-hover);
+  color: var(--text-primary);
+}
+.theme-picker-item[data-active="true"] {
+  background-color: var(--chrome-fill-active);
+  color: var(--text-primary);
 }
 
 /* Respect reduced motion preference */
