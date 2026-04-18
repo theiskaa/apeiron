@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   THEMES,
   THEME_STORAGE_KEY,
@@ -32,10 +33,17 @@ function ThemeIcon({ id, size = 13 }: { id: ThemeId; size?: number }) {
       </svg>
     );
   }
+  if (id === "warm") {
+    return (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor" />
+      </svg>
+    );
+  }
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="9" />
-      <path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor" />
     </svg>
   );
 }
@@ -43,19 +51,44 @@ function ThemeIcon({ id, size = 13 }: { id: ThemeId; size?: number }) {
 export default function ThemePicker() {
   const [theme, setTheme] = useState<ThemeId>("light");
   const [open, setOpen] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const [pos, setPos] = useState<{ top: number; right: number }>({ top: 0, right: 0 });
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setMounted(true);
     const stored = getStoredTheme();
     setTheme(stored);
     applyTheme(stored);
   }, []);
 
+  useLayoutEffect(() => {
+    if (!open) return;
+    const updatePosition = () => {
+      const rect = triggerRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      setPos({
+        top: rect.bottom + 8,
+        right: window.innerWidth - rect.right,
+      });
+    };
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
-    const onPointerDown = (e: MouseEvent) => {
-      if (!wrapperRef.current?.contains(e.target as Node)) setOpen(false);
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node;
+      if (triggerRef.current?.contains(target)) return;
+      if (popoverRef.current?.contains(target)) return;
+      setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -63,10 +96,10 @@ export default function ThemePicker() {
         triggerRef.current?.focus();
       }
     };
-    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("pointerdown", onPointerDown, true);
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("pointerdown", onPointerDown, true);
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
@@ -81,8 +114,41 @@ export default function ThemePicker() {
     triggerRef.current?.focus();
   };
 
+  const popover = open && mounted ? (
+    <div
+      ref={popoverRef}
+      role="menu"
+      aria-label="Theme"
+      className="chrome-surface fixed flex items-center gap-1 p-1 rounded-full"
+      style={{
+        top: pos.top,
+        right: pos.right,
+        boxShadow: "var(--chrome-shadow)",
+        zIndex: 2147483000,
+      }}
+    >
+      {THEMES.map((t) => {
+        const active = t.id === theme;
+        return (
+          <button
+            key={t.id}
+            role="menuitemradio"
+            aria-checked={active}
+            aria-label={t.label}
+            title={t.label}
+            onClick={() => select(t.id)}
+            data-active={active ? "true" : undefined}
+            className="theme-picker-item h-8 w-8 inline-flex items-center justify-center rounded-full text-text-secondary"
+          >
+            <ThemeIcon id={t.id} />
+          </button>
+        );
+      })}
+    </div>
+  ) : null;
+
   return (
-    <div ref={wrapperRef} className="relative">
+    <>
       <button
         ref={triggerRef}
         onClick={() => setOpen((v) => !v)}
@@ -93,32 +159,7 @@ export default function ThemePicker() {
       >
         <ThemeIcon id={theme} />
       </button>
-      {open && (
-        <div
-          role="menu"
-          aria-label="Theme"
-          className="chrome-surface absolute right-0 mt-2 flex items-center gap-1 p-1 rounded-full z-50"
-          style={{ boxShadow: "var(--chrome-shadow)" }}
-        >
-          {THEMES.map((t) => {
-            const active = t.id === theme;
-            return (
-              <button
-                key={t.id}
-                role="menuitemradio"
-                aria-checked={active}
-                aria-label={t.label}
-                title={t.label}
-                onClick={() => select(t.id)}
-                data-active={active ? "true" : undefined}
-                className="theme-picker-item h-8 w-8 inline-flex items-center justify-center rounded-full text-text-secondary"
-              >
-                <ThemeIcon id={t.id} />
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
+      {mounted && popover ? createPortal(popover, document.body) : null}
+    </>
   );
 }
