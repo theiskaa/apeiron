@@ -46,6 +46,7 @@ export const READING_PATHS: ReadingPath[] = [
       { id: "bernays", hook: "Now meet the founder. The nephew of Sigmund Freud who openly described his profession as the engineering of mass consent — and lived to see his books used by Joseph Goebbels, never quite disavowing the methodology" },
       { id: "color-revolutions", hook: "Bernays went geopolitical. Serbia 2000, Georgia 2003, Ukraine 2004 — NED and USAID funding 'spontaneous' democratic movements that kept producing US-aligned governments", parents: ["bernays"] },
       { id: "counterculture-psyop", hook: "Even rebellion can be manufactured — how the 1960s counterculture was steered by the same agencies you just read about", parents: ["bernays"] },
+      { id: "celebrity-27-club", hook: "And how the manufactured counterculture ended — Jones, Hendrix, Joplin, Morrison dead within twenty-five months, each case with forensic anomalies nobody would investigate. The cleanup phase of the same operation", parents: ["counterculture-psyop"] },
       { id: "deep-state", hook: "These operations survived every election because the real government is permanent — the bureaucracy behind the elected faces", parents: ["bernays"] },
       { id: "shadow-elite", hook: "Someone runs the deep state — the network of families, funds, and foundations that sit above governments", parents: ["counterculture-psyop", "deep-state"] },
       { id: "federal-reserve", hook: "Follow the money — a private institution that controls the dollar, created in a secret meeting on Jekyll Island" },
