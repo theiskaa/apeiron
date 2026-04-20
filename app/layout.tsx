@@ -31,7 +31,10 @@ export const metadata: Metadata = {
     "deep dive",
     "interactive graph",
   ],
-  metadataBase: new URL("https://apeirron.com"),
+  metadataBase: new URL("https://www.apeirron.com"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Apeirron — Biggest questions humanity asks",
     description:
