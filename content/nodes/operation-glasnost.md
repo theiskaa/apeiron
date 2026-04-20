@@ -1,7 +1,7 @@
 ---
 id: "operation-glasnost"
 title: "Operation Glasnost"
-category: "power"
+category: "operations"
 connections:
   - target: "operation-gladio"
     reason: "Gladio was NATO's clandestine infrastructure to prevent Soviet power from expanding westward; the covert campaign against the USSR — of which Glasnost-as-operation is the alleged endgame — was the reciprocal project to collapse Soviet power eastward. Both operated across the same 1947-1991 window, under the same Atlanticist intelligence architecture, with overlapping personnel: William Casey, Robert Gates, and George H.W. Bush sat at the apex of both programs. Gladio's partial exposure in 1990 and the Berlin Wall's fall in November 1989 occurred within twelve months of each other — the two halves of the continental security system reaching terminal daylight simultaneously."
