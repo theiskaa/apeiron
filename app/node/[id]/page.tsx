@@ -6,8 +6,11 @@ import {
   getCategories,
   getPhantomNodeIds,
 } from "@/lib/content";
+import { getNodeGitDates } from "@/lib/git-dates";
 import type { Metadata } from "next";
 import PageClient from "@/components/PageClient";
+
+const BASE_URL = "https://www.apeirron.com";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -38,6 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       return {
         title: `${title} — Apeirron`,
         description: `${title} is a proposed topic in the Apeirron knowledge graph. Contribute to help build this node.`,
+        alternates: { canonical: `/node/${id}` },
       };
     }
     return { title: "Not Found — Apeirron" };
@@ -49,16 +53,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   );
   const description = getExcerpt(node.content);
   const title = `${node.frontmatter.title} — Apeirron`;
+  const dates = getNodeGitDates(node.slug);
 
   return {
     title,
     description,
+    alternates: { canonical: `/node/${id}` },
     openGraph: {
       title,
       description,
       type: "article",
       siteName: "Apeirron",
-      images: [{ url: "/og.jpg", width: 1200, height: 630, alt: node.frontmatter.title }],
+      publishedTime: dates.published.toISOString(),
+      modifiedTime: dates.modified.toISOString(),
       tags: [
         category?.label ?? node.frontmatter.category,
         "knowledge graph",
@@ -70,7 +77,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: node.frontmatter.title,
       description,
-      images: ["/og.jpg"],
     },
   };
 }
@@ -78,40 +84,57 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function NodePage({ params }: Props) {
   const { id } = await params;
   const graphData = await buildGraphData();
-  const node = graphData.nodes.find((n) => n.id === id);
+  const graphNode = graphData.nodes.find((n) => n.id === id);
 
-  if (!node) notFound();
+  if (!graphNode) notFound();
 
-  // JSON-LD structured data
-  const jsonLd = {
+  const sourceNode = getAllNodes().find((n) => n.frontmatter.id === id);
+  const categories = getCategories();
+  const category = categories.find((c) => c.id === graphNode.category);
+  const description = getExcerpt(sourceNode?.content ?? "");
+
+  const dates = sourceNode ? getNodeGitDates(sourceNode.slug) : null;
+  const connectedIds = graphData.links
+    .filter((l) => {
+      const s = typeof l.source === "string" ? l.source : (l.source as { id: string }).id;
+      const t = typeof l.target === "string" ? l.target : (l.target as { id: string }).id;
+      return s === id || t === id;
+    })
+    .map((l) => {
+      const s = typeof l.source === "string" ? l.source : (l.source as { id: string }).id;
+      const t = typeof l.target === "string" ? l.target : (l.target as { id: string }).id;
+      return s === id ? t : s;
+    });
+
+  const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: node.title,
-    description: getExcerpt(
-      getAllNodes().find((n) => n.frontmatter.id === id)?.content ?? ""
-    ),
-    url: `https://apeirron.com/node/${id}`,
-    isPartOf: {
-      "@type": "WebSite",
-      name: "Apeirron",
-      url: "https://apeirron.com",
+    "@id": `${BASE_URL}/node/${id}#article`,
+    headline: graphNode.title,
+    description,
+    url: `${BASE_URL}/node/${id}`,
+    mainEntityOfPage: `${BASE_URL}/node/${id}`,
+    inLanguage: "en",
+    isPartOf: { "@id": `${BASE_URL}/#website` },
+    publisher: { "@id": `${BASE_URL}/#organization` },
+    author: { "@id": `${BASE_URL}/#organization` },
+    image: {
+      "@type": "ImageObject",
+      url: `${BASE_URL}/og.jpg`,
+      width: 1200,
+      height: 630,
     },
-    about: node.category,
-    keywords: [
-      node.category,
-      ...graphData.links
-        .filter(
-          (l) =>
-            (typeof l.source === "string" ? l.source : l.source) === id ||
-            (typeof l.target === "string" ? l.target : l.target) === id
-        )
-        .map((l) => {
-          const src =
-            typeof l.source === "string" ? l.source : (l.source as { id: string }).id;
-          return src === id ? l.target : src;
-        }),
-    ],
+    about: {
+      "@type": "Thing",
+      name: category?.label ?? graphNode.category,
+    },
+    keywords: [category?.label ?? graphNode.category, ...connectedIds],
   };
+
+  if (dates) {
+    jsonLd.datePublished = dates.published.toISOString();
+    jsonLd.dateModified = dates.modified.toISOString();
+  }
 
   return (
     <>
