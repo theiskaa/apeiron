@@ -1,12 +1,5 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkGfm from "remark-gfm";
-import remarkRehype from "remark-rehype";
-import rehypeSlug from "rehype-slug";
-import rehypeStringify from "rehype-stringify";
+import fs from "node:fs";
+import path from "node:path";
 import type {
   NodeData,
   NodeFrontmatter,
@@ -14,222 +7,160 @@ import type {
   GraphData,
   GraphNode,
   GraphLink,
+  NodeConnection,
 } from "./types";
-import { getNodeGitDates } from "./git-dates";
+import metadata from "./generated/graph-metadata.json";
 
-const CONTENT_DIR = path.join(process.cwd(), "content", "nodes");
-const CATEGORIES_PATH = path.join(process.cwd(), "content", "categories.json");
-
-const markdownProcessor = unified()
-  .use(remarkParse)
-  .use(remarkGfm)
-  .use(remarkRehype)
-  .use(rehypeSlug)
-  .use(rehypeStringify);
-
-async function markdownToHtml(md: string): Promise<string> {
-  const result = await markdownProcessor.process(md);
-  return result.toString();
+/**
+ * The generated metadata blob. Shape mirrors scripts/generate-content.mjs.
+ * Node metadata contains no contentHtml — that lives in public/content/<slug>.json
+ * and is loaded on demand via getNodeContent().
+ */
+interface MetadataNode {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  color: string;
+  val: number;
+  connections: NodeConnection[];
+  publishedAt: string;
+  updatedAt: string;
+  excerpt: string;
 }
+
+interface MetadataPhantom {
+  id: string;
+  slug: string;
+  title: string;
+  category: "phantom";
+  color: string;
+  val: number;
+  connections: NodeConnection[];
+  phantom: true;
+}
+
+interface Metadata {
+  categories: Category[];
+  nodes: MetadataNode[];
+  phantomNodes: MetadataPhantom[];
+  links: GraphLink[];
+}
+
+const _meta = metadata as unknown as Metadata;
 
 export function getCategories(): Category[] {
-  const raw = fs.readFileSync(CATEGORIES_PATH, "utf-8");
-  return JSON.parse(raw);
+  return _meta.categories;
 }
 
-let _frontmatterCache: NodeFrontmatter[] | null = null;
-
-/** Lightweight: only parses frontmatter, skips content. */
+/** Lightweight: only frontmatter. */
 export function getAllNodeFrontmatters(): NodeFrontmatter[] {
-  if (_frontmatterCache) return _frontmatterCache;
-  const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".md"));
-  _frontmatterCache = files.map((filename) => {
-    const raw = fs.readFileSync(path.join(CONTENT_DIR, filename), "utf-8");
-    const { data } = matter(raw);
-    return data as NodeFrontmatter;
-  });
-  return _frontmatterCache;
-}
-
-let _allNodesCache: NodeData[] | null = null;
-
-export function getAllNodes(): NodeData[] {
-  if (_allNodesCache) return _allNodesCache;
-  const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".md"));
-  _allNodesCache = files.map((filename) => {
-    const raw = fs.readFileSync(path.join(CONTENT_DIR, filename), "utf-8");
-    const { data, content } = matter(raw);
-    return {
-      frontmatter: data as NodeFrontmatter,
-      content,
-      slug: filename.replace(/\.md$/, ""),
-    };
-  });
-  return _allNodesCache;
-}
-
-/** Extract a plain-text excerpt from markdown for meta descriptions. */
-export function getExcerpt(markdown: string, maxLength = 160): string {
-  return markdown
-    .replace(/\[\[([^\]]+)\]\]/g, "$1") // strip wiki links
-    .replace(/^---[\s\S]*?---\s*/m, "") // strip frontmatter
-    .replace(/^#{1,6}\s+.*$/gm, "") // strip headings
-    .replace(/\*\*([^*]+)\*\*/g, "$1") // strip bold
-    .replace(/\*([^*]+)\*/g, "$1") // strip italic
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // strip markdown links
-    .replace(/\n+/g, " ")
-    .trim()
-    .slice(0, maxLength)
-    .replace(/\s+\S*$/, "…"); // cut at word boundary
+  return _meta.nodes.map((n) => ({
+    id: n.id,
+    title: n.title,
+    category: n.category,
+    connections: n.connections,
+  }));
 }
 
 /**
- * Resolve [[wiki links]] in HTML content.
- * Supports [[node-id]] and [[Node Title]] formats.
- * Converts to <a data-node-link="id" class="node-link">Title</a>
+ * Node data without content — matches the legacy shape, but `content` is now
+ * empty for metadata-only consumers. Use `getNodeContent(slug)` to fetch the
+ * compiled HTML for a specific node.
  */
-function resolveWikiLinks(
-  html: string,
-  nodeById: Map<string, NodeData>,
-  nodeByTitle: Map<string, NodeData>,
-  phantomIds?: Set<string>
-): string {
-  return html.replace(/\[\[([^\]]+)\]\]/g, (_match, ref: string) => {
-    const trimmed = ref.trim();
-    const node = nodeById.get(trimmed) || nodeByTitle.get(trimmed.toLowerCase());
-    if (node) {
-      const { id, title } = node.frontmatter;
-      return `<a href="/node/${id}" data-node-link="${id}" class="node-link">${title}</a>`;
-    }
-    if (phantomIds?.has(trimmed)) {
-      const title = trimmed
-        .split("-")
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(" ");
-      return `<a href="/node/${trimmed}" data-node-link="${trimmed}" class="node-link node-link-phantom">${title}</a>`;
-    }
-    // No match found — render as plain text with a broken-link style
-    return `<span class="node-link-broken">${trimmed}</span>`;
-  });
+export function getAllNodes(): NodeData[] {
+  return _meta.nodes.map((n) => ({
+    frontmatter: {
+      id: n.id,
+      title: n.title,
+      category: n.category,
+      connections: n.connections,
+    },
+    content: "",
+    slug: n.slug,
+  }));
+}
+
+/** Look up a node's excerpt for metadata tags (description, llms.txt). */
+export function getNodeExcerpt(slug: string): string {
+  return _meta.nodes.find((n) => n.slug === slug)?.excerpt ?? "";
+}
+
+export function getPhantomNodeIds(): string[] {
+  return _meta.phantomNodes.map((p) => p.id);
 }
 
 let _graphDataCache: GraphData | null = null;
 
+/**
+ * Builds metadata-only graph data — no contentHtml.
+ * Intentionally lightweight so it can be passed as a prop to the client.
+ */
 export async function buildGraphData(): Promise<GraphData> {
   if (_graphDataCache) return _graphDataCache;
-  const nodes = getAllNodes();
-  const categories = getCategories();
-  const categoryMap = new Map(categories.map((c) => [c.id, c]));
 
-  // Build lookup maps for wiki link resolution
-  const nodeById = new Map(nodes.map((n) => [n.frontmatter.id, n]));
-  const nodeByTitle = new Map(
-    nodes.map((n) => [n.frontmatter.title.toLowerCase(), n])
-  );
+  const nodes: GraphNode[] = _meta.nodes.map((n) => ({
+    id: n.id,
+    title: n.title,
+    category: n.category,
+    color: n.color,
+    val: n.val,
+    publishedAt: n.publishedAt,
+    updatedAt: n.updatedAt,
+  }));
 
-  // Deduplicate bidirectional links using sorted canonical keys
-  const linkSet = new Set<string>();
-  const links: GraphLink[] = [];
-
-  for (const node of nodes) {
-    for (const conn of node.frontmatter.connections ?? []) {
-      const key = [node.frontmatter.id, conn.target].sort().join("<->");
-      if (!linkSet.has(key)) {
-        linkSet.add(key);
-        links.push({
-          source: node.frontmatter.id,
-          target: conn.target,
-          reason: conn.reason,
-        });
-      }
-    }
-  }
-
-  // Detect phantom nodes — referenced in connections but no .md file exists
-  const existingIds = new Set(nodes.map((n) => n.frontmatter.id));
-  const phantomIds = new Set<string>();
-  for (const link of links) {
-    if (!existingIds.has(link.target)) phantomIds.add(link.target);
-    if (!existingIds.has(link.source)) phantomIds.add(link.source);
-  }
-
-  const connectionCount = new Map<string, number>();
-  for (const link of links) {
-    connectionCount.set(
-      link.source,
-      (connectionCount.get(link.source) ?? 0) + 1
-    );
-    connectionCount.set(
-      link.target,
-      (connectionCount.get(link.target) ?? 0) + 1
-    );
-  }
-
-  // Build graph nodes with compiled HTML content + resolved wiki links
-  const graphNodes: GraphNode[] = await Promise.all(
-    nodes.map(async (node) => {
-      const cat = categoryMap.get(node.frontmatter.category);
-      let contentHtml = await markdownToHtml(node.content);
-      contentHtml = resolveWikiLinks(contentHtml, nodeById, nodeByTitle, phantomIds);
-      const dates = getNodeGitDates(node.slug);
-      return {
-        id: node.frontmatter.id,
-        title: node.frontmatter.title,
-        category: node.frontmatter.category,
-        color: cat?.color ?? "#666666",
-        val: connectionCount.get(node.frontmatter.id) ?? 1,
-        contentHtml,
-        publishedAt: dates.published.toISOString(),
-        updatedAt: dates.modified.toISOString(),
-      };
-    })
-  );
-
-  // Create phantom graph nodes
-  for (const pid of phantomIds) {
-    const title = pid
-      .split("-")
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(" ");
-    graphNodes.push({
-      id: pid,
-      title,
-      category: "phantom",
-      color: "#666666",
-      val: connectionCount.get(pid) ?? 1,
-      contentHtml: "",
+  for (const p of _meta.phantomNodes) {
+    nodes.push({
+      id: p.id,
+      title: p.title,
+      category: p.category,
+      color: p.color,
+      val: p.val,
       phantom: true,
     });
   }
 
-  _graphDataCache = { nodes: graphNodes, links };
+  _graphDataCache = { nodes, links: _meta.links };
   return _graphDataCache;
 }
 
-export function getPhantomNodeIds(): string[] {
-  const nodes = getAllNodes();
-  const existingIds = new Set(nodes.map((n) => n.frontmatter.id));
-  const phantomIds = new Set<string>();
-  for (const node of nodes) {
-    for (const conn of node.frontmatter.connections ?? []) {
-      if (!existingIds.has(conn.target)) phantomIds.add(conn.target);
-    }
-  }
-  return [...phantomIds];
-}
-
 /**
- * Build a lightweight version of graph data where only the specified node
- * has its full HTML content. All other nodes get contentHtml stripped to
- * save memory on mobile (Safari iOS kills pages that use too much RAM).
+ * Load a single node's compiled HTML. Only called during SSG / at runtime for
+ * the active node. Tries filesystem first (fast during `next build`), falls
+ * back to an absolute fetch (Cloudflare Workers runtime where fs is absent).
  */
-export async function buildGraphDataForNode(activeNodeId: string): Promise<GraphData> {
-  const full = await buildGraphData();
-  return {
-    links: full.links,
-    nodes: full.nodes.map((n) => ({
-      ...n,
-      contentHtml: n.id === activeNodeId ? n.contentHtml : "",
-    })),
-  };
+export async function getNodeContent(slug: string): Promise<string> {
+  const rel = path.posix.join("content", `${slug}.json`);
+
+  // Build-time / Node environments: read from public/ on disk.
+  try {
+    const abs = path.join(process.cwd(), "public", rel);
+    if (fs.existsSync(abs)) {
+      const raw = fs.readFileSync(abs, "utf-8");
+      const parsed = JSON.parse(raw) as { contentHtml: string };
+      return parsed.contentHtml ?? "";
+    }
+  } catch {
+    // fs unavailable — fall through to ASSETS fetch
+  }
+
+  // Runtime on Cloudflare Worker: load from the ASSETS binding.
+  try {
+    const { getCloudflareContext } = await import("@opennextjs/cloudflare");
+    const { env } = getCloudflareContext();
+    const assets = (env as { ASSETS?: { fetch: (req: Request) => Promise<Response> } } | undefined)?.ASSETS;
+    if (assets && typeof assets.fetch === "function") {
+      const res = await assets.fetch(
+        new Request(`https://assets.local/${rel}`)
+      );
+      if (res.ok) {
+        const { contentHtml } = (await res.json()) as { contentHtml: string };
+        return contentHtml ?? "";
+      }
+    }
+  } catch {
+    // getCloudflareContext only exists in @opennextjs/cloudflare environments
+  }
+
+  return "";
 }

@@ -1,4 +1,4 @@
-import { getAllNodes, getCategories, getExcerpt } from "@/lib/content";
+import { getAllNodes, getCategories, getNodeExcerpt } from "@/lib/content";
 
 export const dynamic = "force-static";
 
@@ -24,7 +24,7 @@ export async function GET() {
     .map((cat) => {
       const list = byCategory.get(cat.id)!;
       const lines = list.map((node) => {
-        const excerpt = getExcerpt(node.content, 140);
+        const excerpt = getNodeExcerpt(node.slug);
         return `- [${node.frontmatter.title}](${BASE_URL}/node/${node.frontmatter.id}): ${excerpt}`;
       });
       return `## ${cat.label}\n\n${lines.join("\n")}`;

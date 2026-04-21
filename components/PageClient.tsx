@@ -19,9 +19,14 @@ const GRAPH_TAB: Tab = { id: "graph", type: "graph" };
 interface Props {
   graphData: GraphData;
   initialNodeId?: string;
+  initialContent?: { nodeId: string; contentHtml: string };
 }
 
-export default function PageClient({ graphData, initialNodeId }: Props) {
+export default function PageClient({
+  graphData,
+  initialNodeId,
+  initialContent,
+}: Props) {
   const [tabs, setTabs] = useState<Tab[]>(() => {
     if (initialNodeId) {
       return [GRAPH_TAB, { id: `node:${initialNodeId}`, type: "node", nodeId: initialNodeId }];
@@ -34,6 +39,57 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [focusNodeId, setFocusNodeId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("connections");
+
+  // Per-node HTML content fetched on demand from /content/<slug>.json.
+  // Seeded with `initialContent` from the Server Component (direct node-page
+  // visit) so the active node renders immediately without a client fetch.
+  const [contentCache, setContentCache] = useState<Map<string, string>>(() => {
+    const m = new Map<string, string>();
+    if (initialContent) m.set(initialContent.nodeId, initialContent.contentHtml);
+    return m;
+  });
+  const [loadingIds, setLoadingIds] = useState<Set<string>>(() => new Set());
+  const inFlightRef = useRef<Set<string>>(new Set());
+
+  const ensureContentLoaded = useCallback(
+    (nodeId: string) => {
+      if (!nodeId) return;
+      const node = graphData.nodes.find((n) => n.id === nodeId);
+      if (!node || node.phantom) return; // phantoms have no content file
+      if (contentCache.has(nodeId)) return;
+      if (inFlightRef.current.has(nodeId)) return;
+      inFlightRef.current.add(nodeId);
+      setLoadingIds((prev) => {
+        if (prev.has(nodeId)) return prev;
+        const next = new Set(prev);
+        next.add(nodeId);
+        return next;
+      });
+      fetch(`/content/${nodeId}.json`)
+        .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+        .then((data: { contentHtml?: string }) => {
+          setContentCache((cur) => {
+            if (cur.has(nodeId)) return cur;
+            const next = new Map(cur);
+            next.set(nodeId, data.contentHtml ?? "");
+            return next;
+          });
+        })
+        .catch(() => {
+          // Leave absent; NodeView shows a minimal error state on empty content.
+        })
+        .finally(() => {
+          inFlightRef.current.delete(nodeId);
+          setLoadingIds((cur) => {
+            if (!cur.has(nodeId)) return cur;
+            const next = new Set(cur);
+            next.delete(nodeId);
+            return next;
+          });
+        });
+    },
+    [contentCache, graphData.nodes]
+  );
 
   useEffect(() => {
     try {
@@ -86,6 +142,7 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
           return [...prev, { id: tabId, type: "node", nodeId }];
         });
         setActiveTabId(tabId);
+        ensureContentLoaded(nodeId);
       } else {
         setActiveTabId("graph");
       }
@@ -93,7 +150,7 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
     };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
+  }, [ensureContentLoaded]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -106,14 +163,18 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const handleNodeClick = useCallback((nodeId: string) => {
-    const tabId = `node:${nodeId}`;
-    setTabs((prev) => {
-      if (prev.some((t) => t.id === tabId)) return prev;
-      return [...prev, { id: tabId, type: "node", nodeId }];
-    });
-    setActiveTabId(tabId);
-  }, []);
+  const handleNodeClick = useCallback(
+    (nodeId: string) => {
+      const tabId = `node:${nodeId}`;
+      setTabs((prev) => {
+        if (prev.some((t) => t.id === tabId)) return prev;
+        return [...prev, { id: tabId, type: "node", nodeId }];
+      });
+      setActiveTabId(tabId);
+      ensureContentLoaded(nodeId);
+    },
+    [ensureContentLoaded]
+  );
 
   const handleSelectTab = useCallback((tabId: string) => {
     setActiveTabId(tabId);
@@ -206,6 +267,11 @@ export default function PageClient({ graphData, initialNodeId }: Props) {
             <div className="flex-1 overflow-hidden">
               <NodeView
                 node={activeNode}
+                contentHtml={contentCache.get(activeNode.id) ?? ""}
+                loading={
+                  !contentCache.has(activeNode.id) &&
+                  loadingIds.has(activeNode.id)
+                }
                 links={graphData.links}
                 allNodes={graphData.nodes}
                 onNodeClick={handleNodeClick}

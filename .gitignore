@@ -28,6 +28,16 @@ yarn-error.log*
 # vercel
 .vercel
 
+# cloudflare / opennext
+.open-next
+.wrangler
+.dev.vars
+cloudflare-env.d.ts
+
+# generated content (produced by scripts/generate-content.mjs via prebuild)
+/lib/generated/
+/public/content/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

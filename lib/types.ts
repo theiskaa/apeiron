@@ -28,7 +28,6 @@ export interface GraphNode {
   category: string;
   color: string;
   val: number;
-  contentHtml: string;
   phantom?: boolean;
   publishedAt?: string;
   updatedAt?: string;

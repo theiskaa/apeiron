@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import {
   getAllNodes,
-  getExcerpt,
+  getNodeExcerpt,
   buildGraphData,
   getCategories,
   getPhantomNodeIds,
+  getNodeContent,
 } from "@/lib/content";
 import { getNodeGitDates } from "@/lib/git-dates";
 import type { Metadata } from "next";
@@ -51,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const category = categories.find(
     (c) => c.id === node.frontmatter.category
   );
-  const description = getExcerpt(node.content);
+  const description = getNodeExcerpt(node.slug);
   const title = `${node.frontmatter.title} — Apeirron`;
   const dates = getNodeGitDates(node.slug);
 
@@ -91,9 +92,10 @@ export default async function NodePage({ params }: Props) {
   const sourceNode = getAllNodes().find((n) => n.frontmatter.id === id);
   const categories = getCategories();
   const category = categories.find((c) => c.id === graphNode.category);
-  const description = getExcerpt(sourceNode?.content ?? "");
+  const description = sourceNode ? getNodeExcerpt(sourceNode.slug) : "";
 
   const dates = sourceNode ? getNodeGitDates(sourceNode.slug) : null;
+  const activeContent = graphNode.phantom ? "" : await getNodeContent(id);
   const connectedIds = graphData.links
     .filter((l) => {
       const s = typeof l.source === "string" ? l.source : (l.source as { id: string }).id;
@@ -171,7 +173,15 @@ export default async function NodePage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <PageClient graphData={graphData} initialNodeId={id} />
+      <PageClient
+        graphData={graphData}
+        initialNodeId={id}
+        initialContent={
+          activeContent
+            ? { nodeId: id, contentHtml: activeContent }
+            : undefined
+        }
+      />
     </>
   );
 }

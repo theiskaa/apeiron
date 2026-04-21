@@ -1,0 +1,5 @@
+# Per-node content JSON blobs are immutable per build — long cache is safe.
+# (A content edit produces a new build; clients with stale data will pick up
+# the new file on any subsequent page load that triggers a fresh fetch.)
+/content/*
+  Cache-Control: public, max-age=3600, s-maxage=31536000

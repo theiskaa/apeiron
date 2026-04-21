@@ -1,0 +1,34 @@
+/**
+ * Cloudflare Worker config for Apeirron (deployed via @opennextjs/cloudflare).
+ *
+ * Docs:
+ *   - Wrangler config schema: https://developers.cloudflare.com/workers/wrangler/configuration/
+ *   - OpenNext Cloudflare: https://opennext.js.org/cloudflare
+ *
+ * Bindings are injected automatically by OpenNext at deploy time
+ * (WORKER_SELF_REFERENCE, IMAGES, ASSETS).
+ *
+ * To enable caching for prerendered pages (recommended), bind a KV namespace
+ * and configure it here + in open-next.config.ts. See:
+ *   https://opennext.js.org/cloudflare/caching
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "apeirron",
+  "compatibility_date": "2026-04-21",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "apeirron"
+    }
+  ]
+}

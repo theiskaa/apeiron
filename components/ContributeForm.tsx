@@ -136,7 +136,6 @@ export default function ContributeForm({
         category: category || "mind",
         color: currentColor,
         val: Math.max(conns.length, 1),
-        contentHtml: "",
       },
     ];
 
@@ -157,7 +156,6 @@ export default function ContributeForm({
         category: "phantom",
         color: existing?.color ?? "#666666",
         val: 1,
-        contentHtml: "",
         phantom: !existing,
       });
     }

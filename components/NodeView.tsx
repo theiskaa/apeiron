@@ -22,6 +22,8 @@ interface TocItem {
 
 interface Props {
   node: GraphNode;
+  contentHtml: string;
+  loading?: boolean;
   links: GraphLink[];
   allNodes: GraphNode[];
   onNodeClick: (nodeId: string) => void;
@@ -31,6 +33,8 @@ const GITHUB_REPO = "https://github.com/theiskaa/apeirron";
 
 export default function NodeView({
   node,
+  contentHtml,
+  loading,
   links,
   allNodes,
   onNodeClick,
@@ -102,7 +106,7 @@ export default function NodeView({
   }, [node.id]);
 
   const { mainHtml, sourcesHtml } = useMemo(() => {
-    const html = node.contentHtml;
+    const html = contentHtml;
     const sourcesMatch = html.match(
       /(<h2[^>]*id="sources"[^>]*>[\s\S]*$)/i
     );
@@ -113,7 +117,7 @@ export default function NodeView({
       };
     }
     return { mainHtml: html, sourcesHtml: "" };
-  }, [node.contentHtml]);
+  }, [contentHtml]);
 
   const tocItems = useMemo(() => {
     const items: TocItem[] = [
@@ -296,11 +300,22 @@ export default function NodeView({
             </div>
           </div>
 
-          <div
-            ref={contentRef}
-            className="prose-apeirron"
-            dangerouslySetInnerHTML={{ __html: mainHtml }}
-          />
+          {mainHtml ? (
+            <div
+              ref={contentRef}
+              className="prose-apeirron"
+              dangerouslySetInnerHTML={{ __html: mainHtml }}
+            />
+          ) : loading ? (
+            <ContentSkeleton />
+          ) : (
+            <div
+              className="text-[13px] text-text-muted/70 py-6"
+              role="status"
+            >
+              Couldn&apos;t load content. Try refreshing the page.
+            </div>
+          )}
 
           <ReadNext
             nodeId={node.id}
@@ -365,7 +380,7 @@ function PhantomNodeView({
   links,
   allNodes,
   onNodeClick,
-}: Props) {
+}: Omit<Props, "contentHtml" | "loading">) {
   const nodeMap = useMemo(
     () => new Map(allNodes.map((n) => [n.id, n])),
     [allNodes]
@@ -833,6 +848,32 @@ function ReadNext({
 
 function formatCategoryLabel(id: string): string {
   return id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function ContentSkeleton() {
+  const widths = ["95%", "88%", "92%", "60%", "", "94%", "90%", "75%"];
+  return (
+    <div
+      className="prose-apeirron select-none"
+      role="status"
+      aria-label="Loading content"
+    >
+      {widths.map((w, i) => (
+        <div
+          key={i}
+          style={{
+            width: w || undefined,
+            height: w ? 12 : 24,
+            marginBottom: w ? 10 : 14,
+            backgroundColor: w
+              ? "color-mix(in srgb, var(--text-primary) 6%, transparent)"
+              : "transparent",
+            borderRadius: 4,
+          }}
+        />
+      ))}
+    </div>
+  );
 }
 
 function NodeDates({
