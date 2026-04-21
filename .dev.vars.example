@@ -1,0 +1,9 @@
+# Local secrets for `next dev` + `opennextjs-cloudflare preview`.
+# Copy this file to `.dev.vars` and fill in real values.
+# `.dev.vars` is gitignored.
+#
+# In production, set these as Worker Secrets in the Cloudflare dashboard:
+#   Workers & Pages → apeirron → Settings → Variables and Secrets.
+
+GITHUB_APP_ID=
+GITHUB_APP_PRIVATE_KEY=
