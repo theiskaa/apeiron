@@ -234,11 +234,6 @@ export default function NodeView({
         )}
 
         <div className="flex-1 min-w-0">
-          <Breadcrumbs
-            categoryId={node.category}
-            categoryLabel={formatCategoryLabel(node.category)}
-            title={node.title}
-          />
           <h1 className="text-3xl font-bold text-text-primary mb-2 leading-tight">
             {node.title}
           </h1>
@@ -835,41 +830,6 @@ function ReadNext({
 
 function formatCategoryLabel(id: string): string {
   return id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
-function Breadcrumbs({
-  categoryId,
-  categoryLabel,
-  title,
-}: {
-  categoryId: string;
-  categoryLabel: string;
-  title: string;
-}) {
-  return (
-    <nav
-      aria-label="Breadcrumb"
-      className="mb-4 text-[11px] flex items-center gap-1.5 flex-wrap"
-    >
-      <Link
-        href="/"
-        className="text-text-muted hover:text-text-secondary transition-colors"
-      >
-        Home
-      </Link>
-      <span aria-hidden="true" className="text-text-muted/40">›</span>
-      <Link
-        href={`/nodes#category-${categoryId}`}
-        className="text-text-muted hover:text-text-secondary transition-colors"
-      >
-        {categoryLabel}
-      </Link>
-      <span aria-hidden="true" className="text-text-muted/40">›</span>
-      <span className="text-text-secondary truncate" aria-current="page">
-        {title}
-      </span>
-    </nav>
-  );
 }
 
 function NodeDates({
