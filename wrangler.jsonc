@@ -18,13 +18,6 @@
   "name": "apeirron",
   "compatibility_date": "2026-04-21",
   "compatibility_flags": ["nodejs_compat"],
-  // Runs before `wrangler deploy`. Produces the OpenNext bundle
-  // (.open-next/worker.js, .open-next/.build/..., .open-next/assets/...) that
-  // wrangler then uploads. Avoids requiring a dashboard-side Build command
-  // change in Cloudflare Workers Builds.
-  "build": {
-    "command": "pnpm run build:cloudflare"
-  },
   "assets": {
     "binding": "ASSETS",
     "directory": ".open-next/assets"
