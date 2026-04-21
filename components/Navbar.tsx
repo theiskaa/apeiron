@@ -23,21 +23,21 @@ export default function Navbar({ onLogoClick, onSearchClick }: Props) {
 
   return (
     <nav className="relative z-10 flex items-center justify-between px-4 md:px-8 pt-12 md:pt-0 h-24 md:h-16 shrink-0">
-      {onLogoClick ? (
-        <button
-          onClick={onLogoClick}
-          className="flex items-center gap-3 rounded-lg px-1 -mx-1 hover:opacity-80 transition-opacity"
-        >
-          {logoContent}
-        </button>
-      ) : (
-        <Link
-          href="/"
-          className="flex items-center gap-3 rounded-lg px-1 -mx-1 hover:opacity-80 transition-opacity"
-        >
-          {logoContent}
-        </Link>
-      )}
+      <Link
+        href="/"
+        onClick={
+          onLogoClick
+            ? (e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+                e.preventDefault();
+                onLogoClick();
+              }
+            : undefined
+        }
+        className="flex items-center gap-3 rounded-lg px-1 -mx-1 hover:opacity-80 transition-opacity"
+      >
+        {logoContent}
+      </Link>
       <div className="flex items-center gap-1.5 md:gap-2">
         {onSearchClick && (
           <button
