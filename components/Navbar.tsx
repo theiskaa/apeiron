@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Logo from "./Logo";
 import ThemePicker from "./ThemePicker";
 
 interface Props {
@@ -9,17 +10,7 @@ interface Props {
 }
 
 export default function Navbar({ onLogoClick, onSearchClick }: Props) {
-  const logoContent = (
-    <span
-      className="text-[22px] font-semibold tracking-[0.04em] leading-tight text-text-primary"
-      style={{
-        fontFamily: "var(--font-title), sans-serif",
-        fontStretch: "75%",
-      }}
-    >
-      Apeirron
-    </span>
-  );
+  const logoContent = <Logo className="text-text-primary" height={26} />;
 
   return (
     <nav className="relative z-10 flex items-center justify-between px-4 md:px-8 pt-12 md:pt-0 h-24 md:h-16 shrink-0">

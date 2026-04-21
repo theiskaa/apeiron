@@ -39,6 +39,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+  },
   openGraph: {
     title: "Apeirron — Biggest questions humanity asks",
     description:
