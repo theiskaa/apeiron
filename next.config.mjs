@@ -1,5 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Ensure markdown + categories.json are bundled into the server output so
+  // filesystem reads in lib/content.ts resolve at runtime on Cloudflare Workers
+  // (OpenNext packages traced files under /bundle).
+  outputFileTracingIncludes: {
+    "/**/*": ["./content/**/*"],
+  },
   async redirects() {
     return [
       {
