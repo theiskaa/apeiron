@@ -98,14 +98,14 @@ function resolveWikiLinks(
     const node = nodeById.get(trimmed) || nodeByTitle.get(trimmed.toLowerCase());
     if (node) {
       const { id, title } = node.frontmatter;
-      return `<a data-node-link="${id}" class="node-link">${title}</a>`;
+      return `<a href="/node/${id}" data-node-link="${id}" class="node-link">${title}</a>`;
     }
     if (phantomIds?.has(trimmed)) {
       const title = trimmed
         .split("-")
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
         .join(" ");
-      return `<a data-node-link="${trimmed}" class="node-link node-link-phantom">${title}</a>`;
+      return `<a href="/node/${trimmed}" data-node-link="${trimmed}" class="node-link node-link-phantom">${title}</a>`;
     }
     // No match found — render as plain text with a broken-link style
     return `<span class="node-link-broken">${trimmed}</span>`;
