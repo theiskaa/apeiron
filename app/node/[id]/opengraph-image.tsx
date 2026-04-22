@@ -84,9 +84,17 @@ function truncateLabel(s: string, max: number): string {
   return s.length > max ? s.slice(0, max - 1) + "…" : s;
 }
 
-function radiusFor(val: number, isFocal: boolean): number {
-  const base = Math.sqrt(Math.max(1, val)) * 3 + 4;
-  return isFocal ? clamp(base + 2.5, 13, 20) : clamp(base, 6, 15);
+function densityMult(n: number): number {
+  if (n > 25) return 0.7;
+  if (n > 15) return 0.85;
+  return 1;
+}
+
+function radiusFor(val: number, isFocal: boolean, mult = 1): number {
+  const base = (Math.sqrt(Math.max(1, val)) * 3 + 4) * mult;
+  return isFocal
+    ? clamp(base + 2.5, 11, 20)
+    : clamp(base, 5, 15);
 }
 
 function idHash(s: string): number {
@@ -161,6 +169,10 @@ export default async function OpenGraphImage({ params }: Props) {
     .filter((n): n is NonNullable<typeof n> => !!n);
   neighbors.sort((a, b) => b.val - a.val || a.id.localeCompare(b.id));
 
+  const dMult = densityMult(neighbors.length);
+  const labelFontSize = neighbors.length > 25 ? 11 : neighbors.length > 15 ? 12 : 13;
+  const focalLabelFontSize = neighbors.length > 25 ? 15 : neighbors.length > 15 ? 16 : 17;
+
   const included = new Set<string>([id, ...neighbors.map((n) => n.id)]);
 
   const seenEdges = new Set<string>();
@@ -205,17 +217,31 @@ export default async function OpenGraphImage({ params }: Props) {
     }),
   ];
 
+  const chargeStrength =
+    neighbors.length > 25
+      ? -700
+      : neighbors.length > 15
+        ? -540
+        : -420;
+  const linkDistanceVal =
+    neighbors.length > 25
+      ? 145
+      : neighbors.length > 15
+        ? 128
+        : 115;
+  const collidePad = neighbors.length > 25 ? 9 : 7;
+
   const sim = forceSimulation(simNodes as unknown as d3Node[])
     .force(
       "charge",
-      forceManyBody().strength(-420).distanceMax(550)
+      forceManyBody().strength(chargeStrength).distanceMax(650)
     )
     .force(
       "link",
       forceLink(subgraphLinks as unknown as d3Link[])
         .id((d) => (d as unknown as { id: string }).id)
-        .distance(115)
-        .strength(0.35)
+        .distance(linkDistanceVal)
+        .strength(0.32)
     )
     .force(
       "collide",
@@ -224,13 +250,14 @@ export default async function OpenGraphImage({ params }: Props) {
           (d) =>
             radiusFor(
               (d as unknown as SimNode).val,
-              (d as unknown as SimNode).isFocal
-            ) + 7
+              (d as unknown as SimNode).isFocal,
+              dMult
+            ) + collidePad
         )
         .strength(1)
         .iterations(2)
     )
-    .force("center", forceCenter(cx0, cy0).strength(0.05))
+    .force("center", forceCenter(cx0, cy0).strength(0.04))
     .stop();
 
   for (let i = 0; i < 800; i++) sim.tick();
@@ -249,7 +276,7 @@ export default async function OpenGraphImage({ params }: Props) {
     let minY = Infinity;
     let maxY = -Infinity;
     for (const n of simNodes) {
-      const r = radiusFor(n.val, n.isFocal);
+      const r = radiusFor(n.val, n.isFocal, dMult);
       minX = Math.min(minX, (n.x ?? 0) - r);
       maxX = Math.max(maxX, (n.x ?? 0) + r);
       minY = Math.min(minY, (n.y ?? 0) - r);
@@ -309,8 +336,8 @@ export default async function OpenGraphImage({ params }: Props) {
     (
       <div
         style={{
-          width: "100%",
-          height: "100%",
+          width: CANVAS_W,
+          height: CANVAS_H,
           display: "flex",
           position: "relative",
           background: BG,
@@ -378,7 +405,7 @@ export default async function OpenGraphImage({ params }: Props) {
           })}
 
           {neighborSim.map((n, i) => {
-            const r = radiusFor(n.val, false);
+            const r = radiusFor(n.val, false, dMult);
             return (
               <g key={`n-${i}`}>
                 {n.phantom && (
@@ -404,7 +431,7 @@ export default async function OpenGraphImage({ params }: Props) {
           })}
 
           {(() => {
-            const r = radiusFor(focalNode.val, true);
+            const r = radiusFor(focalNode.val, true, dMult);
             return (
               <g>
                 <circle
@@ -439,26 +466,29 @@ export default async function OpenGraphImage({ params }: Props) {
         </svg>
 
         {neighborSim.map((n, i) => {
-          const r = radiusFor(n.val, false);
+          const r = radiusFor(n.val, false, dMult);
           const absX = GRAPH_X + (n.x ?? 0);
           const absY = GRAPH_Y + (n.y ?? 0) + r + 4;
           const leftSpace = absX;
           const rightSpace = CANVAS_W - absX;
+          const charW = labelFontSize * 0.55;
           const maxChars = clamp(
-            Math.floor((2 * Math.min(leftSpace, rightSpace)) / 7) - 2,
+            Math.floor((2 * Math.min(leftSpace, rightSpace)) / charW) - 2,
             5,
             24
           );
+          const BOX_W = 220;
           return (
             <div
               key={`l-${i}`}
               style={{
                 position: "absolute",
                 display: "flex",
+                justifyContent: "center",
                 top: absY,
-                left: absX,
-                transform: "translateX(-50%)",
-                fontSize: 13,
+                left: absX - BOX_W / 2,
+                width: BOX_W,
+                fontSize: labelFontSize,
                 color: LABEL_COLOR,
                 lineHeight: 1.15,
                 whiteSpace: "nowrap",
@@ -469,25 +499,33 @@ export default async function OpenGraphImage({ params }: Props) {
           );
         })}
 
-        <div
-          style={{
-            position: "absolute",
-            display: "flex",
-            top:
-              GRAPH_Y +
-              (focalNode.y ?? 0) +
-              radiusFor(focalNode.val, true) +
-              6,
-            left: GRAPH_X + (focalNode.x ?? 0),
-            transform: "translateX(-50%)",
-            fontSize: 17,
-            fontWeight: 600,
-            color: FOCAL_LABEL_COLOR,
-            whiteSpace: "nowrap",
-          }}
-        >
-          {truncateLabel(title, 28)}
-        </div>
+        {(() => {
+          const BOX_W = 280;
+          const absX = GRAPH_X + (focalNode.x ?? 0);
+          const absY =
+            GRAPH_Y +
+            (focalNode.y ?? 0) +
+            radiusFor(focalNode.val, true, dMult) +
+            6;
+          return (
+            <div
+              style={{
+                position: "absolute",
+                display: "flex",
+                justifyContent: "center",
+                top: absY,
+                left: absX - BOX_W / 2,
+                width: BOX_W,
+                fontSize: focalLabelFontSize,
+                fontWeight: 600,
+                color: FOCAL_LABEL_COLOR,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {truncateLabel(title, 28)}
+            </div>
+          );
+        })()}
 
         <div
           style={{
