@@ -17,6 +17,8 @@ connections:
     reason: "MKUltra used LSD, mescaline, and sensory deprivation to try to break and reprogram people's minds, using the same substances shamans used for spiritual purposes"
   - target: "jung"
     reason: "Jung's technique of 'active imagination' — entering a controlled waking trance, engaging autonomous unconscious figures in dialogue as if they were independent beings — is one of the most rigorous Western methods for the deliberate induction of altered states. *The Red Book* is his private record of that work between 1913 and 1930."
+  - target: "pharmacratic-inquisition"
+    reason: "The plant medicines that most reliably induce altered states — psilocybin, ayahuasca, peyote, the Eleusinian kykeon — are precisely the ones that centuries of ruling powers have worked to criminalize and erase."
 ---
 
 In 1954, Aldous Huxley swallowed four-tenths of a gram of mescaline, sat down in his garden in Los Angeles, and wrote what would become one of the most influential documents in the history of consciousness research. *The Doors of Perception* described not hallucination but *revelation* — the sense that ordinary perception is a filter, and the drug had opened it. "The man who comes back through the Door in the Wall," Huxley wrote, "will never be quite the same as the man who went out."

@@ -25,6 +25,8 @@ connections:
     reason: "Jung is the depth-psychological investigator who concluded that waking consciousness is a small illuminated zone within a vastly larger, structured unconscious. His collective unconscious and archetypes remain the most sustained empirical case for a trans-personal layer of mind."
   - target: "cern"
     reason: "The deepest unresolved problem in quantum mechanics — the role of the observer in determining physical outcomes — is more empirically pressed at CERN than anywhere else in contemporary science. Some interpretations require consciousness as constitutive of physical reality. Whatever the LHC discovers about matter, it cannot avoid intersecting with what 'discovery' itself is."
+  - target: "pharmacratic-inquisition"
+    reason: "McKenna's thesis names the political fact underneath consciousness research: the substances that most reliably alter it are the ones ruling powers have worked hardest to keep away from the public."
 ---
 
 There is something it is like to be you. Right now, reading these words, there is an experience happening — light hitting your eyes, meaning forming in your mind, a sense of being *here*. This is consciousness. And after centuries of philosophy and decades of neuroscience, nobody can explain why it exists.
