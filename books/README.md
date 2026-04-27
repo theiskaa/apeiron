@@ -16,7 +16,7 @@ The seven volumes follow the categories defined in [`content/categories.json`](.
 | `apeirron-modern` | Twenty-first-century cases, contested deaths, contemporary disinformation | 19 |
 | `apeirron-reality` | Foundational physics, the Mandela effect, the simulation hypothesis, flat-earth epistemology | 6 |
 
-<a href="./apeirron-mind.pdf"><img src="./assets/cover-mind.png" alt="Mind" width="120"></a> <a href="./apeirron-origins.pdf"><img src="./assets/cover-origins.png" alt="Origins" width="120"></a> <a href="./apeirron-cosmos.pdf"><img src="./assets/cover-cosmos.png" alt="Cosmos" width="120"></a> <a href="./apeirron-power.pdf"><img src="./assets/cover-power.png" alt="Power" width="120"></a> <a href="./apeirron-operations.pdf"><img src="./assets/cover-operations.png" alt="Operations" width="120"></a> <a href="./apeirron-modern.pdf"><img src="./assets/cover-modern.png" alt="Modern" width="120"></a> <a href="./apeirron-reality.pdf"><img src="./assets/cover-reality.png" alt="Reality" width="120"></a>
+<a href="./apeirron-mind.pdf"><img src="./assets/cover-mind.png" alt="Mind" width="110"></a> <a href="./apeirron-origins.pdf"><img src="./assets/cover-origins.png" alt="Origins" width="110"></a> <a href="./apeirron-cosmos.pdf"><img src="./assets/cover-cosmos.png" alt="Cosmos" width="110"></a> <a href="./apeirron-power.pdf"><img src="./assets/cover-power.png" alt="Power" width="110"></a> <a href="./apeirron-operations.pdf"><img src="./assets/cover-operations.png" alt="Operations" width="110"></a> <a href="./apeirron-modern.pdf"><img src="./assets/cover-modern.png" alt="Modern" width="110"></a> <a href="./apeirron-reality.pdf"><img src="./assets/cover-reality.png" alt="Reality" width="110"></a>
 
 ## How a volume is structured
 
