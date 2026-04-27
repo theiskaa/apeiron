@@ -1,0 +1,110 @@
+/* Typography for the apeirron epub. Targets readers like Apple Books,
+   Kindle, and Calibre's built-in viewer. Avoid web-only properties; the
+   epub2/epub3 CSS subset is conservative. */
+
+@namespace epub "http://www.idpf.org/2007/ops";
+
+body {
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  line-height: 1.55;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  margin: 0 1em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: left;
+  page-break-after: avoid;
+  -webkit-hyphens: none;
+  hyphens: none;
+}
+
+/* Parts (categories) — rendered as a centered title sheet so each part
+   gets a clean visual break in the e-reader's flow. */
+h1 {
+  font-size: 2em;
+  text-align: center;
+  margin: 3em 0 2em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  page-break-before: always;
+}
+
+/* Chapters — nodes. */
+h2 {
+  font-size: 1.5em;
+  margin: 2em 0 0.75em;
+  page-break-before: always;
+}
+
+h3 {
+  font-size: 1.2em;
+  margin: 1.5em 0 0.5em;
+}
+
+h4 {
+  font-size: 1.05em;
+  margin: 1.25em 0 0.4em;
+}
+
+h5, h6 {
+  font-size: 1em;
+  margin: 1em 0 0.3em;
+  font-style: italic;
+}
+
+p {
+  margin: 0 0 0.8em;
+  text-indent: 1.25em;
+}
+
+/* The first paragraph after a heading should not be indented; this is
+   standard book typography. */
+h1 + p, h2 + p, h3 + p, h4 + p, h5 + p, h6 + p,
+blockquote + p, hr + p, ul + p, ol + p {
+  text-indent: 0;
+}
+
+blockquote {
+  margin: 1em 1.5em;
+  padding-left: 1em;
+  border-left: 2px solid #888;
+  font-style: italic;
+}
+
+ul, ol {
+  margin: 0.5em 0 0.8em 1.5em;
+}
+
+li {
+  margin: 0.2em 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+em, i {
+  font-style: italic;
+}
+
+strong, b {
+  font-weight: bold;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #888;
+  width: 30%;
+  margin: 2em auto;
+}
+
+code, pre {
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 0.9em;
+}
