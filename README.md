@@ -14,6 +14,13 @@ The site is a force-directed graph. Each node is a topic — written as a narrat
 
 All content lives as Markdown files in the [`content/nodes/`](./content/nodes) directory. The graph, connections, and site are generated automatically from these files at build time. No database, no CMS — just Markdown and Git.
 
+## Books
+
+The same content is also available as a typeset edition: seven EPUB and PDF volumes, one per category, generated from the same nodes. See [`books/`](./books) for the build pipeline and details.
+
+<a href="books/apeirron-mind.pdf"><img src="books/assets/cover-mind.png" alt="Mind" width="120"></a> <a href="books/apeirron-origins.pdf"><img src="books/assets/cover-origins.png" alt="Origins" width="120"></a> <a href="books/apeirron-cosmos.pdf"><img src="books/assets/cover-cosmos.png" alt="Cosmos" width="120"></a> <a href="books/apeirron-power.pdf"><img src="books/assets/cover-power.png" alt="Power" width="120"></a> <a href="books/apeirron-operations.pdf"><img src="books/assets/cover-operations.png" alt="Operations" width="120"></a> <a href="books/apeirron-modern.pdf"><img src="books/assets/cover-modern.png" alt="Modern" width="120"></a> <a href="books/apeirron-reality.pdf"><img src="books/assets/cover-reality.png" alt="Reality" width="120"></a>
+
+
 ## Contributing
 
 Apeirron is open to contributions. You can:
