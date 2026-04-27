@@ -5,6 +5,11 @@
   "scripts": {
     "generate-content": "node scripts/generate-content.mjs",
     "generate-og-layouts": "node scripts/generate-og-layouts.mjs",
+    "books:cover": "node books/generate-cover.mjs",
+    "books:assemble": "node books/generate-book.mjs",
+    "books:epub": "pnpm run books:cover && pnpm run books:assemble && bash books/build-book.sh epub",
+    "books:pdf": "pnpm run books:cover && pnpm run books:assemble && bash books/build-book.sh pdf",
+    "books": "pnpm run books:cover && pnpm run books:assemble && bash books/build-book.sh all",
     "predev": "pnpm run generate-content && pnpm run generate-og-layouts",
     "prebuild": "pnpm run generate-content && pnpm run generate-og-layouts",
     "dev": "next dev",
