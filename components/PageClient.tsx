@@ -5,14 +5,15 @@ import dynamic from "next/dynamic";
 import type { GraphData } from "@/lib/types";
 import Navbar from "./Navbar";
 import TabBar, { type Tab } from "./TabBar";
-import NodeView from "./NodeView";
-import CommandPalette from "./CommandPalette";
+import NodeView, { type MiniView } from "./NodeView";
+import CommandPalette, { type CommandAction } from "./CommandPalette";
 import ViewModeToggle, { type ViewMode } from "./ViewModeToggle";
 
 const Graph = dynamic(() => import("./Graph"), { ssr: false });
 const PathsGraph = dynamic(() => import("./PathsGraph"), { ssr: false });
 
 const VIEW_MODE_STORAGE_KEY = "apeirron-view-mode";
+const MINI_VIEW_STORAGE_KEY = "apeirron-node-mini-view";
 
 const GRAPH_TAB: Tab = { id: "graph", type: "graph" };
 
@@ -39,6 +40,7 @@ export default function PageClient({
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [focusNodeId, setFocusNodeId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("connections");
+  const [miniView, setMiniView] = useState<MiniView>("graph");
 
   // Per-node HTML content fetched on demand from /content/<slug>.json.
   // Seeded with `initialContent` from the Server Component (direct node-page
@@ -93,9 +95,13 @@ export default function PageClient({
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
-      if (saved === "connections" || saved === "paths") {
-        setViewMode(saved);
+      const savedView = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
+      if (savedView === "connections" || savedView === "paths") {
+        setViewMode(savedView);
+      }
+      const savedMini = localStorage.getItem(MINI_VIEW_STORAGE_KEY);
+      if (savedMini === "graph" || savedMini === "path") {
+        setMiniView(savedMini);
       }
     } catch {}
   }, []);
@@ -104,6 +110,13 @@ export default function PageClient({
     setViewMode(mode);
     try {
       localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode);
+    } catch {}
+  }, []);
+
+  const handleMiniViewChange = useCallback((v: MiniView) => {
+    setMiniView(v);
+    try {
+      localStorage.setItem(MINI_VIEW_STORAGE_KEY, v);
     } catch {}
   }, []);
 
@@ -195,15 +208,19 @@ export default function PageClient({
 
   const handlePaletteSelect = useCallback(
     (nodeId: string) => {
-      const showGraph = activeTabId === "graph";
-      if (showGraph) {
+      // Focus-on-graph only makes sense in the connections viewMode — that's
+      // where the focus animation is implemented. On paths (or any node tab),
+      // opening the node directly is what the user expects.
+      const onConnectionsGraph =
+        activeTabId === "graph" && viewMode === "connections";
+      if (onConnectionsGraph) {
         setFocusNodeId(nodeId);
         setTimeout(() => setFocusNodeId(null), 1000);
       } else {
         handleNodeClick(nodeId);
       }
     },
-    [activeTabId, handleNodeClick]
+    [activeTabId, viewMode, handleNodeClick]
   );
 
   const selectedNodeOnGraph = useMemo(() => {
@@ -213,6 +230,72 @@ export default function PageClient({
 
   const showGraph = activeTab.type === "graph";
   const openSearch = useCallback(() => setPaletteOpen(true), []);
+
+  // Commands surfaced by the palette. Built per-render from current state so
+  // the visible set always reflects context (e.g. "Switch to Paths" only
+  // appears when Connections is active, etc.).
+  const paletteActions = useMemo<CommandAction[]>(() => {
+    const acts: CommandAction[] = [];
+
+    if (!showGraph) {
+      acts.push({
+        id: "cmd:return-to-graph",
+        label: "Return to graph",
+        hint: "Navigation",
+        keywords: ["home", "graph", "main", "return", "back"],
+        perform: () => setActiveTabId("graph"),
+      });
+    }
+
+    if (showGraph) {
+      if (viewMode !== "connections") {
+        acts.push({
+          id: "cmd:view-connections",
+          label: "Switch to Connections view",
+          hint: "View",
+          keywords: ["connections", "graph", "switch", "view"],
+          perform: () => handleViewModeChange("connections"),
+        });
+      }
+      if (viewMode !== "paths") {
+        acts.push({
+          id: "cmd:view-paths",
+          label: "Switch to Paths view",
+          hint: "View",
+          keywords: ["paths", "diagram", "diagrams", "switch", "view"],
+          perform: () => handleViewModeChange("paths"),
+        });
+      }
+    } else if (activeTab.type === "node") {
+      if (miniView !== "graph") {
+        acts.push({
+          id: "cmd:mini-graph",
+          label: "Side panel: Connections",
+          hint: "View",
+          keywords: ["mini", "side", "panel", "connections", "graph"],
+          perform: () => handleMiniViewChange("graph"),
+        });
+      }
+      if (miniView !== "path") {
+        acts.push({
+          id: "cmd:mini-path",
+          label: "Side panel: Path diagram",
+          hint: "View",
+          keywords: ["mini", "side", "panel", "path", "diagram"],
+          perform: () => handleMiniViewChange("path"),
+        });
+      }
+    }
+
+    return acts;
+  }, [
+    showGraph,
+    viewMode,
+    miniView,
+    activeTab.type,
+    handleViewModeChange,
+    handleMiniViewChange,
+  ]);
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">
@@ -275,6 +358,8 @@ export default function PageClient({
                 links={graphData.links}
                 allNodes={graphData.nodes}
                 onNodeClick={handleNodeClick}
+                miniView={miniView}
+                onMiniViewChange={handleMiniViewChange}
               />
             </div>
           </div>
@@ -304,9 +389,10 @@ export default function PageClient({
 
       <CommandPalette
         nodes={graphData.nodes}
+        actions={paletteActions}
         open={paletteOpen}
         onClose={() => setPaletteOpen(false)}
-        onSelect={handlePaletteSelect}
+        onSelectNode={handlePaletteSelect}
       />
     </div>
   );

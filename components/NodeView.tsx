@@ -11,8 +11,7 @@ const MiniPathDiagram = dynamic(() => import("./MiniPathDiagram"), {
   ssr: false,
 });
 
-type MiniView = "graph" | "path";
-const MINI_VIEW_STORAGE_KEY = "apeirron-node-mini-view";
+export type MiniView = "graph" | "path";
 
 interface TocItem {
   id: string;
@@ -27,6 +26,8 @@ interface Props {
   links: GraphLink[];
   allNodes: GraphNode[];
   onNodeClick: (nodeId: string) => void;
+  miniView: MiniView;
+  onMiniViewChange: (v: MiniView) => void;
 }
 
 const GITHUB_REPO = "https://github.com/theiskaa/apeirron";
@@ -38,6 +39,8 @@ export default function NodeView({
   links,
   allNodes,
   onNodeClick,
+  miniView,
+  onMiniViewChange,
 }: Props) {
   if (node.phantom) {
     return (
@@ -52,21 +55,6 @@ export default function NodeView({
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [miniView, setMiniView] = useState<MiniView>("graph");
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(MINI_VIEW_STORAGE_KEY);
-      if (saved === "graph" || saved === "path") setMiniView(saved);
-    } catch {}
-  }, []);
-
-  const handleMiniViewChange = useCallback((v: MiniView) => {
-    setMiniView(v);
-    try {
-      localStorage.setItem(MINI_VIEW_STORAGE_KEY, v);
-    } catch {}
-  }, []);
 
   const handleContentClick = useCallback(
     (e: MouseEvent) => {
@@ -259,7 +247,7 @@ export default function NodeView({
                   </h3>
                   <MiniViewToggle
                     value={miniView}
-                    onChange={handleMiniViewChange}
+                    onChange={onMiniViewChange}
                   />
                 </div>
                 {miniView === "graph" ? (
@@ -333,7 +321,7 @@ export default function NodeView({
                 </h3>
                 <MiniViewToggle
                   value={miniView}
-                  onChange={handleMiniViewChange}
+                  onChange={onMiniViewChange}
                 />
               </div>
               {miniView === "graph" ? (
@@ -380,7 +368,7 @@ function PhantomNodeView({
   links,
   allNodes,
   onNodeClick,
-}: Omit<Props, "contentHtml" | "loading">) {
+}: Omit<Props, "contentHtml" | "loading" | "miniView" | "onMiniViewChange">) {
   const nodeMap = useMemo(
     () => new Map(allNodes.map((n) => [n.id, n])),
     [allNodes]

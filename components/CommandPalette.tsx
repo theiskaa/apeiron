@@ -3,20 +3,48 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import type { GraphNode } from "@/lib/types";
 
-interface Props {
-  nodes: GraphNode[];
-  open: boolean;
-  onClose: () => void;
-  onSelect: (nodeId: string) => void;
+export interface CommandAction {
+  id: string;
+  label: string;
+  hint?: string;
+  keywords?: string[];
+  perform: () => void;
 }
 
-export default function CommandPalette({ nodes, open, onClose, onSelect }: Props) {
+interface Props {
+  nodes: GraphNode[];
+  actions: CommandAction[];
+  open: boolean;
+  onClose: () => void;
+  onSelectNode: (nodeId: string) => void;
+}
+
+type FlatItem =
+  | { kind: "action"; action: CommandAction }
+  | { kind: "node"; node: GraphNode };
+
+export default function CommandPalette({
+  nodes,
+  actions,
+  open,
+  onClose,
+  onSelectNode,
+}: Props) {
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const filtered = useMemo(() => {
+  const filteredActions = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return actions;
+    return actions.filter((a) => {
+      if (a.label.toLowerCase().includes(q)) return true;
+      return a.keywords?.some((k) => k.toLowerCase().includes(q)) ?? false;
+    });
+  }, [actions, query]);
+
+  const filteredNodes = useMemo(() => {
     if (!query.trim()) return nodes;
     const q = query.toLowerCase();
     return nodes
@@ -52,6 +80,22 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
     return Array.from(map.values());
   }, [nodes, query]);
 
+  // Single flat list drives keyboard navigation across actions then nodes.
+  const flatList = useMemo<FlatItem[]>(() => {
+    const items: FlatItem[] = filteredActions.map((action) => ({
+      kind: "action",
+      action,
+    }));
+    if (query.trim()) {
+      for (const node of filteredNodes) items.push({ kind: "node", node });
+    } else if (grouped) {
+      for (const g of grouped) {
+        for (const node of g.nodes) items.push({ kind: "node", node });
+      }
+    }
+    return items;
+  }, [filteredActions, filteredNodes, grouped, query]);
+
   useEffect(() => {
     if (open) {
       setQuery("");
@@ -62,7 +106,7 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
 
   useEffect(() => {
     setSelectedIndex(0);
-  }, [filtered.length]);
+  }, [flatList.length]);
 
   const keyboardNav = useRef(false);
   useEffect(() => {
@@ -73,22 +117,18 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
     if (item) item.scrollIntoView({ block: "nearest" });
   }, [selectedIndex]);
 
-  const handleSelect = useCallback(
-    (nodeId: string) => {
-      onSelect(nodeId);
+  const performAt = useCallback(
+    (idx: number) => {
+      const item = flatList[idx];
+      if (!item) return;
+      if (item.kind === "action") item.action.perform();
+      else onSelectNode(item.node.id);
       onClose();
     },
-    [onSelect, onClose]
+    [flatList, onSelectNode, onClose]
   );
 
-  // Flat index for keyboard navigation across grouped items
-  const flatBrowseNodes = useMemo(() => {
-    if (!grouped) return [];
-    return grouped.flatMap((g) => g.nodes);
-  }, [grouped]);
-
   const [visible, setVisible] = useState(false);
-
   useEffect(() => {
     if (open) {
       setVisible(true);
@@ -101,9 +141,9 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
   if (!visible && !open) return null;
 
   const hasQuery = query.trim().length > 0;
-  const hasResults = hasQuery && filtered.length > 0;
-  const hasNoResults = hasQuery && filtered.length === 0;
+  const hasNothing = flatList.length === 0;
   const showBrowse = !hasQuery && grouped;
+  const actionCount = filteredActions.length;
 
   return (
     <div
@@ -119,19 +159,18 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
 
       <div
         role="dialog"
-        aria-label="Search nodes"
+        aria-label="Search nodes and commands"
         className="relative w-full max-w-xl mx-4 transition-all duration-150"
         style={{
           opacity: open ? 1 : 0,
           transform: open ? "translateY(0) scale(1)" : "translateY(-8px) scale(0.98)",
         }}
         onKeyDown={(e) => {
-          const list = hasQuery ? filtered : flatBrowseNodes;
           switch (e.key) {
             case "ArrowDown":
               e.preventDefault();
               keyboardNav.current = true;
-              setSelectedIndex((i) => Math.min(i + 1, list.length - 1));
+              setSelectedIndex((i) => Math.min(i + 1, flatList.length - 1));
               break;
             case "ArrowUp":
               e.preventDefault();
@@ -140,7 +179,7 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
               break;
             case "Enter":
               e.preventDefault();
-              if (list[selectedIndex]) handleSelect(list[selectedIndex].id);
+              performAt(selectedIndex);
               break;
             case "Escape":
               e.preventDefault();
@@ -176,7 +215,7 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search nodes..."
+            placeholder="Search nodes or run a command…"
             className="flex-1 bg-transparent text-[14px] text-text-primary placeholder:text-text-muted outline-none focus:outline-none focus:ring-0"
           />
         </div>
@@ -189,98 +228,236 @@ export default function CommandPalette({ nodes, open, onClose, onSelect }: Props
             border: "1px solid var(--border-subtle)",
           }}
         >
-          {hasNoResults ? (
+          {hasNothing ? (
             <div className="px-5 py-6 text-center text-sm text-text-muted">
-              No matching nodes
-            </div>
-          ) : showBrowse ? (
-            <div ref={listRef} role="listbox" className="max-h-80 overflow-y-auto py-1.5 px-1.5 no-scrollbar">
-              {(() => {
-                let flatIdx = 0;
-                return grouped.map((group) => (
-                  <div key={group.label}>
-                    <div className="flex items-center gap-2 px-4 pt-3 pb-1">
-                      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: group.color }} />
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-text-muted">
-                        {group.label}
-                      </span>
-                    </div>
-                    {group.nodes.map((node) => {
-                      const idx = flatIdx++;
-                      const selected = idx === selectedIndex;
-                      return (
-                        <button
-                          key={node.id}
-                          role="option"
-                          aria-selected={selected}
-                          onClick={() => handleSelect(node.id)}
-                          onMouseEnter={() => setSelectedIndex(idx)}
-                          className="w-full flex items-center gap-3 px-4 py-2 text-left transition-colors rounded-xl"
-                          style={{
-                            backgroundColor: selected
-                              ? "var(--accent-soft)"
-                              : "transparent",
-                          }}
-                        >
-                          <span
-                            className="text-[13px] truncate"
-                            style={{
-                              color: selected
-                                ? "var(--text-primary)"
-                                : "var(--text-secondary)",
-                            }}
-                          >
-                            {node.title}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                ));
-              })()}
+              No matching nodes or commands
             </div>
           ) : (
-            <div ref={listRef} role="listbox" className="max-h-72 overflow-y-auto py-1.5 px-1.5 no-scrollbar">
-              {filtered.map((node, i) => {
-                const selected = i === selectedIndex;
-                return (
-                  <button
-                    key={node.id}
-                    role="option"
-                    aria-selected={selected}
-                    onClick={() => handleSelect(node.id)}
-                    onMouseEnter={() => setSelectedIndex(i)}
-                    className="w-full flex items-center gap-3 px-4 py-2 text-left transition-colors rounded-xl"
-                    style={{
-                      backgroundColor: selected
-                        ? "var(--accent-soft)"
-                        : "transparent",
-                    }}
-                  >
-                    <span
-                      className="w-2 h-2 rounded-full shrink-0"
-                      style={{ backgroundColor: node.color }}
+            <div
+              ref={listRef}
+              role="listbox"
+              className="max-h-[22rem] overflow-y-auto py-1.5 px-1.5 no-scrollbar"
+            >
+              {actionCount > 0 && (
+                <div>
+                  <SectionHeader label="Actions" />
+                  {filteredActions.map((action, i) => (
+                    <ActionRow
+                      key={action.id}
+                      action={action}
+                      selected={selectedIndex === i}
+                      onClick={() => performAt(i)}
+                      onHover={() => setSelectedIndex(i)}
                     />
-                    <span
-                      className="text-[13px] truncate"
-                      style={{
-                        color: selected
-                          ? "var(--text-primary)"
-                          : "var(--text-secondary)",
-                      }}
-                    >
-                      {node.title}
-                    </span>
-                    <span className="ml-auto text-[11px] text-text-muted shrink-0">
-                      {node.category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
-                    </span>
-                  </button>
-                );
-              })}
+                  ))}
+                </div>
+              )}
+
+              {actionCount > 0 &&
+                ((showBrowse && grouped && grouped.length > 0) ||
+                  (hasQuery && filteredNodes.length > 0)) && (
+                  <div
+                    className="mx-3 my-1.5 h-px"
+                    style={{ backgroundColor: "var(--border-subtle)" }}
+                    aria-hidden
+                  />
+                )}
+
+              {showBrowse ? (
+                <BrowseGroups
+                  groups={grouped!}
+                  baseIdx={actionCount}
+                  selectedIndex={selectedIndex}
+                  onClick={(idx) => performAt(idx)}
+                  onHover={(idx) => setSelectedIndex(idx)}
+                />
+              ) : hasQuery && filteredNodes.length > 0 ? (
+                <div>
+                  {actionCount > 0 && <SectionHeader label="Nodes" />}
+                  {filteredNodes.map((node, i) => {
+                    const idx = actionCount + i;
+                    const selected = selectedIndex === idx;
+                    return (
+                      <NodeRow
+                        key={node.id}
+                        node={node}
+                        selected={selected}
+                        showCategory
+                        onClick={() => performAt(idx)}
+                        onHover={() => setSelectedIndex(idx)}
+                      />
+                    );
+                  })}
+                </div>
+              ) : null}
             </div>
           )}
         </div>
       </div>
     </div>
+  );
+}
+
+function SectionHeader({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-2 px-4 pt-3 pb-1">
+      <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-text-muted">
+        {label}
+      </span>
+    </div>
+  );
+}
+
+function ActionRow({
+  action,
+  selected,
+  onClick,
+  onHover,
+}: {
+  action: CommandAction;
+  selected: boolean;
+  onClick: () => void;
+  onHover: () => void;
+}) {
+  return (
+    <button
+      role="option"
+      aria-selected={selected}
+      onClick={onClick}
+      onMouseEnter={onHover}
+      className="w-full flex items-center gap-3 px-4 py-2 text-left transition-colors rounded-xl"
+      style={{
+        backgroundColor: selected ? "var(--accent-soft)" : "transparent",
+      }}
+    >
+      <span
+        className="inline-flex items-center justify-center w-4 h-4 rounded-[5px] shrink-0"
+        style={{
+          backgroundColor: "color-mix(in srgb, var(--accent) 18%, transparent)",
+          color: "var(--accent)",
+        }}
+        aria-hidden
+      >
+        <svg
+          width="9"
+          height="9"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </span>
+      <span
+        className="text-[13px] truncate"
+        style={{
+          color: selected ? "var(--text-primary)" : "var(--text-secondary)",
+        }}
+      >
+        {action.label}
+      </span>
+      {action.hint && (
+        <span className="ml-auto text-[11px] text-text-muted shrink-0">
+          {action.hint}
+        </span>
+      )}
+    </button>
+  );
+}
+
+function NodeRow({
+  node,
+  selected,
+  showCategory,
+  onClick,
+  onHover,
+}: {
+  node: GraphNode;
+  selected: boolean;
+  showCategory: boolean;
+  onClick: () => void;
+  onHover: () => void;
+}) {
+  return (
+    <button
+      role="option"
+      aria-selected={selected}
+      onClick={onClick}
+      onMouseEnter={onHover}
+      className="w-full flex items-center gap-3 px-4 py-2 text-left transition-colors rounded-xl"
+      style={{
+        backgroundColor: selected ? "var(--accent-soft)" : "transparent",
+      }}
+    >
+      <span
+        className="w-2 h-2 rounded-full shrink-0"
+        style={{ backgroundColor: node.color }}
+      />
+      <span
+        className="text-[13px] truncate"
+        style={{
+          color: selected ? "var(--text-primary)" : "var(--text-secondary)",
+        }}
+      >
+        {node.title}
+      </span>
+      {showCategory && (
+        <span className="ml-auto text-[11px] text-text-muted shrink-0">
+          {node.category
+            .replace(/-/g, " ")
+            .replace(/\b\w/g, (c) => c.toUpperCase())}
+        </span>
+      )}
+    </button>
+  );
+}
+
+function BrowseGroups({
+  groups,
+  baseIdx,
+  selectedIndex,
+  onClick,
+  onHover,
+}: {
+  groups: { label: string; color: string; nodes: GraphNode[] }[];
+  baseIdx: number;
+  selectedIndex: number;
+  onClick: (idx: number) => void;
+  onHover: (idx: number) => void;
+}) {
+  let flatIdx = baseIdx;
+  return (
+    <>
+      {groups.map((group) => (
+        <div key={group.label}>
+          <div className="flex items-center gap-2 px-4 pt-3 pb-1">
+            <span
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ backgroundColor: group.color }}
+            />
+            <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-text-muted">
+              {group.label}
+            </span>
+          </div>
+          {group.nodes.map((node) => {
+            const idx = flatIdx++;
+            const selected = idx === selectedIndex;
+            return (
+              <NodeRow
+                key={node.id}
+                node={node}
+                selected={selected}
+                showCategory={false}
+                onClick={() => onClick(idx)}
+                onHover={() => onHover(idx)}
+              />
+            );
+          })}
+        </div>
+      ))}
+    </>
   );
 }
