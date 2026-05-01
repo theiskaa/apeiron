@@ -22,7 +22,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/`, lastModified: rootMtime },
     { url: `${BASE_URL}/about`, lastModified: rootMtime },
     { url: `${BASE_URL}/nodes`, lastModified: rootMtime },
-    { url: `${BASE_URL}/books`, lastModified: rootMtime },
     { url: `${BASE_URL}/contribute`, lastModified: rootMtime },
     ...nodeEntries,
   ];

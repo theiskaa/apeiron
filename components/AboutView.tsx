@@ -1,169 +1,50 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import Navbar from "./Navbar";
 
-interface TocItem {
+export interface Volume {
   id: string;
-  text: string;
-  level: number;
+  label: string;
+  description: string;
+  chapters: number;
 }
 
-const TOC_ITEMS: TocItem[] = [
-  { id: "_top", text: "About Apeirron", level: 1 },
-  { id: "what-this-is", text: "What this is", level: 2 },
-  { id: "why-a-graph", text: "Why a graph", level: 2 },
-  { id: "editorial-standards", text: "Editorial standards", level: 2 },
-  { id: "sourcing", text: "Sourcing", level: 2 },
-  { id: "documented-vs-interpretive", text: "Documented vs. interpretive", level: 2 },
-  { id: "governance", text: "Governance and history", level: 2 },
-  { id: "what-this-is-not", text: "What this is not", level: 2 },
-  { id: "privacy", text: "Privacy, analytics, AI", level: 2 },
-  { id: "contact", text: "Contact", level: 2 },
-];
+interface Props {
+  volumes: Volume[];
+}
 
-export default function AboutView() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [activeId, setActiveId] = useState<string>("_top");
+// The PDFs/EPUBs are heavy and pulled from GitHub raw on click. main is
+// pinned so a renamed default branch doesn't silently break downloads.
+const RAW_BASE =
+  "https://raw.githubusercontent.com/theiskaa/apeirron/main/books";
 
+const coverUrl = (id: string) => `/books/cover-${id}.png`;
+const pdfUrl = (id: string) => `${RAW_BASE}/apeirron-${id}.pdf`;
+const epubUrl = (id: string) => `${RAW_BASE}/apeirron-${id}.epub`;
+
+export default function AboutView({ volumes }: Props) {
+  // Honour incoming hash links (e.g. /books → /about#books). Two RAFs let
+  // the layout settle before scrolling so the target lands at the top.
   useEffect(() => {
-    const scroll = scrollRef.current;
-    const content = contentRef.current;
-    if (!scroll || !content) return;
-
-    let ticking = false;
-    let urlTimer: ReturnType<typeof setTimeout> | null = null;
-
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        ticking = false;
-
-        const realItems = TOC_ITEMS.filter((i) => i.id !== "_top");
-        const headings = realItems
-          .map((item) => content.querySelector(`#${CSS.escape(item.id)}`))
-          .filter(Boolean) as HTMLElement[];
-
-        const scrollTop = scroll.scrollTop;
-        const offset = 120;
-
-        if (
-          headings.length === 0 ||
-          headings[0].offsetTop - scroll.offsetTop > scrollTop + offset
-        ) {
-          setActiveId("_top");
-          if (urlTimer) clearTimeout(urlTimer);
-          urlTimer = setTimeout(() => {
-            window.history.replaceState(null, "", window.location.pathname);
-          }, 150);
-          return;
-        }
-
-        let current = headings[0]?.id ?? "_top";
-        for (const h of headings) {
-          if (h.offsetTop - scroll.offsetTop <= scrollTop + offset) {
-            current = h.id;
-          } else {
-            break;
-          }
-        }
-        setActiveId(current);
-        if (urlTimer) clearTimeout(urlTimer);
-        urlTimer = setTimeout(() => {
-          window.history.replaceState(
-            null,
-            "",
-            current === "_top" ? window.location.pathname : `#${current}`
-          );
-        }, 150);
-      });
-    };
-
-    scroll.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-
-    // On mount, if URL has a hash, scroll to it
-    const hash = typeof window !== "undefined" ? window.location.hash.slice(1) : "";
-    if (hash) {
-      const el = content.querySelector(`#${CSS.escape(hash)}`);
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: "auto", block: "start" });
-        }, 0);
-      }
-    }
-
-    return () => {
-      scroll.removeEventListener("scroll", onScroll);
-      if (urlTimer) clearTimeout(urlTimer);
-    };
-  }, []);
-
-  const handleTocClick = useCallback((id: string) => {
-    if (id === "_top") {
-      scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-      setActiveId(id);
-      window.history.replaceState(null, "", window.location.pathname);
-      return;
-    }
-    const el = contentRef.current?.querySelector(`#${CSS.escape(id)}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-      setActiveId(id);
-      window.history.replaceState(null, "", `#${id}`);
-    }
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    const el = document.getElementById(hash);
+    if (!el) return;
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() =>
+        el.scrollIntoView({ behavior: "auto", block: "start" })
+      )
+    );
   }, []);
 
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-background text-text-primary">
       <Navbar />
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto panel-scroll"
-      >
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-8 flex gap-0">
-          <nav
-            aria-label="On this page"
-            className="hidden xl:block w-52 2xl:w-60 shrink-0 pt-20 pr-6"
-          >
-            <div className="sticky top-8">
-              <ul className="space-y-0.5">
-                {TOC_ITEMS.map((item) => (
-                  <li key={item.id}>
-                    <button
-                      onClick={() => handleTocClick(item.id)}
-                      style={{
-                        color:
-                          activeId === item.id
-                            ? "var(--text-primary)"
-                            : "rgba(144,144,160,0.45)",
-                      }}
-                      className={`text-left w-full text-[11px] leading-snug py-[3px] transition-colors ${
-                        item.level === 3 ? "pl-3" : ""
-                      }`}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.color = "var(--text-primary)")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.color =
-                          activeId === item.id
-                            ? "var(--text-primary)"
-                            : "rgba(144,144,160,0.45)")
-                      }
-                    >
-                      {item.text}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </nav>
-
+      <div className="flex-1 overflow-y-auto panel-scroll">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-8 flex flex-col lg:flex-row lg:gap-12">
           <article
-            ref={contentRef}
             className="flex-1 min-w-0 max-w-[720px] prose-apeirron"
           >
             <h1 className="text-3xl font-bold text-text-primary mb-2 leading-tight">
@@ -630,6 +511,85 @@ export default function AboutView() {
               </p>
             </div>
           </article>
+
+          <aside
+            id="books"
+            aria-labelledby="books-heading"
+            className="w-full mt-12 lg:mt-0 lg:w-[340px] shrink-0 lg:sticky lg:top-8 lg:self-start"
+          >
+            <div className="mb-5">
+              <h2
+                id="books-heading"
+                className="text-[11px] font-semibold tracking-[0.14em] uppercase text-text-secondary mb-2"
+              >
+                The Apeirron Series
+              </h2>
+              <p className="text-[12.5px] leading-relaxed text-text-secondary">
+                Seven typeset volumes derived from the graph. EPUB and PDF,
+                served from{" "}
+                <a
+                  href="https://github.com/theiskaa/apeirron"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:text-text-primary"
+                >
+                  GitHub
+                </a>
+                . Edit a chapter by editing its source node.
+              </p>
+            </div>
+
+            <ul className="grid grid-cols-3 gap-x-3 gap-y-5 list-none p-0 m-0">
+              {volumes.map((volume) => (
+                <li key={volume.id} className="flex flex-col items-stretch gap-2">
+                  <a
+                    href={pdfUrl(volume.id)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block transition-transform hover:-translate-y-0.5"
+                    aria-label={`Open ${volume.label} PDF`}
+                  >
+                    <img
+                      src={coverUrl(volume.id)}
+                      alt={`${volume.label} cover`}
+                      width={140}
+                      height={210}
+                      className="w-full h-auto rounded-[2px]"
+                      style={{
+                        boxShadow:
+                          "0 1px 2px rgba(0,0,0,0.08), 0 6px 14px rgba(0,0,0,0.10)",
+                      }}
+                    />
+                  </a>
+                  <div
+                    className="text-[10px] leading-snug"
+                    style={{ color: "rgba(144,144,160,0.75)" }}
+                  >
+                    {volume.chapters} chapter
+                    {volume.chapters === 1 ? "" : "s"}
+                  </div>
+                  <div className="flex gap-1">
+                    <a
+                      href={pdfUrl(volume.id)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="chrome inline-flex items-center justify-center px-1.5 h-[20px] rounded-full text-[9.5px] tracking-wide leading-none text-text-secondary hover:text-text-primary"
+                    >
+                      PDF
+                    </a>
+                    <a
+                      href={epubUrl(volume.id)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="chrome inline-flex items-center justify-center px-1.5 h-[20px] rounded-full text-[9.5px] tracking-wide leading-none text-text-secondary hover:text-text-primary"
+                    >
+                      EPUB
+                    </a>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </aside>
         </div>
       </div>
     </div>
