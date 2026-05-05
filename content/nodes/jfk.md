@@ -25,6 +25,8 @@ connections:
     reason: "Diana's landmine campaign threatened the arms industry just as Kennedy's moves threatened the military-industrial complex; both died in officially-ruled accidents with forensic anomalies pointing to intelligence involvement."
   - target: "gulf-of-tonkin"
     reason: "Kennedy signed NSAM 263 ordering Vietnam withdrawal in October 1963; four days after his death Johnson reversed it with NSAM 273, and Tonkin eight months later provided the pretext for the war Kennedy had refused to fight."
+  - target: "bay-of-pigs"
+    reason: "The Bay of Pigs is the operative precondition of the assassination question. Kennedy fired Dulles, Bissell, and Cabell over the failure; the CIA carried the grievance for thirty years; and the anti-Castro Cuban exile network created by the operation supplied the operatives (Hunt, Sturgis, Martinez, Barker) and the Miami operational milieu (JM/WAVE) at the center of every serious conspiracy hypothesis."
 ---
 
 At 12:30 p.m. on November 22, 1963, the presidential motorcade turned left from Houston Street onto Elm Street in Dealey Plaza, Dallas, Texas. President John Fitzgerald Kennedy sat in the rear seat of the open Lincoln Continental limousine, SS-100-X, next to his wife Jacqueline. In front of them sat Texas Governor John Connally and his wife Nellie. The sun was out. The crowds were large and enthusiastic. Nellie Connally turned to the President and said, "Mr. President, you can't say Dallas doesn't love you." Kennedy replied, "No, you certainly can't." Seconds later, he was shot. Within thirty minutes, he was dead at Parkland Memorial Hospital. He was forty-six years old.
