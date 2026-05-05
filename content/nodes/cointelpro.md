@@ -33,6 +33,8 @@ connections:
     reason: "CHAOS (CIA) and COINTELPRO (FBI) were parallel illegal domestic programs targeting the same anti-war and civil rights movements, sharing intelligence through interagency committees, both exposed in 1975."
   - target: "project-monarch"
     reason: "Both COINTELPRO and alleged Monarch programs operated within the same institutional culture of covert operations against US citizens. The same agencies, the same secrecy classifications, the same operational timeframes."
+  - target: "phoenix-program"
+    reason: "COINTELPRO and Phoenix share an institutional vocabulary — 'neutralize,' 'disrupt,' 'eliminate the infrastructure' — and a single doctrinal premise: that political organization is itself the legitimate target of state action regardless of any specific criminal act. COINTELPRO is the doctrine applied domestically without firearms; Phoenix is the same doctrine applied abroad with them."
 ---
 
 On the evening of March 8, 1971, while most of America was watching the heavyweight boxing match between Muhammad Ali and Joe Frazier at Madison Square Garden — the "Fight of the Century" — a group of eight ordinary citizens committed an act of burglary that would expose one of the most systematic campaigns of political repression in American history. They broke into a small FBI field office in Media, Pennsylvania, a quiet suburb of Philadelphia, and stole every document they could carry. Over one thousand classified files. They loaded them into suitcases and vanished into the night. What those documents revealed, when they were mailed to journalists and members of Congress in the following weeks, was the existence of a program called COINTELPRO — the FBI's secret war against American democracy.

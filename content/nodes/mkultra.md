@@ -33,6 +33,8 @@ connections:
     reason: "Chapman's YMCA/World Vision ties, unexplained foreign travel, and dissociative profile match Fenton Bresler's documented pattern of MKUltra-style programmed assassins."
   - target: "celebrity-27-club"
     reason: "The substances that killed multiple 27 Club members — barbiturates, heroin, LSD — were MKUltra subproject subjects, and manager-handler control patterns like Jeffery over Hendrix mirror documented MKUltra techniques."
+  - target: "phoenix-program"
+    reason: "Phoenix's Provincial Interrogation Centers operationalized MKUltra's interrogation research at scale across forty-four South Vietnamese provinces — the same techniques (sleep and sensory deprivation, electric shock, water immersion, stress positions) developed in the BLUEBIRD/ARTICHOKE/MKUltra lineage applied to a wartime population of detainees with no recourse and minimal survival rate."
   - target: "tuskegee-experiment"
     reason: "Tuskegee and MKUltra ran through the same 1950s-70s Public Health Service and military medical apparatus that treated certain populations as expendable, both exposed in the same Church Committee era."
   - target: "operation-chaos"
