@@ -22,10 +22,12 @@ const nodesRaw = files.map((f) => {
   return data;
 });
 
+const nodeIds = new Set(nodesRaw.map((n) => n.id));
 const linkSet = new Set();
 const links = [];
 for (const node of nodesRaw) {
   for (const conn of node.connections ?? []) {
+    if (!nodeIds.has(conn.target)) continue;
     const key = [node.id, conn.target].sort().join("<->");
     if (!linkSet.has(key)) {
       linkSet.add(key);

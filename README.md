@@ -6,7 +6,6 @@ An interactive knowledge graph mapping the biggest questions humanity asks — c
 
 ![Apeirron Graph](public/apeirron-graph.svg)
 
-
 Every idea is a node. Every node links to others. Every connection has a reason. The result is a web of thought where nothing exists in isolation.
 ## How it works
 
