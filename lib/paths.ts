@@ -37,6 +37,7 @@ export const READING_PATHS: ReadingPath[] = [
       { id: "operation-mockingbird", hook: "They did all this in secret because they controlled the story — CIA assets embedded in every major newsroom", parents: ["operation-paperclip", "cointelpro"] },
       { id: "cia-drugs", hook: "The pattern complete: the same agency that controlled minds and media also ran cocaine through American cities" },
       { id: "iran-contra", hook: "The 1980s made it operational — Oliver North's off-books Enterprise funded the Contras by running their cocaine into America, and Gary Webb was destroyed for reporting it", parents: ["cia-drugs"] },
+      { id: "operation-cyclone", hook: "And the operation that won the Cold War — Casey's other portfolio, run from the same desk in the same years. July 3, 1979: Carter signs Brzezinski's finding six months before any Soviet soldier crosses the Amu Darya, the largest covert action in CIA history routing $20 billion through ISI to camps the Agency never directly touched. The trap closed a decade later — USSR exhausted, war won. The same camps produced the men who boarded planes on a September morning twelve years after", parents: ["iran-contra", "operation-glasnost"] },
       { id: "rex-84", hook: "And the endgame: Oliver North's other project, the classified plan to suspend the Constitution and detain citizens in an emergency. Jack Brooks tried to ask about it and Inouye cut him off on live TV", parents: ["iran-contra"] },
     ],
   },
