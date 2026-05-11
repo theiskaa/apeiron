@@ -41,6 +41,8 @@ connections:
     reason: "The Watertown lockdown established the 'shelter in place' model of urban control — militarized police conducting warrantless house searches."
   - target: "election-fraud"
     reason: "Election fraud theories directly challenge the foundational control-system narrative that legitimate elections determine who holds power."
+  - target: "gary-webb"
+    reason: "The Webb case is the operational principle in its purest form: a dangerous truth is neutralized not by refutation but by destroying its author's credibility. The CIA never disproved 'Dark Alliance' — the Inspector General confirmed it — but the prestige press's institutional consensus that Webb had overreached became, in public understanding, indistinguishable from a finding that he was wrong."
 ---
 
 In 1928, Edward Bernays — nephew of Sigmund Freud and the father of modern public relations — published a book called *Propaganda*. Its opening paragraph is remarkably candid: "The conscious and intelligent manipulation of the organized habits and opinions of the masses is an important element in democratic society. Those who manipulate this unseen mechanism of society constitute an invisible government which is the true ruling power of our country." He was not confessing a secret. He was advertising a service. By the time the book appeared, Bernays had already helped sell American participation in the First World War to a reluctant public through the Committee on Public Information, invented the modern corporate press release, and established the principle — which has governed every American presidential administration since — that manufactured consent is cheaper and more durable than coercion.
